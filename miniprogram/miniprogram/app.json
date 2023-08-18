@@ -1,0 +1,35 @@
+{
+  "pages": [
+    "pages/home/home",
+    "pages/me/me"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#fff",
+    "navigationBarTitleText": "闫嵩达",
+    "navigationBarTextStyle": "black"
+  },
+  "tabBar": {
+    "custom": true,
+		"color": "#000000",
+		"selectedColor": "#000000",
+		"backgroundColor": "#000000",
+		"list": [
+			{
+				"pagePath": "pages/home/home"
+			},
+			{
+				"pagePath": "pages/me/me"
+			}
+		]
+  },
+  "usingComponents": {
+		"van-tabbar": "@vant/weapp/tabbar/index",
+		"van-tabbar-item": "@vant/weapp/tabbar-item/index"
+	},
+  "networkTimeout": {
+    "request": 3000
+  },
+  "lazyCodeLoading": "requiredComponents",
+  "sitemapLocation": "sitemap.json"
+}

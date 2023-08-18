@@ -1,0 +1,15 @@
+{
+  "name": "yansongda",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {},
+  "keywords": [],
+  "author": "",
+  "license": "",
+  "dependencies": {
+    "@vant/weapp": "^1.10.23"
+  },
+  "devDependencies": {
+    "miniprogram-api-typings": "^3.11.0"
+  }
+}
