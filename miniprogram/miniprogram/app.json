@@ -23,12 +23,12 @@
 			}
 		]
   },
-  "usingComponents": {
-		"van-tabbar": "@vant/weapp/tabbar/index",
-		"van-tabbar-item": "@vant/weapp/tabbar-item/index"
-	},
   "networkTimeout": {
     "request": 3000
+  },
+  "style": "v2",
+  "useExtendedLib": {
+    "weui": true
   },
   "lazyCodeLoading": "requiredComponents",
   "sitemapLocation": "sitemap.json"

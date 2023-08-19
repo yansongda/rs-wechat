@@ -3,13 +3,15 @@ Component({
 		active: 0,
 		list: [
 			{
-				icon: 'home-o',
 				text: '首页',
+        iconPath: '/images/icon/app.png',
+        selectedIconPath: '/images/icon/app-selected.png',
 				url: '/pages/home/home'
 			},
 			{
-				icon: 'user-o',
 				text: '我',
+        iconPath: '/images/icon/user.png',
+        selectedIconPath: '/images/icon/user-selected.png',
 				url: '/pages/me/me'
 			}
 		]
@@ -17,9 +19,9 @@ Component({
 
 	methods: {
 		onChange(event: any) {
-			this.setData({ active: event.detail });
+      this.setData({ active: event.detail.index });
 			wx.switchTab({
-				url: this.data.list[event.detail].url
+				url: this.data.list[event.detail.index].url
 			});
 		},
 
