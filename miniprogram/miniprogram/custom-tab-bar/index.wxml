@@ -1,1 +1,0 @@
-<mp-tabbar list="{{ list }}" current="{{ active }}" bindchange="onChange"></mp-tabbar>
