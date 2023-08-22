@@ -1,4 +1,3 @@
-// pages/tools/tools.ts
 Page({
 
   /**
