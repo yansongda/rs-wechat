@@ -1,20 +1,20 @@
 <view data-weui-theme="{{theme}}">
   <button class="avatar-wrapper" open-type="chooseAvatar" bind:chooseavatar="onChooseAvatar">
-    <image class="avatar" src="{{user.avatar}}"></image>
+    <image class="avatar" src="{{avatar}}"></image>
   </button>
   <form bindsubmit="submit">
     <mp-form>
       <mp-cells>
         <mp-cell title="昵称">
-          <input type="nickname" name="nickname" class="weui-input" placeholder="{{user.nickname}}" value="{{user.nickname}}" />
+          <input type="nickname" name="nickname" class="weui-input" placeholder="{{nickname}}" value="{{nickname}}" />
         </mp-cell>
         <mp-cell title="Slogan">
-          <input type="text" name="slogan" class="weui-input" placeholder="Coding My Life..." value="{{user.slogan}}" />
+          <input type="text" name="slogan" class="weui-input" placeholder="Coding My Life..." value="{{slogan}}" />
         </mp-cell>
       </mp-cells>
     </mp-form>
     <view class="weui-form__opr-area submit">
-      <button type="primary" form-type="submit">确定</button>
+      <button type="primary" form-type="submit">修改</button>
     </view>
   </form>
 </view>
