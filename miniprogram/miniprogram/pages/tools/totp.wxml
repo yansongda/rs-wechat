@@ -1,1 +1,19 @@
-<text>pages/tools/totp.wxml</text>
+<view class="items">
+  <view class="item" wx:for="{{items}}" wx:for-index="index" wx:key="{{ item.id }}">
+    <movable-area>
+      <movable-view out-of-bounds="true" direction="horizontal" x="{{item.xmove}}" inertia="true" data-productIndex="{{index}}" bindtouchstart="handleTouchStart" bindtouchend="handleTouchEnd" bindchange="handleMovableChange">
+        <view class="item-wrap">
+          <view class="item-movable">
+            <view class="item-movable-name">{{item.name}}</view>
+            <view class="item-movable-code">{{item.code}}</view>
+          </view>
+        </view>
+      </movable-view>
+    </movable-area>
+    <view class="delete-btn" data-id="{{ item.id }}" bindtap="handleDeleteProduct">删除</view>
+  </view>
+</view>
+<view class="footer">
+  <view class="title">这是什么？</view>
+  <view class="desc">TOTP 是Time-based One-Time Password的简写，表示基于时间戳算法的一次性密码。</view>
+</view>
