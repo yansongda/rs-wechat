@@ -1,5 +1,5 @@
 <view class="items">
-  <view class="item" wx:for="{{items}}" wx:for-index="index" wx:key="{{ item.id }}">
+  <view class="item" wx:for="{{items}}" wx:for-index="index" wx:key="id">
     <movable-area>
       <movable-view out-of-bounds="true" direction="horizontal" x="{{item.xmove}}" inertia="true" data-productIndex="{{index}}" bindtouchstart="handleTouchStart" bindtouchend="handleTouchEnd" bindchange="handleMovableChange">
         <view class="item-wrap">
