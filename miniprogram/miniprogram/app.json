@@ -2,7 +2,8 @@
   "pages": [
     "pages/home/index",
     "pages/me/index",
-    "pages/me/edit"
+    "pages/me/edit",
+    "pages/tools/totp"
   ],
   "window": {
     "backgroundTextStyle": "light",

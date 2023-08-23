@@ -1,36 +1,28 @@
 @import '../../third-party/weui/app.scss';
 
-.kind-list__item {
-  margin: 10px 0;
-  background-color: var(--weui-BG-2);
-  border-radius: 2px;
-  overflow: hidden
-}
+.tools-list {
+  .tools-list__item {
+    margin: 10px 0;
+    background-color: #F6F6F6;
+    border-radius: 2px;
+    overflow: hidden;
+  
+    &:first-child {
+      margin-top: 0
+    }
 
-.kind-list__item:first-child {
-  margin-top: 0
-}
+    .weui-flex.tools-list__item-hd {
+      padding: 20px;
+      -webkit-transition: opacity .3s;
+      transition: opacity .3s;
 
-.kind-list__img {
-  width: 30px;
-  height: 30px
-}
+      .tools-list__item-hd-text {
+        flex: 1;
+      }
 
-.kind-list__item-hd {
-  padding: 20px;
-  -webkit-transition: opacity .3s;
-  transition: opacity .3s
-}
-
-.kind-list__item-hd_show {
-  opacity: .4
-}
-
-.kind-list__item-bd {
-  height: 0;
-  overflow: hidden
-}
-
-.kind-list__item-bd_show {
-  height: auto
+      .tools-list__item-hd-icon {
+        justify-content: flex-end;
+      }
+    }
+  }  
 }
