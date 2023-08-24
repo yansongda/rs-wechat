@@ -1,18 +1,21 @@
 <view class="items">
-  <view class="item" wx:for="{{items}}" wx:for-index="index" wx:key="id">
-    <movable-area>
+  <movable-area>
+    <view class="item" wx:for="{{items}}" wx:for-index="index" wx:key="id">
       <movable-view out-of-bounds="true" direction="horizontal" x="{{item.xmove}}" inertia="true" data-productIndex="{{index}}" bindtouchstart="handleTouchStart" bindtouchend="handleTouchEnd" bindchange="handleMovableChange">
-        <view class="item-wrap">
-          <view class="item-movable">
-            <view class="item-movable-issuer">{{item.issuer}}</view>
-            <view class="item-movable-name">{{item.username}}</view>
-            <view class="item-movable-code">{{item.code}}</view>
+        <view class="item-loading">倒计时</view>
+        <view class="item-body">
+          <view class="item-body-info">
+            <view class="item-body-info-issuer">{{item.issuer}}</view>
+            <view class="item-body-info-username">{{item.username}}</view>
+          </view>
+          <view class="item-body-code">
+            <view>{{item.code}}</view>
           </view>
         </view>
       </movable-view>
-    </movable-area>
-    <view class="delete-btn" data-id="{{ item.id }}" bindtap="handleDeleteProduct">删除</view>
-  </view>
+      <!-- <view class="delete-btn" data-id="{{ item.id }}" bindtap="handleDeleteProduct">删除</view> -->
+    </view>
+  </movable-area>
 </view>
 <view class="footer">
   <view class="title">这是什么？</view>
