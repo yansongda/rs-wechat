@@ -1,46 +1,61 @@
-.items {  
+.items {
   .item {
-    display: flex;
-    padding: 10px;
-    height: 80px;
     width: 100%;
+    height: 80px;
+    padding: 10px;
     border-bottom: 1px #f6f6f6 solid;
 
-    // &:last-child {
-    //   border-bottom: none;
-    // }
-
-    .item-loading {
-      width: 100px;
-      height: 100%;
+    &:last-child {
+      border-bottom: none;
     }
 
-    .item-body {
-      display: flex;
-      flex-direction: column;
+    movable-area {
       width: 100%;
       height: 100%;
 
-      .item-body-info {
+      movable-view {
+        width: 100%;
+        height: 100%;
         display: flex;
-        flex-direction: row;
-        width: 100%;
-        height: 10px;
+        flex-flow: row wrap;
 
-        .item-body-info-issuer {
-          width: 50%;
-          color: gray;
+        .item-loading {
+          flex: 1;
+          height: 100%;
         }
 
-        .item-body-info-username {
-          width: 50%;
-          color: gray;
-        }
-      }
+        .item-body {
+          flex: 3;
+          display: flex;
+          flex-flow: column wrap;
+          overflow: hidden;
 
-      .item-body-code {
-        width: 100%;
-        font-size: 45px;
+          .item-body-info {
+            flex: 1;
+            display: flex;
+            flex-flow: row nowrap;
+            color: gray;
+            font-size: 12px;
+            width: 100%;
+
+            .item-body-info-issuer {
+              flex: 1;
+              overflow: hidden;
+              text-overflow: ellipsis;
+            }
+
+            .item-body-info-username {
+              flex: 1;
+              overflow: hidden;
+              text-overflow: ellipsis;
+            }
+          }
+
+          .item-body-code {
+            flex: 3;
+            font-size: 40px;
+          }
+        }
       }
     }
   }
@@ -51,6 +66,8 @@
   padding: 10px;
   position: fixed;
   bottom: 0;
+  height: 50px;
+  width: 100%;
 
   .title {
     font-size: xx-small;

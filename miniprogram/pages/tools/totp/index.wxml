@@ -1,7 +1,7 @@
 <view class="items">
-  <movable-area>
-    <view class="item" wx:for="{{items}}" wx:for-index="index" wx:key="id">
-      <movable-view out-of-bounds="true" direction="horizontal" x="{{item.xmove}}" inertia="true" data-productIndex="{{index}}" bindtouchstart="handleTouchStart" bindtouchend="handleTouchEnd" bindchange="handleMovableChange">
+  <view class="item" wx:for="{{items}}" wx:for-index="index" wx:key="id">
+    <movable-area>
+      <movable-view out-of-bounds="true" direction="horizontal" inertia="true">
         <view class="item-loading">倒计时</view>
         <view class="item-body">
           <view class="item-body-info">
@@ -14,8 +14,8 @@
         </view>
       </movable-view>
       <!-- <view class="delete-btn" data-id="{{ item.id }}" bindtap="handleDeleteProduct">删除</view> -->
-    </view>
-  </movable-area>
+    </movable-area>
+  </view>
 </view>
 <view class="footer">
   <view class="title">这是什么？</view>
