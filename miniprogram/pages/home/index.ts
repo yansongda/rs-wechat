@@ -7,7 +7,7 @@ Page({
         "url": "/pages/tools/totp/index",
       },
       {
-        "name": "短链服务",
+        "name": "短链生成服务",
         "icon": "link",
         "url": "/pages/tools/shorturl/index",
       }

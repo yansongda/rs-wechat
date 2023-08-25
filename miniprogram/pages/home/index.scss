@@ -1,4 +1,25 @@
-@import '../../third-party/weui/app.scss';
+.header {
+  padding: 40px;
+
+  .title {
+    font-weight: 400;
+    font-size: 1.18rem;
+    text-align: left;
+  }
+
+  .desc {
+    margin-top: 5px;
+    color: #7d7d7d;
+    text-align: left;
+    font-size: 0.82rem;
+  }
+}
+
+.body {
+  padding-left: 15px;
+  padding-right: 15px;
+  padding-bottom: 30px;
+}
 
 .tools-list {
   .tools-list__item {
