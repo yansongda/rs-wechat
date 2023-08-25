@@ -6,9 +6,8 @@
   "keywords": [],
   "author": "",
   "license": "",
-  "dependencies": {
-  },
+  "dependencies": {},
   "devDependencies": {
-    "miniprogram-api-typings": "^3.11.0"
+    "miniprogram-api-typings": "^3.12.0"
   }
 }

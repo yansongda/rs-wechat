@@ -2,7 +2,7 @@
 # yarn lockfile v1
 
 
-miniprogram-api-typings@^3.11.0:
-  version "3.11.0"
-  resolved "https://registry.npmmirror.com/miniprogram-api-typings/-/miniprogram-api-typings-3.11.0.tgz#ff805beeca60a9a354251dbef3d986f867752db4"
-  integrity sha512-jMYeqEOGZc1dq7MR8Zu1tj1zmzlvATlvsUb7eFaTYk8LoBVrbgdGUWwVjAmFFNjNdiUaokceGeJaByAa5QYpKw==
+miniprogram-api-typings@^3.12.0:
+  version "3.12.0"
+  resolved "https://registry.npmmirror.com/miniprogram-api-typings/-/miniprogram-api-typings-3.12.0.tgz#c42ba7606b3c7ca93725baa6d0353e02b3edad88"
+  integrity sha512-tE0zjq+3bFEgUROzCjXTdtLY+FmqiTX4kZWXc8bCC7M9wSHCriBz+ga1E2i1PcI+DQJoz2cyK8Cv2exJv6XEzA==

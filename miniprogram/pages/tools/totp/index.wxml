@@ -1,19 +1,16 @@
 <view class="items">
   <view class="item" wx:for="{{items}}" wx:for-index="index" wx:key="id">
-    <movable-area>
-      <movable-view out-of-bounds="true" direction="horizontal" inertia="true">
-        <view class="item-loading">倒计时</view>
+    <movable-area class="item-movable-area">
+      <movable-view class="item-movable-view {{item.isTouchMove ? 'item-movable-active' : ''}}" data-index="{{index}}" out-of-bounds="true" direction="horizontal" inertia="true" bindtouchstart="touchstart" bindtouchmove="touchmove">
         <view class="item-body">
           <view class="item-body-info">
             <view class="item-body-info-issuer">{{item.issuer}}</view>
             <view class="item-body-info-username">{{item.username}}</view>
           </view>
-          <view class="item-body-code">
-            <view>{{item.code}}</view>
-          </view>
+          <view class="item-body-code">{{item.code}}</view>
         </view>
+        <view class="item-delete" data-id="{{ item.id }}">删除</view>
       </movable-view>
-      <!-- <view class="delete-btn" data-id="{{ item.id }}" bindtap="handleDeleteProduct">删除</view> -->
     </movable-area>
   </view>
 </view>
