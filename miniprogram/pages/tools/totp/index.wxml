@@ -1,3 +1,5 @@
+<progress percent="{{ remainSeconds / 30 * 100 }}" stroke-width="2" class="progress"></progress>
+<view class="{{ items.length > 0 ? 'has-data' : 'no-data' }}">暂无数据</view>
 <view class="items">
   <view class="item" wx:for="{{items}}" wx:for-index="index" wx:key="id">
     <movable-area class="item-movable-area">
@@ -9,12 +11,15 @@
           </view>
           <view class="item-body-code">{{item.code}}</view>
         </view>
-        <view class="item-delete" data-id="{{ item.id }}">删除</view>
+        <view class="item-delete" data-id="{{ item.id }}" bind:tap="delete">删除</view>
       </movable-view>
     </movable-area>
   </view>
 </view>
+
 <view class="footer">
-  <view class="title">这是什么？</view>
-  <view class="desc">TOTP 是Time-based One-Time Password的简写，表示基于时间戳算法的一次性密码。</view>
+  <view class="add" bind:tap="add">
+    <mp-icon icon="add" type="field" color="black" size="25"></mp-icon>
+    <view>添加</view>
+  </view>
 </view>

@@ -2,7 +2,7 @@ Page({
   data: {
     tools: [
       {
-        "name": "TOTP",
+        "name": "TOTP身份验证器",
         "icon": "lock",
         "url": "/pages/tools/totp/index",
       },

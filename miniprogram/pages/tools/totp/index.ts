@@ -1,25 +1,82 @@
+import {default as api} from '@api/totp'
+
 Page({
   data: {
-    items: [
-      {
-        "id": 1,
-        "username": "me@yansongda.cn",
-        "issuer": "Vultr",
-        "code": "123 456"
-      },
-      {
-        "id": 2,
-        "username": "me@yansongda.cnaaaaaaaaaaaa",
-        "issuer": "Vultr.comaaaaaaaaaaa",
-        "code": "789 012"
-      }
-    ],
+    remainSeconds: 30,
+    items: [] as ITotpItem[],
+    interval: 0,
     startX: 0,
     startY: 0
   },
-  touchstart: function (e: any) {
+  onShow() {
+    wx.showLoading({title: '加载中'})
+
+    this.timing()
+    this.all()
+  },
+  onHide() {
+    clearInterval(this.data.interval)
+  },
+  onUnload() {
+    clearInterval(this.data.interval)
+  },
+  timing() {
+    let remainSeconds = 30 - (new Date()).getSeconds()
+    if (remainSeconds < 0) {
+      remainSeconds += 30
+    }
+
+    this.setData({remainSeconds})
+
+    this.data.interval = setInterval(() => {
+      let remainSeconds = this.data.remainSeconds
+
+      remainSeconds -= 1
+      if (remainSeconds <= 0) {
+        remainSeconds = 30
+      }
+
+      this.setData({ remainSeconds })
+
+      if (remainSeconds == 30) {
+        this.all()
+      }
+    }, 1000)
+  },
+  all() {
+    api.all().then((response: ITotpItemResponse[]) => {
+      wx.hideLoading();
+
+      const items: ITotpItem[] = []
+
+      response.forEach((v: ITotpItemResponse) => {
+        items.push({
+          isTouchMove: false,
+          ...v
+        })
+      })
+
+      this.setData({items})
+    })
+  },
+  add() {
+    wx.scanCode({
+      scanType: ["qrCode"],
+      success: (e) => {
+        api.updateOrCreate({uri: e.result}).then(() => this.all())
+        .catch(() => wx.showToast({title: '添加失败', icon: 'error', duration: 2000}))
+      },
+      fail: () => () => wx.showToast({title: '扫码失败', icon: 'error', duration: 2000})
+    })
+  },
+  delete(e: any) {
+    api.deleteTotp(e.currentTarget.dataset.id)
+    .then(() => this.all())
+    .catch(() => wx.showToast({title: '删除失败', icon: 'error', duration: 2000}))
+  },
+  touchstart(e: any) {
     // 开始触摸时 重置所有删除
-    this.data.items.forEach(function (v: any) {
+    this.data.items.forEach(function (v: ITotpItem) {
       if (v.isTouchMove) {
         v.isTouchMove = false;
       }
@@ -33,7 +90,7 @@ Page({
       items: this.data.items
     })
   },
-  touchmove: function (e: any) {    
+  touchmove(e: any) {    
     const index = e.currentTarget.dataset.index;
     const startX = this.data.startX;
     const startY = this.data.startY;
@@ -43,7 +100,7 @@ Page({
     // 获取滑动角度
     const angle = this.angle({ X: startX, Y: startY }, { X: touchMoveX, Y: touchMoveY });
 
-    this.data.items.forEach(function (v: any, i: any) {
+    this.data.items.forEach(function (v: ITotpItem, i: number) {
       v.isTouchMove = false
 
       if (Math.abs(angle) > 30 || i != index) {
@@ -63,10 +120,12 @@ Page({
       items: this.data.items
     })
   },
-  angle: function (start: any, end: any) {
+  angle(start: any, end: any) {
     const _X = end.X - start.X
     const _Y = end.Y - start.Y
 
     return 360 * Math.atan(_Y / _X) / (2 * Math.PI);
   },
 })
+
+export default {}

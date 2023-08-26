@@ -1,4 +1,6 @@
-const app = getApp<GlobalData>()
+import {default as utils} from '@utils/user'
+
+const app = getApp<IGlobalData>()
 
 Page({
   data: {
@@ -7,6 +9,7 @@ Page({
     slogan: app.globalData.user.slogan,
   },
   onLoad() {
+    utils.updateUser(app.globalData.user.openId)
   },
   onShow() {
     this.setData({

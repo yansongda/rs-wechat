@@ -1,8 +1,8 @@
 {
   "pages": [
     "pages/home/index",
-    "pages/me/index",
-    "pages/me/edit",
+    "pages/user/index",
+    "pages/user/edit",
     "pages/tools/totp/index",
     "pages/tools/shorturl/index"
   ],
@@ -21,7 +21,7 @@
         "selectedIconPath": "/images/icon/app-selected.png"
       },
       {
-        "pagePath": "pages/me/index",
+        "pagePath": "pages/user/index",
         "text": "我",
         "iconPath": "/images/icon/user.png",
         "selectedIconPath": "/images/icon/user-selected.png"
@@ -36,5 +36,10 @@
     "weui": true
   },
   "lazyCodeLoading": "requiredComponents",
-  "sitemapLocation": "sitemap.json"
+  "sitemapLocation": "sitemap.json",
+  "resolveAlias": {
+    "@api/*": "/api/*",
+    "@utils/*": "/utils/*",
+    "@constant/*": "/constant/*"
+  }
 }
