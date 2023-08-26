@@ -8,4 +8,8 @@ const detail = async (openId: string) => {
   return await api.get<IUserDetailResponse>('/api/v1/user/detail', {open_id: openId})
 }
 
-export default { login, detail }
+const update = async (updated: IUserUpdate) => {
+  return await api.post('/api/v1/user/update', updated)
+}
+
+export default { login, detail, update }

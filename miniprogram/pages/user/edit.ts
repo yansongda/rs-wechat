@@ -1,3 +1,6 @@
+import {default as api} from '@api/user'
+import {default as utils} from '@utils/user'
+
 const app = getApp<IGlobalData>()
 
 Page({
@@ -14,33 +17,24 @@ Page({
     })
   },
   onChooseAvatar(e: any) {
-    const { avatarUrl } = e.detail 
-    
-    // todo: 上传文件到服务端并更新当前用户的头像
-    app.globalData.user.avatar = avatarUrl
-
-    this.setData({
-      avatar: avatarUrl
-    })
+    this.setData({avatar: e.detail.avatarUrl})
   },
   submit(e: any) {
     const updated = e.detail.value
 
-    // todo: 提交表单
-    console.log(updated)
+    api.update(updated).then(() => {
+      utils.updateUser(app.globalData.user.openId)
 
-    wx.showToast({
-      title: '修改成功',
-      icon: 'success',
-      duration: 1500,
-      success: () => {
-        app.globalData.user.nickname = updated.nickname
-        app.globalData.user.slogan = updated.slogan
-
-        setTimeout(() => {
-          wx.navigateBack()          
-        }, 1500);
-      }
+      wx.showToast({
+        title: '修改成功',
+        icon: 'success',
+        duration: 1500,
+        success: () => {
+          setTimeout(() => {
+            wx.navigateBack()          
+          }, 1500);
+        }
+      })
     })
   },
 })

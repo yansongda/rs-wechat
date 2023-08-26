@@ -1,8 +1,8 @@
 <view data-weui-theme="{{theme}}">
-  <button class="avatar-wrapper" open-type="chooseAvatar" bind:chooseavatar="onChooseAvatar">
-    <image class="avatar" src="{{avatar}}"></image>
-  </button>
   <form bindsubmit="submit">
+    <button class="avatar-wrapper" open-type="chooseAvatar" bind:chooseavatar="onChooseAvatar">
+      <image class="avatar" src="{{avatar}}"><input type="text" name="avatar" value="{{ avatar }}"/></image>
+    </button>
     <mp-form>
       <mp-cells>
         <mp-cell title="昵称">

@@ -5,6 +5,12 @@ interface IUser {
   slogan: string
 }
 
+interface IUserUpdate extends IJson {
+  avatar: string,
+  nickname: string,
+  slogan: string,
+}
+
 interface IUserUpdateResult {
   isGlobalDataUpdated: boolean,
   user?: IUser,
