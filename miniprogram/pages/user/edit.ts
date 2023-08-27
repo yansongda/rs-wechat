@@ -19,22 +19,22 @@ Page({
   onChooseAvatar(e: any) {
     this.setData({avatar: e.detail.avatarUrl})
   },
-  submit(e: any) {
+  async submit(e: any) {
     const updated = e.detail.value
 
-    api.update(updated).then(() => {
-      utils.sync()
+    await api.update(updated)
 
-      wx.showToast({
-        title: '修改成功',
-        icon: 'success',
-        duration: 1500,
-        success: () => {
-          setTimeout(() => {
-            wx.navigateBack()          
-          }, 1500);
-        }
-      })
+    await utils.sync()
+
+    wx.showToast({
+      title: '修改成功',
+      icon: 'success',
+      duration: 1500,
+      success: () => {
+        setTimeout(() => {
+          wx.navigateBack()          
+        }, 1500);
+      }
     })
   },
 })

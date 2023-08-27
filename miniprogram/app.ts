@@ -1,7 +1,8 @@
 import { STORAGE } from '@constant/app'
 import userApi from '@api/user'
 import userUtils from '@utils/user'
-import { HttpApiError } from '@models/error'
+import { EError, WeixinError } from '@models/error'
+import { CODE } from '@constant/error'
 
 App<IGlobalData>({
   globalData: {
@@ -21,30 +22,26 @@ App<IGlobalData>({
     }
 
     wx.login({
-      success: (res) => {
-        userApi.login(res.code)
-          .then((res: IUserLoginResponse) => {
-            // 初始化时 app 并没有加载完成，调用 updateUser 需要读取用户 openId
-            // 此时不能从全局数据里拿数据，所以初始化的时候从 stroage 里拿数据
-            wx.setStorageSync(STORAGE.OPEN_ID, res.open_id)
+      success: async (res) => {
+        const loginResponse: IUserLoginResponse = await userApi.login(res.code)
+        
+        // 初始化时 app 并没有加载完成，调用 updateUser 需要读取用户 openId
+        // 此时不能从全局数据里拿数据，所以初始化的时候从 stroage 里拿数据
+        wx.setStorageSync(STORAGE.OPEN_ID, loginResponse.open_id)
 
-            return userUtils.sync()
-          })
-          .then((result: IUserUpdateResult) => {
-            if (!result.isGlobalDataUpdated) {
-              this.globalData.user = result.user as IUser
-            }
-          })
-          .catch(() => wx.showToast({title: '登录失败',icon: 'error', duration: 1500, mask: true}))
+        const updateResult: IUserUpdateResult = await userUtils.sync()
+        if (!updateResult.isGlobalDataUpdated) {
+          this.globalData.user = updateResult.user as IUser
+        }
       },
-      fail: () => wx.showToast({title: '登录失败',icon: 'error', duration: 1500, mask: true}),
+      fail: async () => { return Promise.reject(new WeixinError(CODE.WEIXIN_LOGIN)) },
     })
   },
-  onError() {
+  onError(e) {
     wx.showToast({title: '小程序异常', icon: 'error', duration: 2000})
   },
   onUnhandledRejection(e: any) {
-    if (e.reason instanceof HttpApiError) {
+    if (e.reason instanceof EError) {
       wx.showToast({title: e.reason.message, icon: 'error', duration: 2000})
     } else {
       wx.showToast({title: '未知错误', icon: 'error', duration: 2000})

@@ -11,6 +11,8 @@ class EError extends Error implements IERROR {
   }
 }
 
+class WeixinError extends EError {}
+
 class LoginError extends EError implements ILoginError {
   describe?: string;
 
@@ -45,4 +47,4 @@ class HttpApiError extends EError implements IHttpApiError {
   }
 }
 
-export { LoginError, HttpError, HttpApiError }
+export { EError, WeixinError, LoginError, HttpError, HttpApiError }

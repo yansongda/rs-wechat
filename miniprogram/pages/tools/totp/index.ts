@@ -1,4 +1,6 @@
 import api from '@api/totp'
+import { CODE } from '@constant/error'
+import { WeixinError } from '@models/error'
 
 Page({
   data: {
@@ -60,16 +62,18 @@ Page({
     this.setData({items})
   },
   async add() {
-    const scan = await wx.scanCode({scanType: ['qrCode']})
+    const scan = await wx.scanCode({scanType: ['qrCode']}).catch(() => {
+      return Promise.reject(new WeixinError(CODE.WEIXIN_QR_CODE))
+    })
     
-    await api.updateOrCreate({uri: scan.result}).catch(() => wx.showToast({title: '添加失败', icon: 'error', duration: 2000}))
+    await api.updateOrCreate({uri: scan.result})
     
     await this.all()
   },
-  delete(e: any) {
-    api.deleteTotp(e.currentTarget.dataset.id)
-    .then(() => this.all())
-    .catch(() => wx.showToast({title: '删除失败', icon: 'error', duration: 2000}))
+  async delete(e: any) {
+    await api.deleteTotp(e.currentTarget.dataset.id)
+    
+    await this.all()
   },
   touchstart(e: any) {
     // 开始触摸时 重置所有删除

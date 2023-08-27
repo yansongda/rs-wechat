@@ -1,12 +1,6 @@
-import { STORAGE, URL } from '@constant/app'
+import { URL } from '@constant/app'
 import { HttpError, HttpApiError, LoginError } from '@models/error'
-
-const app = getApp<IGlobalData>();
-
-// 初始化时会调用用户详情接口，用户详情需要 openID
-// 但是初始化时 app 并没有加载完成，此时不能从全局数据里拿数据
-// 所以初始化的时候尝试从 stroage 里拿数据
-const openId = app?.globalData.user.openId ?? wx.getStorageSync(STORAGE.OPEN_ID) ?? ''
+import userUtils from '@utils/user'
 
 const formatUrl = (url: string, query?: IQuery): string => {
   if (!query) {
@@ -28,6 +22,8 @@ const formatHeaders = (headers?: IHeaders): IHeaders => {
     headers = {}
   }
 
+  const openId = userUtils.getOpenId()
+
   if (openId != '') {
     headers.open_id = openId
   }
@@ -39,11 +35,12 @@ const request = <T>(url: string, options: IOptions, mustOpenId?: boolean): Promi
   return new Promise<T>((resolve, reject) => {
     const uri = URL.BASE + formatUrl(url, options.query)
     const headers = formatHeaders(options.headers)
+    const openId = userUtils.getOpenId()
     
     if ((mustOpenId ?? true) && openId == '') {      
       reject(new LoginError())
     }
-
+    
     wx.request({
       url: uri,
       data: options.json || options.data || {},

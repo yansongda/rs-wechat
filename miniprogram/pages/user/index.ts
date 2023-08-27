@@ -8,8 +8,8 @@ Page({
     nickname: app.globalData.user.nickname,
     slogan: app.globalData.user.slogan,
   },
-  onLoad() {
-    utils.sync()
+  async onLoad() {
+    await utils.sync()
   },
   onShow() {
     this.setData({
