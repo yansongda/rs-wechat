@@ -40,7 +40,7 @@ const request = <T>(url: string, options: IOptions, mustOpenId?: boolean): Promi
     if ((mustOpenId ?? true) && openId == '') {      
       reject(new LoginError())
     }
-    
+
     wx.request({
       url: uri,
       data: options.json || options.data || {},

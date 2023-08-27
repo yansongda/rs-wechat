@@ -71,9 +71,12 @@ Page({
     await this.all()
   },
   async delete(e: any) {
-    await api.deleteTotp(e.currentTarget.dataset.id)
-    
-    await this.all()
+    const result = await wx.showModal({title: '是否确定删除？', content: '删除后数据不可恢复'})
+
+    if (result.confirm) {
+      await api.deleteTotp(e.currentTarget.dataset.id)
+      await this.all()
+    }
   },
   touchstart(e: any) {
     // 开始触摸时 重置所有删除
