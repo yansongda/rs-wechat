@@ -1,6 +1,11 @@
+import {default as constant} from '@constant/app'
+
 const app = getApp<IGlobalData>();
 
-const openId = app?.globalData.user.openId ?? ''
+// 初始化时会调用用户详情接口，用户详情需要 openID
+// 但是初始化时 app 并没有加载完成，此时不能从全局数据里拿数据
+// 所以初始化的时候尝试从 stroage 里拿数据
+const openId = app?.globalData.user.openId ?? wx.getStorageSync(constant.STORAGE.OPEN_ID) ?? ''
 
 const formatUrl = (url: string, query?: IQuery): string => {
   if (!query) {
@@ -31,10 +36,10 @@ const formatHeaders = (headers?: IHeaders): IHeaders => {
 
 const request = <T>(url: string, options: IOptions, mustOpenId?: boolean) => {
   return new Promise<T>((resolve, reject) => {
-    const uri = formatUrl(url, options.query)
+    const uri = constant.URL.BASE + formatUrl(url, options.query)
     const headers = formatHeaders(options.headers)
-
-    if ((mustOpenId ?? true) && openId == '') {
+    
+    if ((mustOpenId ?? true) && openId == '') {      
       wx.showToast({
         title: "请重新登录",
         icon: "error",
@@ -52,8 +57,10 @@ const request = <T>(url: string, options: IOptions, mustOpenId?: boolean) => {
       method: options.method || "POST",
       success: (res: any) => {
         if (res.data.code == 0) {
-          resolve(res.data.data)
+          resolve(res.data.data ?? null)
         }
+
+        reject(res.data)
       },
       fail: (err) => {
         console.log(err)

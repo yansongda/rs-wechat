@@ -1,3 +1,10 @@
-const STORAGE_USER = 'user'
+const STORAGE = {
+  OPEN_ID: 'open_id',
+  USER: 'user'
+}
 
-export default { STORAGE_USER }
+const URL = {
+  BASE: 'https://miniprogram.ysdor.cn',
+}
+
+export default { STORAGE, URL }

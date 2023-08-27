@@ -9,7 +9,7 @@ Page({
     slogan: app.globalData.user.slogan,
   },
   onLoad() {
-    utils.updateUser(app.globalData.user.openId)
+    utils.updateUser()
   },
   onShow() {
     this.setData({

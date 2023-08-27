@@ -12,7 +12,7 @@ App<IGlobalData>({
     }
   },
   onLaunch() {
-    const storage = wx.getStorageSync(constant.STORAGE_USER)
+    const storage = wx.getStorageSync(constant.STORAGE.USER)
     if (storage) {
       this.globalData.user = storage
 
@@ -23,7 +23,11 @@ App<IGlobalData>({
       success: (res) => {
         user.login(res.code)
           .then((res: IUserLoginResponse) => {
-            return utils.updateUser(res.open_id)
+            // 初始化时 app 并没有加载完成，调用 updateUser 需要读取用户 openId
+            // 此时不能从全局数据里拿数据，所以初始化的时候从 stroage 里拿数据
+            wx.setStorageSync(constant.STORAGE.OPEN_ID, res.open_id)
+
+            return utils.updateUser()
           })
           .then((result: IUserUpdateResult) => {
             if (!result.isGlobalDataUpdated) {

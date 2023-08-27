@@ -23,7 +23,7 @@ Page({
     const updated = e.detail.value
 
     api.update(updated).then(() => {
-      utils.updateUser(app.globalData.user.openId)
+      utils.updateUser()
 
       wx.showToast({
         title: '修改成功',

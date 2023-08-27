@@ -3,10 +3,10 @@ import {default as appConstant} from '@constant/app'
 
 const app = getApp<IGlobalData>()
 
-const updateUser = (openId: string): IUserUpdateResult => {
+const updateUser = (): IUserUpdateResult => {
   let result: IUserUpdateResult = {isGlobalDataUpdated: true}
 
-  user.detail(openId).then((detail: IUserDetailResponse) => {
+  user.detail().then((detail: IUserDetailResponse) => {
     const user: IUser = {
       avatar: detail.avatar,
       nickname: detail.nickname,
@@ -14,14 +14,16 @@ const updateUser = (openId: string): IUserUpdateResult => {
       openId: detail.open_id,
     }
 
-    wx.setStorageSync(appConstant.STORAGE_USER, user)
+    wx.setStorageSync(appConstant.STORAGE.USER, user)
 
-    if (!app) {
-      result.isGlobalDataUpdated = false
-      result.user = user
+    if (app) {
+      app.globalData.user = user
+
+      return;
     }
 
-    app.globalData.user = user
+    result.isGlobalDataUpdated = false
+    result.user = user
   })
 
   return result
