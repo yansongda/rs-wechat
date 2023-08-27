@@ -7,4 +7,4 @@ const URL = {
   BASE: 'https://miniprogram.ysdor.cn',
 }
 
-export default { STORAGE, URL }
+export { STORAGE, URL }

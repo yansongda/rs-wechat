@@ -1,5 +1,5 @@
-import {default as api} from '@api/user'
-import {default as utils} from '@utils/user'
+import api from '@api/user'
+import utils from '@utils/user'
 
 const app = getApp<IGlobalData>()
 
@@ -23,7 +23,7 @@ Page({
     const updated = e.detail.value
 
     api.update(updated).then(() => {
-      utils.updateUser()
+      utils.sync()
 
       wx.showToast({
         title: '修改成功',

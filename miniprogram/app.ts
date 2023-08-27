@@ -1,6 +1,7 @@
-import {default as constant} from '@constant/app'
-import {default as user} from '@api/user'
-import {default as utils} from '@utils/user'
+import { STORAGE } from '@constant/app'
+import userApi from '@api/user'
+import userUtils from '@utils/user'
+import { HttpApiError } from '@models/error'
 
 App<IGlobalData>({
   globalData: {
@@ -12,7 +13,7 @@ App<IGlobalData>({
     }
   },
   onLaunch() {
-    const storage = wx.getStorageSync(constant.STORAGE.USER)
+    const storage = wx.getStorageSync(STORAGE.USER)
     if (storage) {
       this.globalData.user = storage
 
@@ -21,13 +22,13 @@ App<IGlobalData>({
 
     wx.login({
       success: (res) => {
-        user.login(res.code)
+        userApi.login(res.code)
           .then((res: IUserLoginResponse) => {
             // 初始化时 app 并没有加载完成，调用 updateUser 需要读取用户 openId
             // 此时不能从全局数据里拿数据，所以初始化的时候从 stroage 里拿数据
-            wx.setStorageSync(constant.STORAGE.OPEN_ID, res.open_id)
+            wx.setStorageSync(STORAGE.OPEN_ID, res.open_id)
 
-            return utils.updateUser()
+            return userUtils.sync()
           })
           .then((result: IUserUpdateResult) => {
             if (!result.isGlobalDataUpdated) {
@@ -38,5 +39,15 @@ App<IGlobalData>({
       },
       fail: () => wx.showToast({title: '登录失败',icon: 'error', duration: 1500, mask: true}),
     })
+  },
+  onError() {
+    wx.showToast({title: '小程序异常', icon: 'error', duration: 2000})
+  },
+  onUnhandledRejection(e: any) {
+    if (e.reason instanceof HttpApiError) {
+      wx.showToast({title: e.reason.message, icon: 'error', duration: 2000})
+    } else {
+      wx.showToast({title: '未知错误', icon: 'error', duration: 2000})
+    }
   }
 })

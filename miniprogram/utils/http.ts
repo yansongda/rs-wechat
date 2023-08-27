@@ -1,11 +1,12 @@
-import {default as constant} from '@constant/app'
+import { STORAGE, URL } from '@constant/app'
+import { HttpError, HttpApiError, LoginError } from '@models/error'
 
 const app = getApp<IGlobalData>();
 
 // 初始化时会调用用户详情接口，用户详情需要 openID
 // 但是初始化时 app 并没有加载完成，此时不能从全局数据里拿数据
 // 所以初始化的时候尝试从 stroage 里拿数据
-const openId = app?.globalData.user.openId ?? wx.getStorageSync(constant.STORAGE.OPEN_ID) ?? ''
+const openId = app?.globalData.user.openId ?? wx.getStorageSync(STORAGE.OPEN_ID) ?? ''
 
 const formatUrl = (url: string, query?: IQuery): string => {
   if (!query) {
@@ -34,19 +35,13 @@ const formatHeaders = (headers?: IHeaders): IHeaders => {
   return headers
 }
 
-const request = <T>(url: string, options: IOptions, mustOpenId?: boolean) => {
+const request = <T>(url: string, options: IOptions, mustOpenId?: boolean): Promise<T> => {
   return new Promise<T>((resolve, reject) => {
-    const uri = constant.URL.BASE + formatUrl(url, options.query)
+    const uri = URL.BASE + formatUrl(url, options.query)
     const headers = formatHeaders(options.headers)
     
     if ((mustOpenId ?? true) && openId == '') {      
-      wx.showToast({
-        title: "请重新登录",
-        icon: "error",
-        duration: 3000,
-      })
-
-      reject('请重新登录')
+      reject(new LoginError())
     }
 
     wx.request({
@@ -57,31 +52,23 @@ const request = <T>(url: string, options: IOptions, mustOpenId?: boolean) => {
       method: options.method || "POST",
       success: (res: any) => {
         if (res.data.code == 0) {
-          resolve(res.data.data ?? null)
+          resolve(res.data.data)
         }
 
-        reject(res.data)
+        reject(new HttpApiError(res.data.code as number, res.data.message as string))
       },
       fail: (err) => {
-        console.log(err)
-
-        wx.showToast({
-          title: "网络请求失败",
-          icon: "error",
-          duration: 3000,
-        })
-
-        reject(err)
+        reject(new HttpError(err.errMsg))
       },
     })
   })
 }
 
-const post = <T>(url: string, json?: IJson, mustOpenId?: boolean) => {
+const post = <T>(url: string, json?: IJson, mustOpenId?: boolean): Promise<T> => {
   return request<T>(url, { json }, mustOpenId)
 }
 
-const get = <T>(url: string, query?: IQuery, mustOpenId?: boolean) => {
+const get = <T>(url: string, query?: IQuery, mustOpenId?: boolean): Promise<T> => {
   return request<T>(url, { query }, mustOpenId)
 }
 

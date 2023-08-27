@@ -1,4 +1,4 @@
-import {default as utils} from '@utils/user'
+import utils from '@utils/user'
 
 const app = getApp<IGlobalData>()
 
@@ -9,7 +9,7 @@ Page({
     slogan: app.globalData.user.slogan,
   },
   onLoad() {
-    utils.updateUser()
+    utils.sync()
   },
   onShow() {
     this.setData({

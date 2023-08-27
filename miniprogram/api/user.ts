@@ -1,16 +1,18 @@
-import {default as api} from '@utils/http'
-import {default as constant} from '@constant/user'
+import http from '@utils/http'
+import { URL } from '@constant/user'
+import api from '@utils/api'
+import { CODE } from '@constant/error'
 
-const login = async (code: string) => {
-  return await api.post<IUserLoginResponse>(constant.URL.LOGIN, {code}, false)
+const login = (code: string) => {
+  return http.post<IUserLoginResponse>(URL.LOGIN, {code}, false).catch((e) => api.resolveReject(e, CODE.HTTP_API_USER_LOGIN))
 }
 
-const detail = async () => {
-  return await api.get<IUserDetailResponse>(constant.URL.DETAIL)
+const detail = () => {
+  return http.get<IUserDetailResponse>(URL.DETAIL).catch((e) => api.resolveReject(e, CODE.HTTP_API_USER_DETAIL))
 }
 
-const update = async (updated: IUserUpdate) => {
-  return await api.post(constant.URL.UPDATE, updated)
+const update = (updated: IUserUpdate) => {
+  return http.post(URL.UPDATE, updated).catch((e) => api.resolveReject(e, CODE.HTTP_API_USER_UPDATE))
 }
 
 export default { login, detail, update }

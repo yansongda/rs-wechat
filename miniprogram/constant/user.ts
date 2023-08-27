@@ -4,4 +4,4 @@ const URL = {
   UPDATE: '/api/v1/users/update'
 }
 
-export default { URL }
+export { URL }

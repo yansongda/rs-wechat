@@ -4,4 +4,4 @@ const URL = {
   DELETE: '/api/v1/totp/delete'
 }
 
-export default { URL }
+export { URL }

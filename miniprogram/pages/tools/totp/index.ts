@@ -1,10 +1,10 @@
-import {default as api} from '@api/totp'
+import api from '@api/totp'
 
 Page({
   data: {
     remainSeconds: 30,
     items: [] as ITotpItem[],
-    interval: 0,
+    intervalIdentity: 0,
     startX: 0,
     startY: 0
   },
@@ -15,10 +15,10 @@ Page({
     this.all()
   },
   onHide() {
-    clearInterval(this.data.interval)
+    clearInterval(this.data.intervalIdentity)
   },
   onUnload() {
-    clearInterval(this.data.interval)
+    clearInterval(this.data.intervalIdentity)
   },
   timing() {
     let remainSeconds = 30 - (new Date()).getSeconds()
@@ -28,7 +28,7 @@ Page({
 
     this.setData({remainSeconds})
 
-    this.data.interval = setInterval(() => {
+    this.data.intervalIdentity = setInterval(() => {
       let remainSeconds = this.data.remainSeconds
 
       remainSeconds -= 1
@@ -43,31 +43,28 @@ Page({
       }
     }, 1000)
   },
-  all() {
-    api.all().then((response: ITotpItemResponse[]) => {
-      wx.hideLoading();
+  async all() {
+    const response = await api.all()
 
-      const items: ITotpItem[] = []
+    wx.hideLoading();
 
-      response.forEach((v: ITotpItemResponse) => {
-        items.push({
-          isTouchMove: false,
-          ...v
-        })
+    const items: ITotpItem[] = []
+
+    response.forEach((v: ITotpItemResponse) => {
+      items.push({
+        isTouchMove: false,
+        ...v
       })
+    })
 
-      this.setData({items})
-    })
+    this.setData({items})
   },
-  add() {
-    wx.scanCode({
-      scanType: ["qrCode"],
-      success: (e) => {
-        api.updateOrCreate({uri: e.result}).then(() => this.all())
-        .catch(() => wx.showToast({title: '添加失败', icon: 'error', duration: 2000}))
-      },
-      fail: () => () => wx.showToast({title: '扫码失败', icon: 'error', duration: 2000})
-    })
+  async add() {
+    const scan = await wx.scanCode({scanType: ['qrCode']})
+    
+    await api.updateOrCreate({uri: scan.result}).catch(() => wx.showToast({title: '添加失败', icon: 'error', duration: 2000}))
+    
+    await this.all()
   },
   delete(e: any) {
     api.deleteTotp(e.currentTarget.dataset.id)

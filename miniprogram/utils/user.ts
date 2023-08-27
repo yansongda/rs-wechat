@@ -1,12 +1,12 @@
-import {default as user} from '@api/user'
-import {default as appConstant} from '@constant/app'
+import api from '@api/user'
+import { STORAGE } from '@constant/app'
 
 const app = getApp<IGlobalData>()
 
-const updateUser = (): IUserUpdateResult => {
+const sync = (): IUserUpdateResult => {
   let result: IUserUpdateResult = {isGlobalDataUpdated: true}
 
-  user.detail().then((detail: IUserDetailResponse) => {
+  api.detail().then((detail: IUserDetailResponse) => {
     const user: IUser = {
       avatar: detail.avatar,
       nickname: detail.nickname,
@@ -14,7 +14,7 @@ const updateUser = (): IUserUpdateResult => {
       openId: detail.open_id,
     }
 
-    wx.setStorageSync(appConstant.STORAGE.USER, user)
+    wx.setStorageSync(STORAGE.USER, user)
 
     if (app) {
       app.globalData.user = user
@@ -29,4 +29,4 @@ const updateUser = (): IUserUpdateResult => {
   return result
 }
 
-export default { updateUser }
+export default { sync }

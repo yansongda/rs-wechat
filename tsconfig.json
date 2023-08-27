@@ -25,6 +25,7 @@
       "@api/*": ["miniprogram/api/*"],
       "@utils/*": ["miniprogram/utils/*"],
       "@constant/*": ["miniprogram/constant/*"],
+      "@models/*": ["miniprogram/models/*"],
     }
   },
   "exclude": [
