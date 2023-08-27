@@ -13,12 +13,14 @@ App<IGlobalData>({
       openId: '',
     }
   },
-  onLaunch() {
-    const storage = wx.getStorageSync(STORAGE.USER)
-    if (storage) {
-      this.globalData.user = storage
+  async onLaunch() {
+    try {
+      const storage = await wx.getStorage({key: STORAGE.USER})
+
+      this.globalData.user = storage.data
 
       return;
+    } catch (e) {
     }
 
     wx.login({
@@ -27,7 +29,7 @@ App<IGlobalData>({
         
         // 初始化时 app 并没有加载完成，调用 updateUser 需要读取用户 openId
         // 此时不能从全局数据里拿数据，所以初始化的时候从 stroage 里拿数据
-        wx.setStorageSync(STORAGE.OPEN_ID, loginResponse.open_id)
+        await wx.setStorage({key: STORAGE.OPEN_ID, data: loginResponse.open_id}).catch(() => { return Promise.reject(new WeixinError(CODE.WEIXIN_STORAGE_SET)) })
 
         const updateResult: IUserUpdateResult = await userUtils.sync()
         if (!updateResult.isGlobalDataUpdated) {

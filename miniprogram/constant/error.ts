@@ -4,6 +4,7 @@ const CODE = {
   WEIXIN: 1,
   WEIXIN_LOGIN: 2,
   WEIXIN_QR_CODE: 3,
+  WEIXIN_STORAGE_SET: 4,
   // 权限错误
   LOGIN: 1000,
   // http 调用错误
@@ -25,6 +26,7 @@ const MESSAGE = {
   [CODE.WEIXIN]: '微信调用错误',
   [CODE.WEIXIN_LOGIN]: '微信登录错误',
   [CODE.WEIXIN_QR_CODE]: '二维码识别出错',
+  [CODE.WEIXIN_STORAGE_SET]: '微信存储出错',
   [CODE.LOGIN]: '登录失败',
   [CODE.HTTP]: '网络请求失败',
   [CODE.HTTP_API]: '业务处理失败',
