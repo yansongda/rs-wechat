@@ -1,4 +1,5 @@
 import { URL } from '@constant/app'
+import { CODE, MESSAGE } from '@constant/error'
 import { HttpError, HttpApiError, LoginError } from '@models/error'
 import userUtils from '@utils/user'
 
@@ -67,10 +68,22 @@ const wxRequest = <T>(request: IRequest) => {
 
 const wxUpload = <T>(request: IRequest) => {
   return new Promise<T>((resolve, reject) => {
+    const filePath: string = request.data?.filePath ?? ''
+    const name: string = request.data?.name ?? ''
+    const formData: IRequestData = request.data ?? {}
+
+    if (!filePath || !name) {
+      reject(new HttpError(MESSAGE[CODE.HTTP_API]))
+    }
+
+    delete formData.filePath
+    delete formData.name
+
     wx.uploadFile({
       url: request.url,
-      filePath: '',
-      name: '',
+      filePath,
+      name,
+      formData,
       header: request.headers ?? {},
       timeout: request.timeout || 10000,
       success: (res: any) => {
