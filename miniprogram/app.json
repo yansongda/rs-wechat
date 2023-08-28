@@ -3,8 +3,8 @@
     "pages/home/index",
     "pages/user/index",
     "pages/user/edit",
-    "pages/tools/totp/index",
-    "pages/tools/shorturl/index"
+    "pages/totp/index",
+    "pages/shorturl/index"
   ],
   "window": {
     "backgroundTextStyle": "light",

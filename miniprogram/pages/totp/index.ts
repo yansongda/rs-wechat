@@ -10,11 +10,9 @@ Page({
     startX: 0,
     startY: 0
   },
-  onShow() {
-    wx.showLoading({title: '加载中'})
-
+  async onShow() {
     this.timing()
-    this.all()
+    await this.all()
   },
   onHide() {
     clearInterval(this.data.intervalIdentity)
@@ -30,7 +28,7 @@ Page({
 
     this.setData({remainSeconds})
 
-    this.data.intervalIdentity = setInterval(() => {
+    this.data.intervalIdentity = setInterval(async () => {
       let remainSeconds = this.data.remainSeconds
 
       remainSeconds -= 1
@@ -41,17 +39,16 @@ Page({
       this.setData({ remainSeconds })
 
       if (remainSeconds == 30) {
-        this.all()
+        await this.all()
       }
     }, 1000)
   },
   async all() {
+    wx.showLoading({title: '加载中'})
+
     const response = await api.all()
 
-    wx.hideLoading();
-
     const items: ITotpItem[] = []
-
     response.forEach((v: ITotpItemResponse) => {
       items.push({
         isTouchMove: false,
@@ -60,6 +57,8 @@ Page({
     })
 
     this.setData({items})
+
+    wx.hideLoading()
   },
   async add() {
     const scan = await wx.scanCode({scanType: ['qrCode']}).catch(() => {

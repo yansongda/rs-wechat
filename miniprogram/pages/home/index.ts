@@ -4,12 +4,12 @@ Page({
       {
         "name": "TOTP身份验证器",
         "icon": "lock",
-        "url": "/pages/tools/totp/index",
+        "url": "/pages/totp/index",
       },
       {
         "name": "短链生成服务",
         "icon": "link",
-        "url": "/pages/tools/shorturl/index",
+        "url": "/pages/shorturl/index",
       }
     ]
   },
