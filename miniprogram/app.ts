@@ -29,14 +29,14 @@ App<IGlobalData>({
         
         // 初始化时 app 并没有加载完成，调用 updateUser 需要读取用户 openId
         // 此时不能从全局数据里拿数据，所以初始化的时候从 stroage 里拿数据
-        await wx.setStorage({key: STORAGE.OPEN_ID, data: loginResponse.open_id}).catch(() => { return Promise.reject(new WeixinError(CODE.WEIXIN_STORAGE_SET)) })
+        await wx.setStorage({key: STORAGE.OPEN_ID, data: loginResponse.open_id}).catch(() => Promise.reject(new WeixinError(CODE.WEIXIN_STORAGE_SET)))
 
         const updateResult: IUserUpdateResult = await userUtils.sync()
         if (!updateResult.isGlobalDataUpdated) {
           this.globalData.user = updateResult.user as IUser
         }
       },
-      fail: async () => { return Promise.reject(new WeixinError(CODE.WEIXIN_LOGIN)) },
+      fail: async () => Promise.reject(new WeixinError(CODE.WEIXIN_LOGIN)),
     })
   },
   onError(e) {

@@ -61,9 +61,7 @@ Page({
     wx.hideLoading()
   },
   async add() {
-    const scan = await wx.scanCode({scanType: ['qrCode']}).catch(() => {
-      return Promise.reject(new WeixinError(CODE.WEIXIN_QR_CODE))
-    })
+    const scan = await wx.scanCode({scanType: ['qrCode']}).catch(() => Promise.reject(new WeixinError(CODE.WEIXIN_QR_CODE)))
     
     await api.updateOrCreate({uri: scan.result})
     
