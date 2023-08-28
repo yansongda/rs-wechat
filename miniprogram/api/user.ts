@@ -4,11 +4,11 @@ import api from '@utils/api'
 import { CODE } from '@constant/error'
 
 const login = (code: string) => {
-  return http.post<IUserLoginResponse>(URL.LOGIN, {code}, false).catch((e) => api.resolveReject(e, CODE.HTTP_API_USER_LOGIN))
+  return http.post<IUserLoginResponse>(URL.LOGIN, {code}, false, false).catch((e) => api.resolveReject(e, CODE.HTTP_API_USER_LOGIN))
 }
 
 const uploadAvatar = (path: string) => {
-
+  
 }
 
 const detail = () => {

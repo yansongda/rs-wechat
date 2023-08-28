@@ -5,7 +5,7 @@ interface IUser {
   slogan: string
 }
 
-interface IUserUpdate extends IJson {
+interface IUserUpdate extends IRequestJson {
   avatar: string,
   nickname: string,
   slogan: string,

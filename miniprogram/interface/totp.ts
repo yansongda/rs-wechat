@@ -2,7 +2,7 @@ interface ITotpItem extends ITotpItemResponse {
   isTouchMove: boolean,
 }
 
-interface ITotpUpdateOrCreate extends IJson{
+interface ITotpUpdateOrCreate extends IRequestJson{
   issuer?: string,
   username?: string,
   uri?: string,

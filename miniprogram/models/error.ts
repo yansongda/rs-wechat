@@ -26,7 +26,7 @@ class LoginError extends EError implements ILoginError {
 class HttpError extends EError implements IHttpError {
   describe?: string;
   url?: string;
-  headers?: IHeaders;
+  headers?: IRequestHeaders;
   timeout?: number;
 
   constructor(describe?: string, code?: number, message?: string) {
@@ -37,10 +37,10 @@ class HttpError extends EError implements IHttpError {
 }
 
 class HttpApiError extends EError implements IHttpApiError {
-  query?: IQuery;
-  json?: IJson;
-  data?: IData;
-  headers?: IHeaders;
+  query?: IRequestQuery;
+  json?: IRequestJson;
+  data?: IRequestData;
+  headers?: IRequestHeaders;
 
   constructor(code?: number, message?: string) {
     super(code || CODE.HTTP, message)

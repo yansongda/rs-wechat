@@ -2,56 +2,60 @@ import { URL } from '@constant/app'
 import { HttpError, HttpApiError, LoginError } from '@models/error'
 import userUtils from '@utils/user'
 
-const formatUrl = (url: string, query?: IQuery): string => {
-  if (!query) {
-    return url
+const formatUrl = (request: IRequest): void => {
+  if (typeof request.query != 'undefined') {
+    const query = request.query
+
+    let paramsArray = <any>[]
+
+    Object.keys(request.query).forEach(key => query[key] && paramsArray.push(`${key}=${query[key]}`))
+  
+    request.url += (request.url.search(/\?/) === -1 ? '?' : '&') + `${paramsArray.join('&')}`
   }
 
-  let paramsArray = [] as any
-
-  Object.keys(query)
-    .forEach(key => query[key] && paramsArray.push(`${key}=${query[key]}`))
-
-  url += (url.search(/\?/) === -1 ? '?' : '&') + `${paramsArray.join('&')}`
-
-  return url
+  if (request.url.startsWith('/')) {
+    request.url = URL.BASE + request.url
+  }
 }
 
-const formatHeaders = (headers?: IHeaders): IHeaders => {
-  if (!headers) {
-    headers = {}
+const formatHeaders = (request: IRequest, openId: string): void => {
+  if (typeof request.headers == 'undefined') {
+    request.headers = {}
   }
 
+  request.headers.open_id = openId
+}
+
+const request = <T>(request: IRequest, mustOpenId?: boolean): Promise<T> => {
   const openId = userUtils.getOpenId()
 
-  if (openId != '') {
-    headers.open_id = openId
+  if (openId == '' && (mustOpenId ?? true)) {
+    return Promise.reject(new LoginError())
   }
 
-  return headers
+  formatUrl(request)
+  formatHeaders(request, openId)
+
+  if (request.isUploadFile) {
+    return wxUpload(request)
+  }
+
+  return wxRequest(request)
 }
 
-const request = <T>(url: string, options: IOptions, mustOpenId?: boolean): Promise<T> => {
+const wxRequest = <T>(request: IRequest) => {
   return new Promise<T>((resolve, reject) => {
-    const uri = URL.BASE + formatUrl(url, options.query)
-    const headers = formatHeaders(options.headers)
-    const openId = userUtils.getOpenId()
-    
-    if ((mustOpenId ?? true) && openId == '') {      
-      reject(new LoginError())
-    }
-
     wx.request({
-      url: uri,
-      data: options.json || options.data || {},
-      header: headers,
-      timeout: options.timeout || 3000,
-      method: options.method || "POST",
+      url: request.url,
+      data: request.data || {},
+      header: request.headers ?? {},
+      timeout: request.timeout || 3000,
+      method: request.method || 'POST',
       success: (res: any) => {
         if (res.data.code == 0) {
           resolve(res.data.data)
         }
-
+  
         reject(new HttpApiError(res.data.code as number, res.data.message as string))
       },
       fail: (err) => {
@@ -61,12 +65,34 @@ const request = <T>(url: string, options: IOptions, mustOpenId?: boolean): Promi
   })
 }
 
-const post = <T>(url: string, json?: IJson, mustOpenId?: boolean): Promise<T> => {
-  return request<T>(url, { json }, mustOpenId)
+const wxUpload = <T>(request: IRequest) => {
+  return new Promise<T>((resolve, reject) => {
+    wx.uploadFile({
+      url: request.url,
+      filePath: '',
+      name: '',
+      header: request.headers ?? {},
+      timeout: request.timeout || 10000,
+      success: (res: any) => {
+        if (res.data.code == 0) {
+          resolve(res.data.data)
+        }
+  
+        reject(new HttpApiError(res.data.code as number, res.data.message as string))
+      },
+      fail: (err) => {
+        reject(new HttpError(err.errMsg))
+      },
+    })
+  })
 }
 
-const get = <T>(url: string, query?: IQuery, mustOpenId?: boolean): Promise<T> => {
-  return request<T>(url, { query }, mustOpenId)
+const post = <T>(url: string, data?: IRequestData, isUploadFile?: boolean, mustOpenId?: boolean): Promise<T> => {
+  return request<T>({url, data, isUploadFile}, mustOpenId)
+}
+
+const get = <T>(url: string, query?: IRequestQuery, mustOpenId?: boolean): Promise<T> => {
+  return request<T>({url, query}, mustOpenId)
 }
 
 export default { request, post, get }

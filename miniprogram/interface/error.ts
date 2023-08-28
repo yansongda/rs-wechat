@@ -10,13 +10,13 @@ interface ILoginError extends IERROR {
 interface IHttpError extends IERROR {
   describe?: string,
   url?: string,
-  headers?: IHeaders,
+  headers?: IRequestHeaders,
   timeout?: number,
 }
 
 interface IHttpApiError extends IERROR {
-  query?: IQuery,
-  json?: IJson,
-  data?: IData,
-  headers?: IHeaders,
+  query?: IRequestQuery,
+  json?: IRequestJson,
+  data?: IRequestData,
+  headers?: IRequestHeaders,
 }

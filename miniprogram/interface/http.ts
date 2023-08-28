@@ -1,24 +1,21 @@
-interface IOptions {
-  query?: IQuery,
-  json?: IJson,
-  data?: IData,
-  headers?: IHeaders,
+interface IRequest {
+  url: string,
+  query?: IRequestQuery,
+  data?: IRequestData,
+  headers?: IRequestHeaders,
   method?: "POST" | "OPTIONS" | "GET" | "HEAD" | "PUT" | "DELETE" | "TRACE" | "CONNECT" | undefined,
   timeout?: number,
+  isUploadFile?: boolean,
 }
 
-interface IQuery{
+interface IRequestQuery {
   [key: string]: number | string | undefined
 }
 
-interface IJson{
-  [key: string]: number | string | null | undefined
-}
-
-interface IData{
+interface IRequestData {
   [key: string]: any
 }
 
-interface IHeaders{
+interface IRequestHeaders {
   [key: string]: string | undefined
 }
