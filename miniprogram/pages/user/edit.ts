@@ -16,14 +16,17 @@ Page({
       slogan: app.globalData.user.slogan,
     })
   },
-  onChooseAvatar(e: any) {
-    this.setData({avatar: e.detail.avatarUrl})
+  async onChooseAvatar(e: any) {
+    wx.showLoading({title: '上传中', mask: true})
+
+    const { url } = await api.uploadAvatar(e.detail.avatarUrl)
+
+    this.setData({ avatar: url })
+
+    wx.hideLoading()
   },
   async submit(e: any) {
-    const updated = e.detail.value
-
-    await api.update(updated)
-
+    await api.update(e.detail.value as IUserUpdateRequest)
     await utils.sync()
 
     wx.showToast({

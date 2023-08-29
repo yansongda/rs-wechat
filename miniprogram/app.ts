@@ -2,7 +2,7 @@ import { STORAGE } from '@constant/app'
 import userApi from '@api/user'
 import userUtils from '@utils/user'
 import { EError, WeixinError } from '@models/error'
-import { CODE } from '@constant/error'
+import { CODE, MESSAGE } from '@constant/error'
 
 App<IGlobalData>({
   globalData: {
@@ -39,12 +39,14 @@ App<IGlobalData>({
       fail: async () => Promise.reject(new WeixinError(CODE.WEIXIN_LOGIN)),
     })
   },
-  onError(e) {
+  onError(e: any) {
+    console.log(e)
+
     wx.showToast({title: '小程序异常', icon: 'error', duration: 2000})
   },
   onUnhandledRejection(e: any) {
     if (e.reason instanceof EError) {
-      wx.showToast({title: e.reason.message, icon: 'error', duration: 2000})
+      wx.showToast({title: e.reason.message || MESSAGE[e.reason.code], icon: 'error', duration: 2000})
     } else {
       wx.showToast({title: '未知错误', icon: 'error', duration: 2000})
     }

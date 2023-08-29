@@ -16,7 +16,6 @@ interface IHttpError extends IERROR {
 
 interface IHttpApiError extends IERROR {
   query?: IRequestQuery,
-  json?: IRequestJson,
   data?: IRequestData,
   headers?: IRequestHeaders,
 }

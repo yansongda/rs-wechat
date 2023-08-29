@@ -5,10 +5,10 @@ interface IUser {
   slogan: string
 }
 
-interface IUserUpdate extends IRequestJson {
-  avatar: string,
-  nickname: string,
-  slogan: string,
+interface IUserUpdateRequest extends IRequestData {
+  avatar?: string,
+  nickname?: string,
+  slogan?: string,
 }
 
 interface IUserUpdateResult {
@@ -25,4 +25,8 @@ interface IUserDetailResponse {
   avatar: string,
   nickname: string,
   slogan: string,
+}
+
+interface IUserUploadAvatarResponse {
+  url: string,
 }

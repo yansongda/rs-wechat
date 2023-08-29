@@ -38,12 +38,11 @@ class HttpError extends EError implements IHttpError {
 
 class HttpApiError extends EError implements IHttpApiError {
   query?: IRequestQuery;
-  json?: IRequestJson;
   data?: IRequestData;
   headers?: IRequestHeaders;
 
   constructor(code?: number, message?: string) {
-    super(code || CODE.HTTP, message)
+    super(code || CODE.HTTP_API, message)
   }
 }
 
