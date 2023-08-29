@@ -7,11 +7,17 @@ Page({
     remainSeconds: 30,
     items: [] as ITotpItem[],
     intervalIdentity: 0,
+    isScanQrCode: false,
     startX: 0,
     startY: 0
   },
   async onShow() {
     this.timing()
+
+    if (this.data.isScanQrCode) {
+      return;
+    }
+
     await this.all()
   },
   onHide() {
@@ -61,7 +67,11 @@ Page({
     wx.hideLoading()
   },
   async add() {
+    this.data.isScanQrCode = true
+
     const scan = await wx.scanCode({scanType: ['qrCode']}).catch(() => Promise.reject(new WeixinError(CODE.WEIXIN_QR_CODE)))
+    
+    this.data.isScanQrCode = false
     
     await api.updateOrCreate({uri: scan.result})
     
