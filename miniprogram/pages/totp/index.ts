@@ -66,19 +66,19 @@ Page({
 
     wx.hideLoading()
   },
-  async add() {
+  async create() {
     this.data.isScanQrCode = true
 
     const scan = await wx.scanCode({scanType: ['qrCode']}).catch(() => Promise.reject(new WeixinError(CODE.WEIXIN_QR_CODE)))
     
     this.data.isScanQrCode = false
     
-    await api.updateOrCreate({uri: scan.result})
+    await api.create(scan.result)
     
     await this.all()
   },
-  async edit() {
-    await wx.navigateTo({url: '/pages/totp/edit'})
+  async edit(e: any) {
+    await wx.navigateTo({url: '/pages/totp/edit?id=' + e.currentTarget.dataset.id})
 
     this.clearInterval()
   },

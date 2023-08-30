@@ -2,10 +2,9 @@ interface ITotpItem extends ITotpItemResponse {
   isTouchMove: boolean,
 }
 
-interface ITotpUpdateOrCreate extends IRequestData{
-  issuer?: string,
-  username?: string,
-  uri?: string,
+interface ITotpUpdateRequest extends IRequestData{
+  issuer: string,
+  username: string,
 }
 
 interface ITotpItemResponse {

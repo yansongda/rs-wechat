@@ -22,7 +22,7 @@
 </view>
 
 <view class="footer">
-  <view class="add" bind:tap="add">
+  <view class="add" bind:tap="create">
     <mp-icon icon="add" type="field" color="black" size="25"></mp-icon>
     <view>添加</view>
   </view>
