@@ -17,7 +17,7 @@ Page({
     })
   },
   async onChooseAvatar(e: any) {
-    wx.showLoading({title: '上传中', mask: true})
+    wx.showLoading({title: '上传中', icon: 'loading', mask: true})
 
     const { url } = await api.uploadAvatar(e.detail.avatarUrl)
 
@@ -26,6 +26,8 @@ Page({
     wx.hideLoading()
   },
   async submit(e: any) {
+    wx.showToast({title: '更新中', icon: 'loading', mask: true})
+
     await api.update(e.detail.value as IUserUpdateRequest)
     await utils.sync()
 
@@ -39,6 +41,9 @@ Page({
         }, 1500);
       }
     })
+  },
+  cancel() {
+    wx.navigateBack()
   },
 })
 

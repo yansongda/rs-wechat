@@ -11,7 +11,11 @@
           </view>
           <view class="item-body-code">{{item.code}}</view>
         </view>
-        <view class="item-delete" data-id="{{ item.id }}" bind:tap="delete">删除</view>
+        <view class="item-operation">
+          <view class="item-update" data-id="{{ item.id }}" bind:tap="edit">备注</view>
+          <view class="item-delete" data-id="{{ item.id }}" bind:tap="delete">删除</view>
+        </view>
+        
       </movable-view>
     </movable-area>
   </view>

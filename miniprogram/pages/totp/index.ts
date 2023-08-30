@@ -21,10 +21,10 @@ Page({
     await this.all()
   },
   onHide() {
-    clearInterval(this.data.intervalIdentity)
+    this.clearInterval()
   },
   onUnload() {
-    clearInterval(this.data.intervalIdentity)
+    this.clearInterval()
   },
   timing() {
     let remainSeconds = 30 - (new Date()).getSeconds()
@@ -34,7 +34,7 @@ Page({
 
     this.setData({remainSeconds})
 
-    this.data.intervalIdentity = setInterval(async () => {
+    this.data.intervalIdentity = this.data.intervalIdentity || setInterval(async () => {
       let remainSeconds = this.data.remainSeconds
 
       remainSeconds -= 1
@@ -77,6 +77,11 @@ Page({
     
     await this.all()
   },
+  async edit() {
+    await wx.navigateTo({url: '/pages/totp/edit'})
+
+    this.clearInterval()
+  },
   async delete(e: any) {
     const result = await wx.showModal({title: '是否确定删除？', content: '删除后数据不可恢复'})
 
@@ -84,6 +89,11 @@ Page({
       await api.deleteTotp(e.currentTarget.dataset.id)
       await this.all()
     }
+  },
+  clearInterval() {
+    clearInterval(this.data.intervalIdentity)
+    
+    this.data.intervalIdentity = 0
   },
   touchstart(e: any) {
     // 开始触摸时 重置所有删除
