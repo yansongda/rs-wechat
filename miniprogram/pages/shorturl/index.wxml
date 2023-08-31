@@ -1,1 +1,31 @@
-<text>短链</text>
+<form bindsubmit="submit">
+  <view class="weui-form">
+    <view class="weui-form__bd">
+      <view class="weui-form__control-area">
+        <view class="weui-cells__group weui-cells__group_form">
+          <view class="weui-cells weui-cells_form">
+            <view for="link" class="weui-cell weui-cell_active weui-cell_vertical">
+              <view class="weui-cell__bd">
+                <textarea id="link" class="weui-textarea" placeholder="请输入长链接地址" name="link" auto-focus="true" confirm-type="done" />
+              </view>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+    <view class="weui-form__ft">
+      <view class="weui-form__opr-area">
+        <button class="weui-btn weui-btn_primary" aria-role="button" form-type="submit">生成</button>
+      </view>
+    </view>
+  </view>
+</form>
+<view class="weui-cells__group weui-cells__group_form" bind:tap="copy">
+  <view class="weui-cells weui-cells_form">
+    <view for="shortlink" class="weui-cell weui-cell_active weui-cell_vertical">
+      <view class="weui-cell__bd">
+        <textarea id="shortlink" class="weui-textarea" placeholder="等待生成短链接地址，生成后点击复制" disabled="true" value="{{ shortlink }}" />
+      </view>
+    </view>
+  </view>
+</view>

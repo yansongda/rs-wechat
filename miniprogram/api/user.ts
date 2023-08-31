@@ -4,11 +4,11 @@ import api from '@utils/api'
 import { CODE } from '@constant/error'
 
 const login = (code: string) => {
-  return http.post<IUserLoginResponse>(URL.LOGIN, {code}, false, false).catch((e) => api.resolveReject(e, CODE.HTTP_API_USER_LOGIN))
+  return http.post<IUserLoginResponse>(URL.LOGIN, {code} as IUserLoginRequest, false, false).catch((e) => api.resolveReject(e, CODE.HTTP_API_USER_LOGIN))
 }
 
 const uploadAvatar = (filePath: string) => {
-  return http.post<IUserUploadAvatarResponse>(URL.UPLOAD_AVATAR, {filePath, name: 'avatar'}, true).catch((e) => api.resolveReject(e, CODE.HTTP_API_USER_UPLOAD_AVATAR))
+  return http.post<IUserUploadAvatarResponse>(URL.UPLOAD_AVATAR, {filePath, name: 'avatar'} as IUserUploadAvatarRequest, true).catch((e) => api.resolveReject(e, CODE.HTTP_API_USER_UPLOAD_AVATAR))
 }
 
 const detail = () => {
@@ -16,7 +16,7 @@ const detail = () => {
 }
 
 const update = (updated: IUserUpdateRequest) => {
-  return http.post(URL.UPDATE, updated).catch((e) => api.resolveReject(e, CODE.HTTP_API_USER_UPDATE))
+  return http.post<IUserUpdateResponse>(URL.UPDATE, updated).catch((e) => api.resolveReject(e, CODE.HTTP_API_USER_UPDATE))
 }
 
 export default { login, uploadAvatar, detail, update }

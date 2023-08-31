@@ -101,11 +101,11 @@ const wxUpload = <T>(request: IRequest) => {
 }
 
 const post = <T>(url: string, data?: IRequestData, isUploadFile?: boolean, mustOpenId?: boolean): Promise<T> => {
-  return request<T>({url, data, isUploadFile}, mustOpenId)
+  return request<T>({url, data, isUploadFile} as IRequest, mustOpenId)
 }
 
 const get = <T>(url: string, query?: IRequestQuery, mustOpenId?: boolean): Promise<T> => {
-  return request<T>({url, query}, mustOpenId)
+  return request<T>({url, query} as IRequest, mustOpenId)
 }
 
 export default { request, post, get }

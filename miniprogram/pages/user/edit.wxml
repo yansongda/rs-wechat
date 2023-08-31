@@ -6,7 +6,7 @@
           <image class="avatar" src="{{avatar}}"><input type="text" name="avatar" value="{{ avatar }}" /></image>
         </button>
         <view class="weui-cells__group weui-cells__group_form">
-          <view class="weui-cells">
+          <view class="weui-cells weui-cells_form">
             <view for="nickname" class="weui-cell weui-cell_active">
               <view class="weui-cell__hd">
                 <view class="weui-label">昵称</view>

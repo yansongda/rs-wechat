@@ -8,19 +8,19 @@ const all = () => {
 }
 
 const detail = (id: number) => {
-  return http.get<ITotpItemResponse>(URL.DETAIL, {id}).catch((e) => api.resolveReject(e, CODE.HTTP_API_TOTP_DETAIL))
+  return http.get<ITotpItemResponse>(URL.DETAIL, {id} as ITotpDetailRequest).catch((e) => api.resolveReject(e, CODE.HTTP_API_TOTP_DETAIL))
 }
 
 const create = (uri: string) => {
-  return http.post(URL.UPDATE_OR_CREATE, {uri}).catch((e) => api.resolveReject(e, CODE.HTTP_API_TOTP_CREATE))
+  return http.post<ITotpResponse>(URL.UPDATE_OR_CREATE, { uri } as ITotpUpdateCreateRequest).catch((e) => api.resolveReject(e, CODE.HTTP_API_TOTP_CREATE))
 }
 
 const update = (data: ITotpUpdateRequest) => {
-  return http.post(URL.UPDATE_OR_CREATE, data).catch((e) => api.resolveReject(e, CODE.HTTP_API_TOTP_UPDATE))
+  return http.post<ITotpResponse>(URL.UPDATE_OR_CREATE, data ).catch((e) => api.resolveReject(e, CODE.HTTP_API_TOTP_UPDATE))
 }
 
 const deleteTotp = (id: number) => {
-  return http.post(URL.DELETE, {id}).catch((e) => api.resolveReject(e, CODE.HTTP_API_TOTP_ALL))
+  return http.post<ITotpResponse>(URL.DELETE, {id}).catch((e) => api.resolveReject(e, CODE.HTTP_API_TOTP_ALL))
 }
 
 export default { all, detail, create, update, deleteTotp }

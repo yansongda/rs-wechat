@@ -13,8 +13,8 @@ Page({
     const {issuer, username} = await api.detail(this.data.id)
 
     this.setData({
-      issuer,
-      username
+      issuer: issuer ?? '',
+      username: username ?? '',
     })
   },
   async submit(e: any) {
