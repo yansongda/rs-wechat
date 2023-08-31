@@ -10,6 +10,11 @@ Page({
         "name": "短链生成服务",
         "icon": "link",
         "url": "/pages/shorturl/index",
+      },
+      {
+        "name": "时间转换",
+        "icon": "time",
+        "url": "/pages/time/index",
       }
     ]
   },
