@@ -6,12 +6,14 @@ Page({
     shortlink: ''
   },
   async submit(e: any) {
+    wx.showToast({title: '生成中', icon: 'loading', mask: true, duration: 3000})
+
     const { link } = e.detail.value
 
     const { shortlink } = await api.create(link)
 
     if ((shortlink ?? '') == '') {
-      wx.showToast({title: '生成失败', duration: 2000, icon: 'error'})
+      wx.showToast({title: '生成失败', icon: 'error'})
       return;
     }
 
@@ -19,6 +21,8 @@ Page({
       link,
       shortlink,
     })
+
+    wx.hideToast()
   },
   copy() {
     if (this.data.shortlink == '') {

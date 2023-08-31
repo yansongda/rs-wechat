@@ -26,7 +26,7 @@ Page({
     wx.hideLoading()
   },
   async submit(e: any) {
-    wx.showToast({title: '更新中', icon: 'loading', mask: true})
+    wx.showToast({title: '更新中', icon: 'loading', mask: true, duration: 3000})
 
     await api.update(e.detail.value as IUserUpdateRequest)
     await utils.sync()
@@ -34,7 +34,6 @@ Page({
     wx.showToast({
       title: '修改成功',
       icon: 'success',
-      duration: 1500,
       success: () => {
         setTimeout(() => {
           wx.navigateBack()          

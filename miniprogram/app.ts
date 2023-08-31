@@ -42,13 +42,13 @@ App<IGlobalData>({
   onError(e: any) {
     console.log(e)
 
-    wx.showToast({title: '小程序异常', icon: 'error', duration: 2000})
+    wx.showToast({title: '小程序异常', icon: 'error'})
   },
   onUnhandledRejection(e: any) {
     if (e.reason instanceof EError) {
-      wx.showToast({title: e.reason.message || MESSAGE[e.reason.code], icon: 'error', duration: 2000})
+      wx.showToast({title: e.reason.message || MESSAGE[e.reason.code], icon: 'error'})
     } else {
-      wx.showToast({title: '未知错误', icon: 'error', duration: 2000})
+      wx.showToast({title: '未知错误', icon: 'error'})
     }
   }
 })
