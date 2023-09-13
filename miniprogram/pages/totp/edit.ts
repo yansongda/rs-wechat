@@ -18,7 +18,7 @@ Page({
     })
   },
   async submit(e: any) {
-    wx.showToast({title: '更新中', icon: 'loading', mask: true, duration: 3000})
+    await wx.showToast({title: '更新中', icon: 'loading', mask: true, duration: 3000})
 
     await api.update(e.detail.value as ITotpUpdateRequest)
 
@@ -32,7 +32,7 @@ Page({
       }
     })
   },
-  cancel() {
-    wx.navigateBack()
+  async cancel() {
+    await wx.navigateBack()
   }
 })

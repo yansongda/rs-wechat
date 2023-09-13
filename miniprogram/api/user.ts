@@ -3,20 +3,39 @@ import { URL } from '@constant/user'
 import api from '@utils/api'
 import { CODE } from '@constant/error'
 
-const login = (code: string) => {
-  return http.post<IUserLoginResponse>(URL.LOGIN, {code} as IUserLoginRequest, false, false).catch((e) => api.resolveReject(e, CODE.HTTP_API_USER_LOGIN))
+const login = async (code: string) => {
+  try {
+    return await http.post<IUserLoginResponse>(URL.LOGIN, {code} as IUserLoginRequest, false, false)
+  } catch (e) {
+    return await api.resolveReject(e, CODE.HTTP_API_USER_LOGIN)
+  }
 }
 
-const uploadAvatar = (filePath: string) => {
-  return http.post<IUserUploadAvatarResponse>(URL.UPLOAD_AVATAR, {filePath, name: 'avatar'} as IUserUploadAvatarRequest, true).catch((e) => api.resolveReject(e, CODE.HTTP_API_USER_UPLOAD_AVATAR))
+const uploadAvatar = async (filePath: string) => {
+  try {
+    return await http.post<IUserUploadAvatarResponse>(URL.UPLOAD_AVATAR, {
+      filePath,
+      name: 'avatar'
+    } as IUserUploadAvatarRequest, true)
+  } catch (e) {
+    return await api.resolveReject(e, CODE.HTTP_API_USER_UPLOAD_AVATAR)
+  }
 }
 
-const detail = () => {
-  return http.get<IUserDetailResponse>(URL.DETAIL).catch((e) => api.resolveReject(e, CODE.HTTP_API_USER_DETAIL))
+const detail = async () => {
+  try {
+    return await http.get<IUserDetailResponse>(URL.DETAIL)
+  } catch (e) {
+    return await api.resolveReject(e, CODE.HTTP_API_USER_DETAIL)
+  }
 }
 
-const update = (updated: IUserUpdateRequest) => {
-  return http.post<IUserUpdateResponse>(URL.UPDATE, updated).catch((e) => api.resolveReject(e, CODE.HTTP_API_USER_UPDATE))
+const update = async (updated: IUserUpdateRequest) => {
+  try {
+    return await http.post<IUserUpdateResponse>(URL.UPDATE, updated)
+  } catch (e) {
+    return await api.resolveReject(e, CODE.HTTP_API_USER_UPDATE)
+  }
 }
 
 export default { login, uploadAvatar, detail, update }

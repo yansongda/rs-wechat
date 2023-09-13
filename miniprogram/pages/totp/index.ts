@@ -50,7 +50,7 @@ Page({
     }, 1000)
   },
   async all() {
-    wx.showLoading({title: '加载中'})
+    await wx.showLoading({title: '加载中'})
 
     const response = await api.all()
 
@@ -64,7 +64,7 @@ Page({
 
     this.setData({items})
 
-    wx.hideLoading()
+    await wx.hideLoading()
   },
   async create() {
     this.data.isScanQrCode = true
@@ -128,13 +128,7 @@ Page({
         return;
       }
 
-      if (touchMoveX > startX) {
-        //右滑
-        v.isTouchMove = false
-      } else {
-        //左滑
-        v.isTouchMove = true
-      } 
+      v.isTouchMove = touchMoveX <= startX;
     })
 
     this.setData({

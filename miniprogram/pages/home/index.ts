@@ -18,11 +18,9 @@ Page({
       }
     ]
   },
-  navigate(e: any) {
-    const { url } = e.currentTarget.dataset;
+  async navigate(e: any) {
+    const {url} = e.currentTarget.dataset;
 
-    wx.navigateTo({
-      url
-    })
+    await wx.navigateTo({url})
   }
 })

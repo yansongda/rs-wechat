@@ -14,3 +14,7 @@ $RECYCLE.BIN/
 node_modules/
 
 miniprogram/miniprogram_npm/
+
+# Added by cargo
+
+/target
