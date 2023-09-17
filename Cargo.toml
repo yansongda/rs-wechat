@@ -5,4 +5,24 @@ edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
+[[bin]]
+name = "yansongda-miniprogram-api"
+path = "src/bin/api.rs"
+
 [dependencies]
+dotenvy = { version = "~0.15.0", default-features = true }
+chrono = { version = "~0.4.22", default-features = true }
+serde_json = { version = "~1.0.71", default-features = true }
+serde = { version = "~1.0.130", default-features = true, features = ["derive"] }
+
+tracing = { version = "~0.1.37", default-features = false }
+tracing-subscriber = { version = "~0.3.16", default-features = false, features = ["registry"] }
+
+axum = { version = "~0.6.4", default-features = false }
+tokio = { version = "~1.32.0", default-features = false }
+tower-http = { version = "~0.4.4", default-features = false }
+
+sqlx = { version = "~0.7.1", default-features = false, features = ["runtime-tokio", "tls-rustls", "macros", "sqlite"] }
+
+rs-snowflake = { version = "~0.6.0", default-features = false }
+libreauth = { version = "~0.16.0", default-features = false }
