@@ -1,3 +1,12 @@
-fn main() {
-    println!("Hello, world!")
+use miniprogram::api::app::App;
+use tokio;
+
+#[tokio::main]
+async fn main() {
+    let app = App::new();
+
+    axum::Server::bind(&app.listen)
+        .serve(app.router.into_make_service())
+        .await
+        .unwrap();
 }
