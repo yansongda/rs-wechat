@@ -1,3 +1,4 @@
 pub mod app;
-pub mod route;
-pub mod v1;
+pub(crate) mod middleware;
+pub(crate) mod route;
+pub(crate) mod v1;

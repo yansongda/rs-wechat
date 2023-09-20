@@ -14,6 +14,12 @@ pub struct App {
     pub router: Router,
 }
 
+impl Default for App {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl App {
     pub fn new() -> Self {
         dotenv().ok();
@@ -37,7 +43,7 @@ impl App {
     fn router() -> Router {
         Router::new()
             .nest("/health", route::health())
-            // .nest("/api/v1", route::api_v1())
+            .nest("/api/v1", route::api_v1())
             .layer(SetRequestIdLayer::x_request_id(MakeRequestUuid))
             .layer(PropagateRequestIdLayer::x_request_id())
             .layer(CorsLayer::permissive())

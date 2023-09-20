@@ -1,5 +1,4 @@
 use miniprogram::api::app::App;
-use tokio;
 
 #[tokio::main]
 async fn main() {

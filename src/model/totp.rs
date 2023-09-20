@@ -11,7 +11,7 @@ pub struct CreateRequest {
 }
 
 #[derive(Deserialize, Debug)]
-pub struct  UpdateRequest {
+pub struct UpdateRequest {
     pub issuer: String,
     pub username: String,
 }
