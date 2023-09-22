@@ -16,9 +16,9 @@ pub struct User {
 pub struct Totp {
     pub id: i32,
     pub user_id: i32,
-    pub name: String,
-    pub secret: String,
+    pub username: String,
     pub issuer: String,
+    pub secret: String,
     pub created_at: NaiveDateTime,
     pub updated_at: NaiveDateTime,
 }

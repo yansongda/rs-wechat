@@ -23,7 +23,7 @@ tokio = { version = "~1.32.0", default-features = false, features = ["full"] }
 axum = { version = "~0.6.4", default-features = false, features = ["form", "http1", "json", "matched-path", "original-uri", "query", "tokio"] }
 tower-http = { version = "~0.4.4", default-features = false, features = ["cors", "request-id"] }
 
-sqlx = { version = "~0.7.1", default-features = false, features = ["runtime-tokio", "macros", "sqlite", "chrono"] }
+sqlx = { version = "~0.7.1", default-features = false, features = ["runtime-tokio", "macros", "sqlite", "chrono", "mysql"] }
 
 rs-snowflake = { version = "~0.6.0", default-features = false }
 libreauth = { version = "~0.16.0", default-features = false }
