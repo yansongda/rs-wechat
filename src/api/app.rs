@@ -32,10 +32,7 @@ impl App {
 
     fn listen() -> SocketAddr {
         let listen = env::var("APP_LISTEN").unwrap_or_else(|_| String::from("0.0.0.0"));
-        let port = env::var("APP_PORT").map_or_else(
-            |_| env::var("PORT").map_or_else(|_| 8080, |v| v.parse().unwrap()),
-            |v| v.parse().unwrap(),
-        );
+        let port = env::var("APP_PORT").map_or_else(|_| 8080, |v| v.parse().unwrap());
 
         SocketAddr::from((IpAddr::from_str(listen.as_str()).unwrap(), port))
     }

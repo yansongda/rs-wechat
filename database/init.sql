@@ -10,10 +10,11 @@ create table user
     avatar     text,
     nickname   text,
     slogan     text,
-    created_at text,
-    updated_at text
+    created_at datetime,
+    updated_at datetime
 );
 
+-- auto-generated definition
 create table totp
 (
     id         integer not null
@@ -23,10 +24,9 @@ create table totp
     username   text    not null,
     issuer     text    not null,
     secret     text    not null,
-    created_at text,
-    updated_at text
+    created_at datetime,
+    updated_at datetime
 );
 
 create index idx_user_id
     on totp (user_id);
-

@@ -1,4 +1,24 @@
+use chrono::NaiveDateTime;
+use sea_orm::entity::prelude::*;
 use serde::{Deserialize, Serialize};
+
+#[derive(Debug, Clone, Eq, PartialEq, Serialize, Deserialize, DeriveEntityModel)]
+#[sea_orm(table_name = "totp")]
+pub struct Model {
+    #[sea_orm(primary_key)]
+    pub id: i64,
+    pub user_id: i64,
+    pub username: String,
+    pub issuer: String,
+    pub secret: String,
+    pub created_at: Option<NaiveDateTime>,
+    pub updated_at: Option<NaiveDateTime>,
+}
+
+#[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]
+pub enum Relation {}
+
+impl ActiveModelBehavior for ActiveModel {}
 
 #[derive(Deserialize, Debug)]
 pub struct DetailRequest {

@@ -18,3 +18,5 @@ miniprogram/miniprogram_npm/
 # Added by cargo
 
 /target
+
+.env
