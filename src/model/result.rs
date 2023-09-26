@@ -4,6 +4,8 @@ use std::sync::OnceLock;
 
 use serde::{Deserialize, Serialize};
 
+static ERROR_CODE_MESSAGE: OnceLock<HashMap<Error, (u16, &'static str)>> = OnceLock::new();
+
 #[derive(PartialEq, Eq, Hash, Debug)]
 pub enum Error {
     Unknown,
@@ -13,18 +15,20 @@ pub enum Error {
     Insert,
 }
 
-pub fn error_code_message() -> &'static HashMap<Error, (u16, &'static str)> {
-    static INSTANCE: OnceLock<HashMap<Error, (u16, &'static str)>> = OnceLock::new();
+impl Error {
+    pub fn code_message(&self) -> (u16, &'static str) {
+        let messages = ERROR_CODE_MESSAGE.get_or_init(|| {
+            HashMap::from([
+                (Self::Unknown, (9999, "未知错误，请联系管理员")),
+                (Self::Params, (2000, "参数错误，请确认您的参数是否符合规范")),
+                (Self::UserNotFound, (2001, "用户未找到")),
+                (Self::Database, (5000, "发生了一些问题，请联系管理员")),
+                (Self::Insert, (5001, "保存数据出现了一些问题，请联系管理员")),
+            ])
+        });
 
-    INSTANCE.get_or_init(|| {
-        HashMap::from([
-            (Error::Unknown, (9999, "未知错误，请联系管理员")),
-            (Error::Params, (2000, "参数错误，请确认您的参数是否符合规范")),
-            (Error::UserNotFound, (2001, "用户未找到")),
-            (Error::Database, (5000, "发生了一些问题，请联系管理员")),
-            (Error::Insert, (5001, "保存数据出现了一些问题，请联系管理员")),
-        ])
-    })
+        messages.get(self).unwrap_or_else(|| messages.get(&Self::Unknown).unwrap()).to_owned()
+    }
 }
 
 #[derive(Serialize, Deserialize)]

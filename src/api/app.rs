@@ -40,6 +40,7 @@ impl App {
     fn router() -> Router {
         Router::new()
             .nest("/health", route::health())
+            .nest("/test", route::test())
             .nest("/api/v1", route::api_v1())
             .layer(SetRequestIdLayer::x_request_id(MakeRequestUuid))
             .layer(PropagateRequestIdLayer::x_request_id())
