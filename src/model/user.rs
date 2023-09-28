@@ -11,7 +11,9 @@ pub struct Model {
     pub avatar: Option<String>,
     pub nickname: Option<String>,
     pub slogan: Option<String>,
+    #[sea_orm(column_type = "DateTime", nullable)]
     pub created_at: Option<NaiveDateTime>,
+    #[sea_orm(column_type = "DateTime", nullable)]
     pub updated_at: Option<NaiveDateTime>,
 }
 
@@ -26,6 +28,6 @@ pub struct DetailResponse {
     pub avatar: String,
     pub nickname: String,
     pub slogan: String,
-    pub created_at: NaiveDateTime,
-    pub updated_at: NaiveDateTime,
+    pub created_at: Option<NaiveDateTime>,
+    pub updated_at: Option<NaiveDateTime>,
 }

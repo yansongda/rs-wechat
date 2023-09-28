@@ -11,7 +11,9 @@ pub struct Model {
     pub username: String,
     pub issuer: String,
     pub secret: String,
+    #[sea_orm(column_type = "DateTime", nullable)]
     pub created_at: Option<NaiveDateTime>,
+    #[sea_orm(column_type = "DateTime", nullable)]
     pub updated_at: Option<NaiveDateTime>,
 }
 
