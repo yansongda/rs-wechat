@@ -2,13 +2,13 @@ use sea_orm::{ActiveModelTrait, ColumnTrait, EntityTrait, IntoActiveModel, Query
 
 use crate::model::result::Error;
 use crate::model::user::{Column, Entity, Model as User};
-use crate::repository::{Pool, POOL};
+use crate::repository::Pool;
 
 pub async fn find_one(open_id: String) -> Result<User, Error> {
     let result: Option<User> = Entity::find().filter(
         Column::OpenId.eq(open_id)
     )
-        .one(&POOL.get().unwrap().default)
+        .one(Pool::get("default"))
         .await
         .map_err(|_| Error::Database)?;
 
@@ -20,7 +20,7 @@ pub async fn find_one(open_id: String) -> Result<User, Error> {
 }
 
 pub async fn create(user: User) -> Result<User, Error> {
-    let result = user.into_active_model().insert(POOL.default)
+    let result = user.into_active_model().insert(Pool::get("default"))
         .await
         .map_err(|_| Error::Database)?;
 

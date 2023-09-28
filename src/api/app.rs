@@ -8,21 +8,18 @@ use tower_http::cors::CorsLayer;
 use tower_http::request_id::{MakeRequestUuid, PropagateRequestIdLayer, SetRequestIdLayer};
 
 use crate::api::route;
+use crate::repository::Pool;
 
 pub struct App {
     pub listen: SocketAddr,
     pub router: Router,
 }
 
-impl Default for App {
-    fn default() -> Self {
-        Self::new()
-    }
-}
-
 impl App {
-    pub fn new() -> Self {
+    pub async fn new() -> Self {
         dotenv().ok();
+
+        Pool::init().await;
 
         App {
             listen: App::listen(),

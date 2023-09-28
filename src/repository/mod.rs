@@ -1,3 +1,4 @@
+use std::collections::HashMap;
 use std::env;
 use std::sync::OnceLock;
 use std::time::Duration;
@@ -6,17 +7,21 @@ use sea_orm::{ConnectOptions, Database, DatabaseConnection};
 pub mod user;
 pub mod totp;
 
-static POOL: OnceLock<Pool> = OnceLock::new();
+static POOL: OnceLock<HashMap<&str, DatabaseConnection>> = OnceLock::new();
 
-struct Pool {
-    default: DatabaseConnection,
-}
+pub struct Pool;
 
 impl Pool {
-    async fn new() -> Self {
-        Pool {
-            default: Self::default().await,
-        }
+    pub async fn init() {
+        let p = HashMap::from([
+            ("default", Self::default().await),
+        ]);
+
+        POOL.set(p).unwrap();
+    }
+
+    pub fn get(pool: &str) -> &DatabaseConnection {
+        POOL.get().unwrap().get(pool).unwrap()
     }
 
     async fn default() -> DatabaseConnection {

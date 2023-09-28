@@ -1,1 +1,1 @@
-pub(crate) mod totp;
+pub(super) mod totp;

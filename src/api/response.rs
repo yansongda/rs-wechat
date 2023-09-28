@@ -2,8 +2,8 @@ use axum::response::IntoResponse;
 use serde::Serialize;
 use crate::model::result;
 
-pub(crate) struct Response<D: Serialize>(result::Response<D>);
-pub(crate) struct Error(result::Error);
+pub(super) struct Response<D: Serialize>(result::Response<D>);
+pub(super) struct Error(result::Error);
 
 impl<D: Serialize> Response<D> {
     pub fn success(data: D) -> Self {
