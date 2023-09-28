@@ -1,6 +1,6 @@
+use crate::model::result;
 use axum::response::IntoResponse;
 use serde::Serialize;
-use crate::model::result;
 
 pub(super) struct Response<D: Serialize>(result::Response<D>);
 pub(super) struct Error(result::Error);

@@ -27,7 +27,10 @@ impl Error {
             ])
         });
 
-        messages.get(self).unwrap_or_else(|| messages.get(&Self::Unknown).unwrap()).to_owned()
+        messages
+            .get(self)
+            .unwrap_or_else(|| messages.get(&Self::Unknown).unwrap())
+            .to_owned()
     }
 }
 

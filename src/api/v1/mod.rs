@@ -1,1 +1,1 @@
-pub(super) mod totp;
+pub mod totp;

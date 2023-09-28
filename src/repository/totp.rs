@@ -1,17 +1,22 @@
 use crate::model::result::Error;
 
-pub fn find(open_id: String) -> Result<(), Error> {
+pub fn find(_open_id: String) -> Result<(), Error> {
     todo!()
 }
 
-pub fn find_one(id: i32) -> Result<(), Error> {
+pub fn find_one(_id: i32) -> Result<(), Error> {
     todo!()
 }
 
-pub fn create(user_id: i32, username: String, issuer: String, secret: String) -> Result<(), Error> {
+pub fn create(
+    _user_id: i32,
+    _username: String,
+    _issuer: String,
+    _secret: String,
+) -> Result<(), Error> {
     todo!()
 }
 
-pub fn update(id: i32, username: String, issuer: String) -> Result<(), Error> {
+pub fn update(_id: i32, _username: String, _issuer: String) -> Result<(), Error> {
     todo!()
 }
