@@ -1,24 +1,10 @@
-use crate::api::response::{Error, Response};
-use axum::routing::{get, post};
 use axum::Router;
+use axum::routing::{get, post};
 
 use crate::api::v1;
-use crate::model::user::Model;
-use crate::repository::user;
 
 pub fn health() -> Router {
     Router::new().route("/", get(|| async { "success" }))
-}
-
-pub fn test() -> Router {
-    Router::new().route(
-        "/",
-        get(|| async {
-            let user = user::find_one(String::from("test")).await?;
-
-            Ok::<Response<Model>, Error>(Response::success(user))
-        }),
-    )
 }
 
 pub fn api_v1() -> Router {
