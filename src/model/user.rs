@@ -28,6 +28,6 @@ pub struct DetailResponse {
     pub avatar: String,
     pub nickname: String,
     pub slogan: String,
-    pub created_at: Option<NaiveDateTime>,
-    pub updated_at: Option<NaiveDateTime>,
+    pub created_at: String,
+    pub updated_at: String,
 }
