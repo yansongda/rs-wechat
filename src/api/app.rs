@@ -11,8 +11,8 @@ use crate::api::route;
 use crate::repository::Pool;
 
 pub struct App {
-    pub listen: SocketAddr,
-    pub router: Router,
+    listen: SocketAddr,
+    router: Router,
 }
 
 impl App {
@@ -25,6 +25,14 @@ impl App {
             listen: App::listen(),
             router: App::router(),
         }
+    }
+
+    pub fn get_listen(&self) -> &SocketAddr {
+        &self.listen
+    }
+
+    pub fn get_router(&self) -> &Router {
+        &self.router
     }
 
     fn listen() -> SocketAddr {

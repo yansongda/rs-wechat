@@ -22,6 +22,11 @@ pub enum Relation {}
 
 impl ActiveModelBehavior for ActiveModel {}
 
+#[derive(Deserialize)]
+pub struct LoginRequest {
+    pub code: String,
+}
+
 pub struct DetailResponse {
     pub id: i32,
     pub open_id: String,
