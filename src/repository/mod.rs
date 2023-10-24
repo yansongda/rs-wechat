@@ -1,9 +1,10 @@
 use std::collections::HashMap;
-use std::env;
 use std::sync::OnceLock;
 use std::time::Duration;
 
 use sea_orm::{ConnectOptions, Database, DatabaseConnection};
+
+use crate::config::Config;
 
 pub mod totp;
 pub mod user;
@@ -24,35 +25,17 @@ impl Pool {
     }
 
     async fn connect(pool: &str) -> DatabaseConnection {
-        let suffix = if "default" != pool { format!("_{}", pool) } else { "".to_string() };
-
         let mut options = ConnectOptions::new(
-            env::var("DB_URL").unwrap_or_else(|_| "mysql://root:root@127.0.0.1/miniprogram".to_string()),
+            Config::get::<String>(format!("databases.{}.url", pool).as_str()),
         );
 
         options
-            .connect_timeout(env::var(format!("DB_CONNECT_TIMEOUT{}", suffix)).map_or_else(
-                |_| Duration::from_secs(1),
-                |v| Duration::from_secs(v.parse().unwrap_or(1)),
-            ))
-            .max_connections(
-                env::var(format!("DB_MAX_CONNECTIONS{}", suffix)).map_or_else(|_| 30, |v| v.parse().unwrap_or(30)),
-            )
-            .min_connections(
-                env::var(format!("DB_MIN_CONNECTIONS{}", suffix)).map_or_else(|_| 2, |v| v.parse().unwrap_or(2)),
-            )
-            .idle_timeout(env::var(format!("DB_IDLE_TIMEOUT{}", suffix)).map_or_else(
-                |_| Duration::from_secs(600),
-                |v| Duration::from_secs(v.parse().unwrap_or(600)),
-            ))
-            .acquire_timeout(env::var(format!("DB_ACQUIRE_TIMEOUT{}", suffix)).map_or_else(
-                |_| Duration::from_secs(3),
-                |v| Duration::from_secs(v.parse().unwrap_or(3)),
-            ))
-            .max_lifetime(env::var(format!("DB_MAX_LIFETIME{}", suffix)).map_or_else(
-                |_| Duration::from_secs(1800),
-                |v| Duration::from_secs(v.parse().unwrap_or(1800)),
-            ));
+            .connect_timeout(Duration::from_secs(Config::get::<u64>(format!("databases.{}.connect_timeout", pool).as_str())))
+            .max_connections(Config::get::<u32>(format!("databases.{}.max_connections", pool).as_str()))
+            .min_connections(Config::get::<u32>(format!("databases.{}.min_connections", pool).as_str()))
+            .idle_timeout(Duration::from_secs(Config::get::<u64>(format!("databases.{}.idle_timeout", pool).as_str())))
+            .acquire_timeout(Duration::from_secs(Config::get::<u64>(format!("databases.{}.acquire_timeout", pool).as_str())))
+            .max_lifetime(Duration::from_secs(Config::get::<u64>(format!("databases.{}.max_lifetime", pool).as_str())));
 
         Database::connect(options).await.unwrap()
     }

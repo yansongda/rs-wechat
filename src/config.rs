@@ -1,10 +1,6 @@
 use std::sync::OnceLock;
-use config::{Config as C, File, FileFormat, Source};
+use config::{Config as C, File, FileFormat};
 use serde::Deserialize;
-
-mod api;
-mod databases;
-mod weixin;
 
 static _CONFIG: OnceLock<C> = OnceLock::new();
 
@@ -27,10 +23,6 @@ impl Config {
             .unwrap();
 
         _CONFIG.set(config).unwrap();
-
-        let test = Config::get::<String>("bin.api.listen");
-
-        println!("test: {}", test);
     }
 
     pub fn get<'de, T: Deserialize<'de>>(key: &str) -> T {

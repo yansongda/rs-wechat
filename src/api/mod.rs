@@ -1,4 +1,3 @@
-use std::env;
 use std::net::{IpAddr, SocketAddr};
 use std::str::FromStr;
 
@@ -40,10 +39,10 @@ impl App {
     }
 
     fn listen() -> SocketAddr {
-        let listen = env::var("API_LISTEN").unwrap_or_else(|_| String::from("0.0.0.0"));
-        let port = env::var("API_PORT").map_or_else(|_| 8080, |v| v.parse().unwrap());
+        let listen = Config::get::<&str>("bin.api.listen");
+        let port = Config::get::<u16>("bin.api.port");
 
-        SocketAddr::from((IpAddr::from_str(listen.as_str()).unwrap(), port))
+        SocketAddr::from((IpAddr::from_str(listen).unwrap(), port))
     }
 
     fn router() -> Router {

@@ -1029,7 +1029,6 @@ dependencies = [
  "axum",
  "chrono",
  "config",
- "dotenvy",
  "libreauth",
  "rs-snowflake",
  "sea-orm",
