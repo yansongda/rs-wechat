@@ -3,7 +3,7 @@ listen="0.0.0.0"
 port=8080
 
 [databases.default]
-url="sqllite:///miniprogram.sqlite3"
+url="sqlite://miniprogram.sqlite3"
 connection_timeout=1
 idle_timeout=600
 max_lifetime=1800

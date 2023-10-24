@@ -20,3 +20,4 @@ miniprogram/miniprogram_npm/
 /target
 
 .env
+miniprogram.sqlite3

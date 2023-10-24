@@ -30,7 +30,7 @@ impl Pool {
         );
 
         options
-            .connect_timeout(Duration::from_secs(Config::get::<u64>(format!("databases.{}.connect_timeout", pool).as_str())))
+            .connect_timeout(Duration::from_secs(Config::get::<u64>(format!("databases.{}.connection_timeout", pool).as_str())))
             .max_connections(Config::get::<u32>(format!("databases.{}.max_connections", pool).as_str()))
             .min_connections(Config::get::<u32>(format!("databases.{}.min_connections", pool).as_str()))
             .idle_timeout(Duration::from_secs(Config::get::<u64>(format!("databases.{}.idle_timeout", pool).as_str())))

@@ -39,10 +39,10 @@ impl App {
     }
 
     fn listen() -> SocketAddr {
-        let listen = Config::get::<&str>("bin.api.listen");
+        let listen = Config::get::<String>("bin.api.listen");
         let port = Config::get::<u16>("bin.api.port");
 
-        SocketAddr::from((IpAddr::from_str(listen).unwrap(), port))
+        SocketAddr::from((IpAddr::from_str(listen.as_str()).unwrap(), port))
     }
 
     fn router() -> Router {
