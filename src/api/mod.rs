@@ -3,10 +3,10 @@ use std::net::{IpAddr, SocketAddr};
 use std::str::FromStr;
 
 use axum::Router;
-use dotenvy::dotenv;
 use tower_http::cors::CorsLayer;
 use tower_http::request_id::{MakeRequestUuid, PropagateRequestIdLayer, SetRequestIdLayer};
 
+use crate::config::Config;
 use crate::repository::Pool;
 
 mod middleware;
@@ -21,7 +21,7 @@ pub struct App {
 
 impl App {
     pub async fn init() -> Self {
-        dotenv().ok();
+        Config::init();
 
         Pool::init().await;
 

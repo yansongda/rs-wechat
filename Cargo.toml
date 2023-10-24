@@ -11,6 +11,7 @@ name = "miniprogram-api"
 path = "src/bin/api.rs"
 
 [dependencies]
+config = { version = "~0.13.1", default-features = false, features = ["toml", "json", "json5"] }
 dotenvy = { version = "~0.15.0", default-features = true }
 chrono = { version = "~0.4.22", default-features = true, features = ["serde"] }
 serde = { version = "~1.0.130", default-features = true, features = ["derive"] }

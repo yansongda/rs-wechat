@@ -8,7 +8,7 @@ use sea_orm::{ConnectOptions, Database, DatabaseConnection};
 pub mod totp;
 pub mod user;
 
-static POOL: OnceLock<HashMap<&str, DatabaseConnection>> = OnceLock::new();
+static _POOL: OnceLock<HashMap<&str, DatabaseConnection>> = OnceLock::new();
 
 pub struct Pool;
 
@@ -16,11 +16,11 @@ impl Pool {
     pub async fn init() {
         let p = HashMap::from([("default", Self::connect("default").await)]);
 
-        POOL.set(p).unwrap();
+        _POOL.set(p).unwrap();
     }
 
     pub fn get(pool: &str) -> &DatabaseConnection {
-        POOL.get().unwrap().get(pool).unwrap()
+        _POOL.get().unwrap().get(pool).unwrap()
     }
 
     async fn connect(pool: &str) -> DatabaseConnection {
