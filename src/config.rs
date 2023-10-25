@@ -20,12 +20,12 @@ impl Config {
             .set_default("databases.default.acquire_timeout", 3).unwrap()
             .add_source(File::with_name("./config.toml").required(false))
             .build()
-            .unwrap();
+            .expect("初始化配置失败");
 
-        _CONFIG.set(config).unwrap();
+        _CONFIG.set(config).expect("系统配置初始化失败");
     }
 
     pub fn get<'de, T: Deserialize<'de>>(key: &str) -> T {
-        _CONFIG.get().unwrap().get(key).unwrap()
+        _CONFIG.get().expect("获取系统配置失败，请检查是否已成功初始化").get(key).unwrap()
     }
 }

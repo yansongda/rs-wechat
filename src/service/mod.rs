@@ -1,3 +1,3 @@
 pub mod totp;
 pub mod user;
-mod http;
+pub mod http;

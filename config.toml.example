@@ -10,3 +10,8 @@ max_lifetime=1800
 max_connections=30
 min_connections=2
 acquire_timeout=3
+
+[wechat]
+url="https://api.weixin.qq.com"
+app_id=""
+app_secret=""
