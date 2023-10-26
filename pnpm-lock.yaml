@@ -6,11 +6,11 @@ settings:
 
 devDependencies:
   miniprogram-api-typings:
-    specifier: ^3.12.0
-    version: 3.12.0
+    specifier: ^3.12.1
+    version: 3.12.1
 
 packages:
 
-  /miniprogram-api-typings@3.12.0:
-    resolution: {integrity: sha512-tE0zjq+3bFEgUROzCjXTdtLY+FmqiTX4kZWXc8bCC7M9wSHCriBz+ga1E2i1PcI+DQJoz2cyK8Cv2exJv6XEzA==}
+  /miniprogram-api-typings@3.12.1:
+    resolution: {integrity: sha512-ewXOEqLGIgqQSy4wbaCHq47sfDsC/hQhO9QVzTQTCKNf9x691AwADHorfCTfVLXDVkOjbbLmJ086M3Dv7hKcXw==}
     dev: true
