@@ -10,7 +10,7 @@ pub fn health() -> Router {
 pub fn api_v1() -> Router {
     Router::new()
         .nest(
-            "/user",
+            "/users",
             Router::new()
                 .route("/login", post(v1::user::login))
                 .route("/detail", get(v1::user::detail))

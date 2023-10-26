@@ -4,7 +4,7 @@ use serde::Deserialize;
 pub struct LoginResponse {
     pub session_key: Option<String>,
     pub unionid: Option<String>,
-    pub errmsg: String,
+    pub errmsg: Option<String>,
     pub openid: Option<String>,
-    pub errcode: i32,
+    pub errcode: Option<i32>,
 }

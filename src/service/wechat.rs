@@ -29,7 +29,7 @@ pub async fn login(code: &str) -> Result<LoginResponse> {
     let result: LoginResponse =
         serde_json::from_str(response.body.as_str()).map_err(|_| Error::WechatHttpResponseParse)?;
 
-    if result.errcode != 0 {
+    if result.errcode.is_some() {
         println!("微信 API 结果出错: {:?}", result);
 
         return Err(Error::WechatHttpResponse);
