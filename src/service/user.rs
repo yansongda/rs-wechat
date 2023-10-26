@@ -5,7 +5,7 @@ use crate::repository;
 use crate::service::wechat;
 
 pub async fn login(code: &str) -> Result<User> {
-    Ok(repository::user::create(User {
+    repository::user::create(User {
         id: 0,
         open_id: wechat::login(code).await?.openid.unwrap(),
         avatar: None,
@@ -14,5 +14,5 @@ pub async fn login(code: &str) -> Result<User> {
         created_at: None,
         updated_at: None,
     })
-    .await?)
+    .await
 }
