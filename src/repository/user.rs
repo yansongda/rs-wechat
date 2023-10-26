@@ -1,4 +1,4 @@
-use sea_orm::ActiveValue::Set;
+use sea_orm::ActiveValue::{Set, NotSet};
 use sea_orm::{ActiveModelTrait, ColumnTrait, EntityTrait, IntoActiveModel, QueryFilter};
 
 use crate::model::result::{Error, Result};
@@ -22,6 +22,7 @@ pub async fn find_one(open_id: String) -> Result<User> {
 pub async fn create(user: User) -> Result<User> {
     let mut active_model = user.into_active_model();
 
+    active_model.id = NotSet;
     active_model.created_at = Set(Some(chrono::Local::now().naive_local()));
     active_model.updated_at = Set(Some(chrono::Local::now().naive_local()));
 
