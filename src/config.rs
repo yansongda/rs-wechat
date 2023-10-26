@@ -1,5 +1,5 @@
 use std::sync::OnceLock;
-use config::{Config as C, File, FileFormat};
+use config::{Config as C, File};
 use serde::Deserialize;
 
 static _CONFIG: OnceLock<C> = OnceLock::new();
@@ -18,6 +18,9 @@ impl Config {
             .set_default("databases.default.max_connections", 30).unwrap()
             .set_default("databases.default.min_connections", 2).unwrap()
             .set_default("databases.default.acquire_timeout", 3).unwrap()
+            .set_default("wechat.url", "https://api.weixin.qq.com").unwrap()
+            .set_default("wechat.app_id", "").unwrap()
+            .set_default("wechat.app_secret", "").unwrap()
             .add_source(File::with_name("./config.toml").required(false))
             .build()
             .expect("初始化配置失败");
