@@ -13,5 +13,6 @@ pub async fn login(code: &str) -> Result<User> {
         slogan: None,
         created_at: None,
         updated_at: None,
-    }).await?)
+    })
+    .await?)
 }
