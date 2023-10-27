@@ -2,7 +2,7 @@ use config::{Config as C, File};
 use serde::Deserialize;
 use std::sync::OnceLock;
 
-static _CONFIG: OnceLock<C> = OnceLock::new();
+static G_CONFIG: OnceLock<C> = OnceLock::new();
 
 pub struct Config;
 
@@ -37,11 +37,11 @@ impl Config {
             .build()
             .expect("初始化配置失败");
 
-        _CONFIG.set(config).expect("系统配置初始化失败");
+        G_CONFIG.set(config).expect("系统配置初始化失败");
     }
 
     pub fn get<'de, T: Deserialize<'de>>(key: &str) -> T {
-        _CONFIG
+        G_CONFIG
             .get()
             .expect("获取系统配置失败，请检查是否已成功初始化")
             .get(key)

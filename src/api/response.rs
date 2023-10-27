@@ -1,7 +1,9 @@
 use axum::response::IntoResponse;
 use serde::Serialize;
 
-use crate::model::result::{Error, Response};
+use crate::model::result::{Error, Result, Response};
+
+pub type Resp<D> = Result<Response<D>>;
 
 impl<D: Serialize> IntoResponse for Response<D> {
     fn into_response(self) -> axum::response::Response {

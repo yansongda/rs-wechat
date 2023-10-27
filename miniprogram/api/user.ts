@@ -11,17 +11,6 @@ const login = async (code: string) => {
   }
 }
 
-const uploadAvatar = async (filePath: string) => {
-  try {
-    return await http.post<IUserUploadAvatarResponse>(URL.UPLOAD_AVATAR, {
-      filePath,
-      name: 'avatar'
-    } as IUserUploadAvatarRequest, true)
-  } catch (e) {
-    return await api.resolveReject(e, CODE.HTTP_API_USER_UPLOAD_AVATAR)
-  }
-}
-
 const detail = async () => {
   try {
     return await http.get<IUserDetailResponse>(URL.DETAIL)
@@ -38,4 +27,4 @@ const update = async (updated: IUserUpdateRequest) => {
   }
 }
 
-export default { login, uploadAvatar, detail, update }
+export default { login, detail, update }

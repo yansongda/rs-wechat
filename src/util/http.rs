@@ -7,10 +7,10 @@ use reqwest::{Client, Request};
 use crate::model::http::HttpResponse;
 use crate::model::result::{Error, Result};
 
-static _CLIENT: OnceLock<Client> = OnceLock::new();
+static G_CLIENT: OnceLock<Client> = OnceLock::new();
 
 pub async fn request(request: Request) -> Result<HttpResponse> {
-    let client = _CLIENT.get_or_init(|| {
+    let client = G_CLIENT.get_or_init(|| {
         Client::builder()
             .user_agent("yansongda/miniprogram")
             .connect_timeout(Duration::from_secs(1))

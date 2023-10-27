@@ -4,7 +4,7 @@ use std::sync::OnceLock;
 
 use serde::{Deserialize, Serialize};
 
-static _ERROR_CODE_MESSAGE: OnceLock<HashMap<Error, (u16, &'static str)>> = OnceLock::new();
+static G_ERROR_CODE_MESSAGE: OnceLock<HashMap<Error, (u16, &'static str)>> = OnceLock::new();
 
 #[derive(PartialEq, Eq, Hash, Debug)]
 pub enum Error {
@@ -13,6 +13,7 @@ pub enum Error {
     UserNotFound,
     Database,
     Insert,
+    Update,
     Http,
     HttpResponse,
     WechatHttp,
@@ -31,13 +32,14 @@ pub type Result<D> = std::result::Result<D, Error>;
 
 impl Error {
     pub fn code_message(&self) -> (u16, &'static str) {
-        let messages = _ERROR_CODE_MESSAGE.get_or_init(|| {
+        let messages = G_ERROR_CODE_MESSAGE.get_or_init(|| {
             HashMap::from([
                 (Self::Unknown, (9999, "未知错误，请联系管理员")),
                 (Self::Params, (2000, "参数错误，请确认您的参数是否符合规范")),
                 (Self::UserNotFound, (2001, "用户未找到")),
                 (Self::Database, (5000, "发生了一些问题，请联系管理员")),
                 (Self::Insert, (5001, "保存数据出现了一些问题，请联系管理员")),
+                (Self::Update, (5002, "更新数据出现了一些问题，请联系管理员")),
                 (Self::Http, (9800, "第三方 API 请求出错，请联系管理员")),
                 (
                     Self::HttpResponse,

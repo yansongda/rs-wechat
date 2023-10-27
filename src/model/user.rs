@@ -41,6 +41,10 @@ impl From<Model> for LoginResponse {
     }
 }
 
+pub struct CreateUser {
+    pub open_id: String,
+}
+
 #[derive(Serialize)]
 pub struct DetailResponse {
     pub id: i32,
@@ -64,4 +68,18 @@ impl From<Model> for DetailResponse {
             updated_at: user.updated_at.map(|t| t.format("%Y-%m-%d %H:%M:%S").to_string()),
         }
     }
+}
+
+#[derive(Deserialize)]
+pub struct UpdateRequest {
+    pub avatar: Option<String>,
+    pub nickname: Option<String>,
+    pub slogan: Option<String>,
+}
+
+pub struct UpdateUser {
+    pub open_id: String,
+    pub avatar: Option<String>,
+    pub nickname: Option<String>,
+    pub slogan: Option<String>,
 }

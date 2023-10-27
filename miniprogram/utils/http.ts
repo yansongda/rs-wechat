@@ -24,7 +24,7 @@ const formatHeaders = (request: IRequest, openId: string): void => {
     request.headers = {}
   }
 
-  request.headers.open_id = openId
+  request.headers.authorization = "Bearer " + openId
 }
 
 const request = <T>(request: IRequest, mustOpenId?: boolean): Promise<T> => {

@@ -1,18 +1,20 @@
 use crate::model::result::Result;
-use crate::model::user::Model as User;
+use crate::model::user::{CreateUser, Model as User, UpdateRequest};
 use crate::repository;
 
 use crate::service::wechat;
 
 pub async fn login(code: &str) -> Result<User> {
-    repository::user::create(User {
-        id: 0,
+    repository::user::create(CreateUser {
         open_id: wechat::login(code).await?.openid.unwrap(),
-        avatar: None,
-        nickname: None,
-        slogan: None,
-        created_at: None,
-        updated_at: None,
     })
     .await
+}
+
+pub async fn detail(open_id: &str) -> Result<User> {
+    repository::user::find_one(open_id).await
+}
+
+pub async fn update(open_id: &str, updated: UpdateRequest) -> Result<User> {
+    repository::user::find_one(open_id).await
 }

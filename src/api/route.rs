@@ -12,9 +12,9 @@ pub fn api_v1() -> Router {
         .nest(
             "/users",
             Router::new()
-                .route("/login", post(v1::user::login))
-                .route("/detail", get(v1::user::detail))
-                .route("/update", post(v1::user::update)),
+                .route("/login", post(v1::users::login))
+                .route("/detail", get(v1::users::detail))
+                .route("/update", post(v1::users::update)),
         )
         .nest(
             "/totp",

@@ -19,11 +19,15 @@ Page({
   async onChooseAvatar(e: any) {
     await wx.showLoading({title: '上传中', icon: 'loading', mask: true})
 
-    const { url } = await api.uploadAvatar(e.detail.avatarUrl)
+    wx.getFileSystemManager().readFile({
+      filePath: e.detail.avatarUrl,
+      encoding: 'base64',
+      success: async (res: any) => {
+        this.setData({ avatar: "data:image/png;base64," + res.data })
 
-    this.setData({ avatar: url })
-
-    await wx.hideLoading()
+        await wx.hideLoading()
+      }
+    })
   },
   async submit(e: any) {
     await wx.showToast({title: '更新中', icon: 'loading', mask: true, duration: 3000})

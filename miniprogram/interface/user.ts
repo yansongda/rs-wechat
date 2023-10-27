@@ -6,15 +6,6 @@ interface IUserLoginResponse {
   open_id: string,
 }
 
-interface IUserUploadAvatarRequest extends IRequestData {
-  filePath: string,
-  name: string,
-}
-
-interface IUserUploadAvatarResponse {
-  url: string,
-}
-
 interface IUserDetailResponse {
   open_id: string,
   avatar: string,

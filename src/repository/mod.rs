@@ -9,7 +9,7 @@ use crate::config::Config;
 pub mod totp;
 pub mod user;
 
-static _POOL: OnceLock<HashMap<&str, DatabaseConnection>> = OnceLock::new();
+static G_POOL: OnceLock<HashMap<&str, DatabaseConnection>> = OnceLock::new();
 
 pub struct Pool;
 
@@ -17,11 +17,11 @@ impl Pool {
     pub async fn init() {
         let p = HashMap::from([("default", Self::connect("default").await)]);
 
-        _POOL.set(p).unwrap();
+        G_POOL.set(p).unwrap();
     }
 
     pub fn get(pool: &str) -> &DatabaseConnection {
-        _POOL.get().unwrap().get(pool).unwrap()
+        G_POOL.get().unwrap().get(pool).unwrap()
     }
 
     async fn connect(pool: &str) -> DatabaseConnection {
