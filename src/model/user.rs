@@ -22,6 +22,46 @@ pub enum Relation {}
 
 impl ActiveModelBehavior for ActiveModel {}
 
+impl From<CurrentUser> for Model {
+    fn from(value: CurrentUser) -> Self {
+        Self {
+            id: value.id,
+            open_id: value.open_id,
+            avatar: value.avatar,
+            nickname: value.nickname,
+            slogan: value.slogan,
+            created_at: value.created_at,
+            updated_at: value.updated_at,
+        }
+    }
+}
+
+
+#[derive(Clone, Debug)]
+pub struct CurrentUser {
+    pub id: i64,
+    pub open_id: String,
+    pub avatar: Option<String>,
+    pub nickname: Option<String>,
+    pub slogan: Option<String>,
+    pub created_at: Option<NaiveDateTime>,
+    pub updated_at: Option<NaiveDateTime>,
+}
+
+impl From<Model> for CurrentUser {
+    fn from(user: Model) -> Self {
+        Self {
+            id: user.id,
+            open_id: user.open_id,
+            avatar: user.avatar,
+            nickname: user.nickname,
+            slogan: user.slogan,
+            created_at: user.created_at,
+            updated_at: user.updated_at,
+        }
+    }
+}
+
 #[derive(Deserialize)]
 pub struct LoginRequest {
     pub code: String,
@@ -47,7 +87,7 @@ pub struct CreateUser {
 
 #[derive(Serialize)]
 pub struct DetailResponse {
-    pub id: i32,
+    pub id: i64,
     pub open_id: String,
     pub avatar: Option<String>,
     pub nickname: Option<String>,
@@ -56,10 +96,10 @@ pub struct DetailResponse {
     pub updated_at: Option<String>,
 }
 
-impl From<Model> for DetailResponse {
-    fn from(user: Model) -> Self {
+impl From<CurrentUser> for DetailResponse {
+    fn from(user: CurrentUser) -> Self {
         Self {
-            id: user.id as i32,
+            id: user.id,
             open_id: user.open_id,
             avatar: user.avatar,
             nickname: user.nickname,
@@ -78,8 +118,17 @@ pub struct UpdateRequest {
 }
 
 pub struct UpdateUser {
-    pub open_id: String,
     pub avatar: Option<String>,
     pub nickname: Option<String>,
     pub slogan: Option<String>,
+}
+
+impl From<UpdateRequest> for UpdateUser {
+    fn from(value: UpdateRequest) -> Self {
+        Self {
+            avatar: value.avatar,
+            nickname: value.nickname,
+            slogan: value.slogan,
+        }
+    }
 }

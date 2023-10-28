@@ -2,6 +2,7 @@ use std::net::{IpAddr, SocketAddr};
 use std::str::FromStr;
 
 use axum::Router;
+use tower::ServiceBuilder;
 use tower_http::cors::CorsLayer;
 use tower_http::request_id::{MakeRequestUuid, PropagateRequestIdLayer, SetRequestIdLayer};
 
@@ -10,7 +11,7 @@ use crate::repository::Pool;
 
 mod middleware;
 mod response;
-mod route;
+mod routes;
 mod v1;
 
 pub struct App {
@@ -47,10 +48,14 @@ impl App {
 
     fn router() -> Router {
         Router::new()
-            .nest("/health", route::health())
-            .nest("/api/v1", route::api_v1())
-            .layer(PropagateRequestIdLayer::x_request_id())
-            .layer(SetRequestIdLayer::x_request_id(MakeRequestUuid))
-            .layer(CorsLayer::permissive())
+            .nest("/health", routes::health())
+            .nest("/api/v1", routes::api_v1())
+            .layer(
+                ServiceBuilder::new()
+                    .layer(SetRequestIdLayer::x_request_id(MakeRequestUuid))
+                    .layer(PropagateRequestIdLayer::x_request_id())
+                    .layer(CorsLayer::permissive())
+            )
+
     }
 }

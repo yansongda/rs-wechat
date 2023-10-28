@@ -21,18 +21,18 @@ pub async fn login(code: &str) -> Result<LoginResponse> {
     ))
     .await
     .map_err(|e| match e {
-        Error::Http => Error::WechatHttp,
-        Error::HttpResponse => Error::WechatHttpResponse,
+        Error::Http => Error::HttpWechat,
+        Error::HttpResponse => Error::HttpWechatResponse,
         _ => Error::Http,
     })?;
 
     let result: LoginResponse =
-        serde_json::from_str(response.body.as_str()).map_err(|_| Error::WechatHttpResponseParse)?;
+        serde_json::from_str(response.body.as_str()).map_err(|_| Error::HttpWechatResponseParse)?;
 
     if result.errcode.is_some() {
         println!("微信 API 结果出错: {:?}", result);
 
-        return Err(Error::WechatHttpResponse);
+        return Err(Error::HttpWechatResponse);
     }
 
     Ok(result)

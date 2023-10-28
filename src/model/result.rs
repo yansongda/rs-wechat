@@ -9,16 +9,18 @@ static G_ERROR_CODE_MESSAGE: OnceLock<HashMap<Error, (u16, &'static str)>> = Onc
 #[derive(PartialEq, Eq, Hash, Debug)]
 pub enum Error {
     Unknown,
+    AuthorizationMissing,
+    AuthorizationNotFound,
     Params,
     UserNotFound,
     Database,
-    Insert,
-    Update,
+    DatabaseInsert,
+    DatabaseUpdate,
     Http,
     HttpResponse,
-    WechatHttp,
-    WechatHttpResponse,
-    WechatHttpResponseParse,
+    HttpWechat,
+    HttpWechatResponse,
+    HttpWechatResponseParse,
 }
 
 #[derive(Serialize, Deserialize)]
@@ -35,23 +37,25 @@ impl Error {
         let messages = G_ERROR_CODE_MESSAGE.get_or_init(|| {
             HashMap::from([
                 (Self::Unknown, (9999, "未知错误，请联系管理员")),
+                (Self::AuthorizationMissing, (1000, "缺少认证信息，认证失败")),
+                (Self::AuthorizationNotFound, (1001, "认证信息不正确，认证失败")),
                 (Self::Params, (2000, "参数错误，请确认您的参数是否符合规范")),
                 (Self::UserNotFound, (2001, "用户未找到")),
                 (Self::Database, (5000, "发生了一些问题，请联系管理员")),
-                (Self::Insert, (5001, "保存数据出现了一些问题，请联系管理员")),
-                (Self::Update, (5002, "更新数据出现了一些问题，请联系管理员")),
+                (Self::DatabaseInsert, (5001, "保存数据出现了一些问题，请联系管理员")),
+                (Self::DatabaseUpdate, (5002, "更新数据出现了一些问题，请联系管理员")),
                 (Self::Http, (9800, "第三方 API 请求出错，请联系管理员")),
                 (
                     Self::HttpResponse,
                     (9801, "第三方 API 响应出错，请联系管理员"),
                 ),
-                (Self::WechatHttp, (9802, "微信 API 请求出错，请联系管理员")),
+                (Self::HttpWechat, (9802, "微信 API 请求出错，请联系管理员")),
                 (
-                    Self::WechatHttpResponseParse,
+                    Self::HttpWechatResponseParse,
                     (9803, "微信 API 解析出错，请联系管理员"),
                 ),
                 (
-                    Self::WechatHttpResponse,
+                    Self::HttpWechatResponse,
                     (9804, "微信 API 结果出错，请联系管理员"),
                 ),
             ])

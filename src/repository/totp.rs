@@ -35,7 +35,7 @@ pub async fn create(totp: Totp) -> Result<Totp> {
     let result = active_model
         .insert(Pool::get("default"))
         .await
-        .map_err(|_| Error::Insert)?;
+        .map_err(|_| Error::DatabaseInsert)?;
 
     Ok(result)
 }
@@ -44,7 +44,7 @@ pub async fn update(updated: ActiveModel) -> Result<()> {
     updated
         .update(Pool::get("default"))
         .await
-        .map_err(|_| Error::Insert)?;
+        .map_err(|_| Error::DatabaseInsert)?;
 
     Ok(())
 }

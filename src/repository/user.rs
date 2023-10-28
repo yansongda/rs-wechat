@@ -6,7 +6,7 @@ use crate::model::user;
 use crate::model::user::{Column, CreateUser, Entity, Model as User, UpdateUser};
 use crate::repository::Pool;
 
-pub async fn find_one(open_id: &str) -> Result<User> {
+pub async fn find(open_id: &str) -> Result<User> {
     let result: Option<User> = Entity::find()
         .filter(Column::OpenId.eq(open_id))
         .one(Pool::get("default"))
@@ -20,7 +20,7 @@ pub async fn find_one(open_id: &str) -> Result<User> {
     Err(Error::UserNotFound)
 }
 
-pub async fn create(user: CreateUser) -> Result<User> {
+pub async fn insert(user: CreateUser) -> Result<User> {
     let active_model = user::ActiveModel {
         open_id: Set(user.open_id),
         created_at: Set(Some(chrono::Local::now().naive_local())),
@@ -31,16 +31,28 @@ pub async fn create(user: CreateUser) -> Result<User> {
     Ok(active_model
         .insert(Pool::get("default"))
         .await
-        .map_err(|_| Error::Insert)?)
+        .map_err(|_| Error::DatabaseInsert)?)
 }
 
-pub async fn update(user: UpdateUser) -> Result<User> {
-    let mut active_model = user.into_active_model();
+pub async fn update(model: User, updated: UpdateUser) -> Result<User> {
+    let mut active_model = model.into_active_model();
+
+    if updated.avatar.is_some() {
+        active_model.avatar = Set(updated.avatar);
+    }
+
+    if updated.nickname.is_some() {
+        active_model.nickname = Set(updated.nickname);
+    }
+
+    if updated.slogan.is_some() {
+        active_model.slogan = Set(updated.slogan);
+    }
 
     active_model.updated_at = Set(Some(chrono::Local::now().naive_local()));
 
     Ok(active_model
         .update(Pool::get("default"))
         .await
-        .map_err(|_| Error::Update)?)
+        .map_err(|_| Error::DatabaseUpdate)?)
 }
