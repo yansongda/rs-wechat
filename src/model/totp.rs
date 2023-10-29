@@ -22,9 +22,22 @@ pub enum Relation {}
 
 impl ActiveModelBehavior for ActiveModel {}
 
+#[derive(Serialize, Debug)]
+pub struct AllResponse {
+    pub results: Vec<DetailResponse>,
+}
+
 #[derive(Deserialize, Debug)]
 pub struct DetailRequest {
+    pub id: i64,
+}
+
+#[derive(Serialize, Debug)]
+pub struct DetailResponse {
     pub id: i32,
+    pub issuer: String,
+    pub username: String,
+    pub code: String,
 }
 
 #[derive(Deserialize, Debug)]
@@ -41,17 +54,4 @@ pub struct UpdateRequest {
 #[derive(Deserialize, Debug)]
 pub struct DeleteRequest {
     pub id: i32,
-}
-
-#[derive(Serialize, Debug)]
-pub struct AllResponse {
-    pub results: Vec<DetailResponse>,
-}
-
-#[derive(Serialize, Debug)]
-pub struct DetailResponse {
-    pub id: i32,
-    pub issuer: String,
-    pub username: String,
-    pub code: String,
 }

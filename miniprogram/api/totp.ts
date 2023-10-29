@@ -21,7 +21,7 @@ const detail = async (id: number) => {
 
 const create = async (uri: string) => {
   try {
-    return await http.post<ITotpResponse>(URL.UPDATE_OR_CREATE, {uri} as ITotpUpdateCreateRequest)
+    return await http.post<ITotpResponse>(URL.CREATE, {uri} as ITotpCreateRequest)
   } catch (e) {
     return await api.resolveReject(e, CODE.HTTP_API_TOTP_CREATE)
   }
@@ -29,7 +29,7 @@ const create = async (uri: string) => {
 
 const update = async (data: ITotpUpdateRequest) => {
   try {
-    return await http.post<ITotpResponse>(URL.UPDATE_OR_CREATE, data)
+    return await http.post<ITotpResponse>(URL.UPDATE, data)
   } catch (e) {
     return await api.resolveReject(e, CODE.HTTP_API_TOTP_UPDATE)
   }
@@ -37,7 +37,7 @@ const update = async (data: ITotpUpdateRequest) => {
 
 const deleteTotp = async (id: number) => {
   try {
-    return await http.post<ITotpResponse>(URL.DELETE, {id})
+    return await http.post<ITotpResponse>(URL.DELETE, {id} as ITotpDeleteRequest)
   } catch (e) {
     return await api.resolveReject(e, CODE.HTTP_API_TOTP_ALL)
   }

@@ -2,7 +2,14 @@ interface ITotpItem extends ITotpItemResponse {
   isTouchMove: boolean,
 }
 
-interface ITotpDetailRequest extends IRequestQuery {
+interface ITotpItemResponse {
+  id: number,
+  issuer: string,
+  username: string,
+  code: string,
+}
+
+interface ITotpDetailRequest extends IRequestData {
   id: number,
 }
 
@@ -11,15 +18,12 @@ interface ITotpUpdateRequest extends IRequestData{
   username: string,
 }
 
-interface ITotpUpdateCreateRequest extends IRequestData{
+interface ITotpCreateRequest extends IRequestData{
   uri: string
 }
 
-interface ITotpItemResponse {
+interface ITotpDeleteRequest extends IRequestData {
   id: number,
-  issuer: string,
-  username: string,
-  code: string,
 }
 
 interface ITotpResponse {
