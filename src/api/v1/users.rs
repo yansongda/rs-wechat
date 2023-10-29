@@ -1,9 +1,11 @@
-use axum::Extension;
 use axum::extract::Json;
+use axum::Extension;
 
 use crate::api::response::Resp;
 use crate::model::result::Response;
-use crate::model::user::{CurrentUser, DetailResponse, LoginRequest, LoginResponse, Model as User, UpdateRequest};
+use crate::model::user::{
+    CurrentUser, DetailResponse, LoginRequest, LoginResponse, Model as User, UpdateRequest,
+};
 use crate::service;
 
 pub async fn login(Json(params): Json<LoginRequest>) -> Resp<LoginResponse> {
@@ -16,7 +18,10 @@ pub async fn detail(Extension(current_user): Extension<CurrentUser>) -> Resp<Det
     Ok(Response::success(current_user.into()))
 }
 
-pub async fn update(Extension(current_user): Extension<CurrentUser>, Json(params): Json<UpdateRequest>) -> Resp<()> {
+pub async fn update(
+    Extension(current_user): Extension<CurrentUser>,
+    Json(params): Json<UpdateRequest>,
+) -> Resp<()> {
     service::user::update(current_user, params).await?;
 
     Ok(Response::success(()))

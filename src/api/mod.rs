@@ -54,8 +54,7 @@ impl App {
                 ServiceBuilder::new()
                     .layer(SetRequestIdLayer::x_request_id(MakeRequestUuid))
                     .layer(PropagateRequestIdLayer::x_request_id())
-                    .layer(CorsLayer::permissive())
+                    .layer(CorsLayer::permissive()),
             )
-
     }
 }

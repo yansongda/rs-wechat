@@ -1,5 +1,5 @@
-use sea_orm::{ActiveModelTrait, ColumnTrait, EntityTrait, IntoActiveModel, QueryFilter};
 use sea_orm::ActiveValue::Set;
+use sea_orm::{ActiveModelTrait, ColumnTrait, EntityTrait, IntoActiveModel, QueryFilter};
 
 use crate::model::result::{Error, Result};
 use crate::model::user;
@@ -28,10 +28,10 @@ pub async fn insert(user: CreateUser) -> Result<User> {
         ..Default::default()
     };
 
-    Ok(active_model
+    active_model
         .insert(Pool::get("default"))
         .await
-        .map_err(|_| Error::DatabaseInsert)?)
+        .map_err(|_| Error::DatabaseInsert)
 }
 
 pub async fn update(model: User, updated: UpdateUser) -> Result<User> {
@@ -51,8 +51,8 @@ pub async fn update(model: User, updated: UpdateUser) -> Result<User> {
 
     active_model.updated_at = Set(Some(chrono::Local::now().naive_local()));
 
-    Ok(active_model
+    active_model
         .update(Pool::get("default"))
         .await
-        .map_err(|_| Error::DatabaseUpdate)?)
+        .map_err(|_| Error::DatabaseUpdate)
 }

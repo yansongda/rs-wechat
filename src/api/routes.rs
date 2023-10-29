@@ -1,5 +1,5 @@
-use axum::{middleware, Router};
 use axum::routing::{get, post};
+use axum::{middleware, Router};
 use tower::ServiceBuilder;
 
 use crate::api::middleware::authorization;
@@ -25,12 +25,9 @@ pub fn api_v1() -> Router {
                 .route("/updateOrCreate", post(v1::totp::update_or_create))
                 .route("/delete", post(v1::totp::delete)),
         )
-        .layer(
-            ServiceBuilder::new()
-                .layer(middleware::from_fn(authorization))
-        )
-        .nest("/users",
-              Router::new()
-                  .route("/login", post(v1::users::login))
+        .layer(ServiceBuilder::new().layer(middleware::from_fn(authorization)))
+        .nest(
+            "/users",
+            Router::new().route("/login", post(v1::users::login)),
         )
 }

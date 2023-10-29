@@ -21,7 +21,11 @@ pub async fn request(request: Request) -> Result<HttpResponse> {
 
     println!("请求参数: {:?}", request);
 
-    let response = client.execute(request).await.map_err(|_| Error::Http)?;
+    let response = client.execute(request).await.map_err(|e| {
+        println!("请求失败: {:?}", e);
+
+        Error::Http
+    })?;
 
     let status = response.status().as_u16();
     let headers = response

@@ -6,7 +6,7 @@ use serde::{Deserialize, Serialize};
 
 static G_ERROR_CODE_MESSAGE: OnceLock<HashMap<Error, (u16, &'static str)>> = OnceLock::new();
 
-#[derive(PartialEq, Eq, Hash, Debug)]
+#[derive(PartialEq, Eq, Hash, Debug, Copy, Clone)]
 pub enum Error {
     Unknown,
     AuthorizationMissing,
@@ -38,12 +38,21 @@ impl Error {
             HashMap::from([
                 (Self::Unknown, (9999, "未知错误，请联系管理员")),
                 (Self::AuthorizationMissing, (1000, "缺少认证信息，认证失败")),
-                (Self::AuthorizationNotFound, (1001, "认证信息不正确，认证失败")),
+                (
+                    Self::AuthorizationNotFound,
+                    (1001, "认证信息不正确，认证失败"),
+                ),
                 (Self::Params, (2000, "参数错误，请确认您的参数是否符合规范")),
                 (Self::UserNotFound, (2001, "用户未找到")),
                 (Self::Database, (5000, "发生了一些问题，请联系管理员")),
-                (Self::DatabaseInsert, (5001, "保存数据出现了一些问题，请联系管理员")),
-                (Self::DatabaseUpdate, (5002, "更新数据出现了一些问题，请联系管理员")),
+                (
+                    Self::DatabaseInsert,
+                    (5001, "保存数据出现了一些问题，请联系管理员"),
+                ),
+                (
+                    Self::DatabaseUpdate,
+                    (5002, "更新数据出现了一些问题，请联系管理员"),
+                ),
                 (Self::Http, (9800, "第三方 API 请求出错，请联系管理员")),
                 (
                     Self::HttpResponse,

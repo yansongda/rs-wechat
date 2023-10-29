@@ -36,7 +36,6 @@ impl From<CurrentUser> for Model {
     }
 }
 
-
 #[derive(Clone, Debug)]
 pub struct CurrentUser {
     pub id: i64,
@@ -66,7 +65,6 @@ impl From<Model> for CurrentUser {
 pub struct LoginRequest {
     pub code: String,
 }
-
 
 #[derive(Serialize)]
 pub struct LoginResponse {
@@ -104,8 +102,12 @@ impl From<CurrentUser> for DetailResponse {
             avatar: user.avatar,
             nickname: user.nickname,
             slogan: user.slogan,
-            created_at: user.created_at.map(|t| t.format("%Y-%m-%d %H:%M:%S").to_string()),
-            updated_at: user.updated_at.map(|t| t.format("%Y-%m-%d %H:%M:%S").to_string()),
+            created_at: user
+                .created_at
+                .map(|t| t.format("%Y-%m-%d %H:%M:%S").to_string()),
+            updated_at: user
+                .updated_at
+                .map(|t| t.format("%Y-%m-%d %H:%M:%S").to_string()),
         }
     }
 }

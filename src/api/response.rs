@@ -7,8 +7,8 @@ use crate::model::result::{Error, Response, Result};
 pub type Resp<D> = Result<Response<D>>;
 
 impl<D: Serialize> Response<D> {
-    fn to_http_response(self) -> axum::http::Response<Body> {
-        let body = serde_json::to_string(&self).unwrap();
+    fn to_http_response(&self) -> axum::http::Response<Body> {
+        let body = serde_json::to_string(self).unwrap();
 
         axum::response::Response::builder()
             .status(200)
