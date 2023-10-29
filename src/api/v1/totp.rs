@@ -10,6 +10,8 @@ pub async fn detail(Extension(current_user): Extension<CurrentUser>, Json(params
 
 }
 
-pub async fn update_or_create(Extension(current_user): Extension<CurrentUser>) {}
+pub async fn create(Extension(current_user): Extension<CurrentUser>) {}
+
+pub async fn update(Extension(current_user): Extension<CurrentUser>) {}
 
 pub async fn delete(Extension(current_user): Extension<CurrentUser>) {}

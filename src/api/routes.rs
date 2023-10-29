@@ -1,5 +1,5 @@
-use axum::routing::{get, post};
 use axum::{middleware, Router};
+use axum::routing::{get, post};
 use tower::ServiceBuilder;
 
 use crate::api::middleware::authorization;
@@ -10,24 +10,29 @@ pub fn health() -> Router {
 }
 
 pub fn api_v1() -> Router {
-    Router::new()
+    let unauthorized = Router::new()
+        .route("/users/login", post(v1::users::login));
+
+    let users =  Router::new()
         .nest(
             "/users",
             Router::new()
                 .route("/detail", get(v1::users::detail))
                 .route("/update", post(v1::users::update)),
         )
+        .layer(ServiceBuilder::new().layer(middleware::from_fn(authorization)));
+
+    let totp = Router::new()
         .nest(
             "/totp",
             Router::new()
                 .route("/all", get(v1::totp::all))
                 .route("/detail", get(v1::totp::detail))
-                .route("/updateOrCreate", post(v1::totp::update_or_create))
+                .route("/create", post(v1::totp::create))
+                .route("/update", post(v1::totp::update))
                 .route("/delete", post(v1::totp::delete)),
         )
-        .layer(ServiceBuilder::new().layer(middleware::from_fn(authorization)))
-        .nest(
-            "/users",
-            Router::new().route("/login", post(v1::users::login)),
-        )
+        .layer(ServiceBuilder::new().layer(middleware::from_fn(authorization)));
+
+    unauthorized.merge(users).merge(totp)
 }
