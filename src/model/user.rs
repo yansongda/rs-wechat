@@ -18,7 +18,20 @@ pub struct Model {
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]
-pub enum Relation {}
+pub enum Relation {
+    #[sea_orm(
+        has_many = "crate::model::totp::Entity",
+        from = "Column::Id",
+        to = "crate::model::totp::Column::UserId"
+    )]
+    Totp,
+}
+
+impl Related<crate::model::totp::Entity> for Entity {
+    fn to() -> RelationDef {
+        Relation::Totp.def()
+    }
+}
 
 impl ActiveModelBehavior for ActiveModel {}
 
@@ -79,6 +92,7 @@ impl From<Model> for LoginResponse {
     }
 }
 
+#[derive(DeriveIntoActiveModel)]
 pub struct CreateUser {
     pub open_id: String,
 }
@@ -119,6 +133,7 @@ pub struct UpdateRequest {
     pub slogan: Option<String>,
 }
 
+#[derive(DeriveIntoActiveModel)]
 pub struct UpdateUser {
     pub avatar: Option<String>,
     pub nickname: Option<String>,

@@ -13,9 +13,12 @@ pub enum Error {
     AuthorizationNotFound,
     Params,
     UserNotFound,
+    TotpNotFound,
+    TotpParse,
     Database,
     DatabaseInsert,
     DatabaseUpdate,
+    DatabaseDelete,
     Http,
     HttpResponse,
     HttpWechat,
@@ -44,6 +47,8 @@ impl Error {
                 ),
                 (Self::Params, (2000, "参数错误，请确认您的参数是否符合规范")),
                 (Self::UserNotFound, (2001, "用户未找到")),
+                (Self::TotpNotFound, (2002, "TOTP 信息未找到")),
+                (Self::TotpParse, (2003, "TOTP 链接解析失败")),
                 (Self::Database, (5000, "发生了一些问题，请联系管理员")),
                 (
                     Self::DatabaseInsert,
@@ -52,6 +57,10 @@ impl Error {
                 (
                     Self::DatabaseUpdate,
                     (5002, "更新数据出现了一些问题，请联系管理员"),
+                ),
+                (
+                    Self::DatabaseDelete,
+                    (5003, "删除数据出现了一些问题，请联系管理员"),
                 ),
                 (Self::Http, (9800, "第三方 API 请求出错，请联系管理员")),
                 (

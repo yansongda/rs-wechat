@@ -1,19 +1,19 @@
 use sea_orm::ActiveValue::Set;
-use sea_orm::{ActiveModelTrait, ColumnTrait, EntityTrait, IntoActiveModel, QueryFilter};
+use sea_orm::{ActiveModelTrait, EntityTrait, IntoActiveModel, ModelTrait};
 
 use crate::model::result::{Error, Result};
-use crate::model::totp::{ActiveModel, Column, Entity, Model as Totp};
+use crate::model::totp::{CreateTotp, Entity, Model as Totp, UpdateTotp};
+use crate::model::user::Model as User;
 use crate::repository::Pool;
 
-pub async fn find(user_id: i64) -> Result<Vec<Totp>> {
-    Entity::find()
-        .filter(Column::UserId.eq(user_id))
+pub async fn all(user: User) -> Result<Vec<Totp>> {
+    user.find_related(Entity)
         .all(Pool::get("default"))
         .await
         .map_err(|_| Error::Database)
 }
 
-pub async fn find_by_id(id: i64) -> Result<Totp> {
+pub async fn find(id: i64) -> Result<Totp> {
     let result = Entity::find_by_id(id)
         .one(Pool::get("default"))
         .await
@@ -23,10 +23,10 @@ pub async fn find_by_id(id: i64) -> Result<Totp> {
         return Ok(result);
     }
 
-    Err(Error::UserNotFound)
+    Err(Error::TotpNotFound)
 }
 
-pub async fn create(totp: Totp) -> Result<Totp> {
+pub async fn insert(totp: CreateTotp) -> Result<Totp> {
     let mut active_model = totp.into_active_model();
 
     active_model.created_at = Set(Some(chrono::Local::now().naive_local()));
@@ -40,11 +40,25 @@ pub async fn create(totp: Totp) -> Result<Totp> {
     Ok(result)
 }
 
-pub async fn update(updated: ActiveModel) -> Result<()> {
-    updated
+pub async fn update(model: Totp, updated: UpdateTotp) -> Result<()> {
+    let mut active_model = updated.into_active_model();
+
+    active_model.id = Set(model.id);
+    active_model.updated_at = Set(Some(chrono::Local::now().naive_local()));
+
+    active_model
         .update(Pool::get("default"))
         .await
         .map_err(|_| Error::DatabaseInsert)?;
+
+    Ok(())
+}
+
+pub async fn delete(model: Totp) -> Result<()> {
+    model
+        .delete(Pool::get("default"))
+        .await
+        .map_err(|_| Error::DatabaseDelete)?;
 
     Ok(())
 }

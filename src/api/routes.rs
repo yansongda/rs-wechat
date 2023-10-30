@@ -1,5 +1,5 @@
-use axum::{middleware, Router};
 use axum::routing::{get, post};
+use axum::{middleware, Router};
 use tower::ServiceBuilder;
 
 use crate::api::middleware::authorization;
@@ -10,10 +10,9 @@ pub fn health() -> Router {
 }
 
 pub fn api_v1() -> Router {
-    let unauthorized = Router::new()
-        .route("/users/login", post(v1::users::login));
+    let unauthorized = Router::new().route("/users/login", post(v1::users::login));
 
-    let users =  Router::new()
+    let users = Router::new()
         .nest(
             "/users",
             Router::new()

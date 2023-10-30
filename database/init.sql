@@ -20,9 +20,9 @@ create table totp
     id         integer not null
         constraint pk_id
             primary key autoincrement,
-    user_id    integer,
+    user_id    integer not null,
     username   text    not null,
-    issuer     text    not null,
+    issuer     text        null,
     secret     text    not null,
     created_at text,
     updated_at text
