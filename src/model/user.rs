@@ -1,5 +1,6 @@
 use chrono::NaiveDateTime;
 use sea_orm::entity::prelude::*;
+use sea_orm::{prelude::async_trait::async_trait, ActiveValue};
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, Serialize, Eq, PartialEq, Deserialize, DeriveEntityModel)]
@@ -33,7 +34,22 @@ impl Related<crate::model::totp::Entity> for Entity {
     }
 }
 
-impl ActiveModelBehavior for ActiveModel {}
+#[async_trait]
+impl ActiveModelBehavior for ActiveModel {
+    async fn before_save<C>(mut self, _db: &C, insert: bool) -> Result<Self, DbErr>
+    where
+        C: ConnectionTrait,
+    {
+        if insert {
+            self.id = ActiveValue::NotSet;
+            self.created_at = ActiveValue::Set(Some(chrono::Local::now().naive_local()));
+        };
+
+        self.updated_at = ActiveValue::Set(Some(chrono::Local::now().naive_local()));
+
+        Ok(self)
+    }
+}
 
 impl From<CurrentUser> for Model {
     fn from(value: CurrentUser) -> Self {

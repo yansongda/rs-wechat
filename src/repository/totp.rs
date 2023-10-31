@@ -27,12 +27,8 @@ pub async fn find(id: i64) -> Result<Totp> {
 }
 
 pub async fn insert(totp: CreateTotp) -> Result<Totp> {
-    let mut active_model = totp.into_active_model();
-
-    active_model.created_at = Set(Some(chrono::Local::now().naive_local()));
-    active_model.updated_at = Set(Some(chrono::Local::now().naive_local()));
-
-    let result = active_model
+    let result = totp
+        .into_active_model()
         .insert(Pool::get("default"))
         .await
         .map_err(|_| Error::DatabaseInsert)?;
@@ -44,7 +40,6 @@ pub async fn update(model: Totp, updated: UpdateTotp) -> Result<()> {
     let mut active_model = updated.into_active_model();
 
     active_model.id = Set(model.id);
-    active_model.updated_at = Set(Some(chrono::Local::now().naive_local()));
 
     active_model
         .update(Pool::get("default"))

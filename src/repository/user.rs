@@ -20,9 +20,7 @@ pub async fn find(open_id: &str) -> Result<User> {
 }
 
 pub async fn insert(user: CreateUser) -> Result<User> {
-    let active_model = user.into_active_model();
-
-    active_model
+    user.into_active_model()
         .insert(Pool::get("default"))
         .await
         .map_err(|_| Error::DatabaseInsert)
@@ -32,7 +30,6 @@ pub async fn update(model: User, updated: UpdateUser) -> Result<User> {
     let mut active_model = updated.into_active_model();
 
     active_model.id = Set(model.id);
-    active_model.updated_at = Set(Some(chrono::Local::now().naive_local()));
 
     active_model
         .update(Pool::get("default"))

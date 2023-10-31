@@ -1,5 +1,6 @@
 use chrono::NaiveDateTime;
 use sea_orm::entity::prelude::*;
+use sea_orm::{prelude::async_trait::async_trait, ActiveValue, IntoActiveModel};
 use serde::{Deserialize, Serialize};
 
 use crate::service::totp;
@@ -35,7 +36,22 @@ impl Related<crate::model::user::Entity> for Entity {
     }
 }
 
-impl ActiveModelBehavior for ActiveModel {}
+#[async_trait]
+impl ActiveModelBehavior for ActiveModel {
+    async fn before_save<C>(mut self, _db: &C, insert: bool) -> Result<Self, DbErr>
+    where
+        C: ConnectionTrait,
+    {
+        if insert {
+            self.id = ActiveValue::NotSet;
+            self.created_at = ActiveValue::Set(Some(chrono::Local::now().naive_local()));
+        };
+
+        self.updated_at = ActiveValue::Set(Some(chrono::Local::now().naive_local()));
+
+        Ok(self)
+    }
+}
 
 #[derive(Deserialize, Debug)]
 pub struct DetailRequest {
@@ -81,10 +97,23 @@ pub struct UpdateRequest {
     pub username: Option<String>,
 }
 
-#[derive(DeriveIntoActiveModel)]
 pub struct UpdateTotp {
-    pub username: Option<String>,
     pub issuer: Option<String>,
+    pub username: Option<String>,
+}
+
+impl IntoActiveModel<ActiveModel> for UpdateTotp {
+    fn into_active_model(self) -> ActiveModel {
+        ActiveModel {
+            issuer: ActiveValue::Set(self.issuer),
+            username: if let Some(username) = self.username {
+                ActiveValue::Set(username)
+            } else {
+                ActiveValue::NotSet
+            },
+            ..::std::default::Default::default()
+        }
+    }
 }
 
 impl From<UpdateRequest> for UpdateTotp {
