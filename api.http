@@ -1,0 +1,64 @@
+### 用户 - 登录
+POST {{domain}}/api/v1/users/login
+Content-Type: application/json
+
+{
+  "code": "999"
+}
+
+### 用户 - 详情
+POST {{domain}}/api/v1/users/detail
+Authorization: Bearer {{open_id}}
+
+### 用户 - 更新
+POST {{domain}}/api/v1/users/update
+Content-Type: application/json
+Authorization: Bearer {{open_id}}
+
+{
+  "avatar": "",
+  "nickname": "yansongdaa",
+  "slogan": "Coding My Life...aa"
+}
+
+### TOTP - 所有
+POST {{domain}}/api/v1/totp/all
+Authorization: Bearer {{open_id}}
+
+### TOTP - 详情
+POST {{domain}}/api/v1/totp/detail
+Content-Type: application/json
+Authorization: Bearer {{open_id}}
+
+{
+    "id": 1
+}
+
+### TOTP - 创建
+POST {{domain}}/api/v1/totp/create
+Content-Type: application/json
+Authorization: Bearer {{open_id}}
+
+{
+  "uri": "otpauth://totp/GitHub:yansongda?secret=LBKODWEWIEEEMQKY&issuer=GitHub"
+}
+
+### TOTP - 更新
+POST {{domain}}/api/v1/totp/update
+Content-Type: application/json
+Authorization: Bearer {{open_id}}
+
+{
+  "id": 1,
+  "issuer": "Google Search",
+  "username": "yansongda-search"
+}
+
+### TOTP - 删除
+POST {{domain}}/api/v1/totp/delete
+Content-Type: application/json
+Authorization: Bearer {{open_id}}
+
+{
+  "id": 1
+}

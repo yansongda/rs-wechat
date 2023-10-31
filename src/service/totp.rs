@@ -22,7 +22,11 @@ pub async fn detail(current_user: CurrentUser, id: i64) -> Result<DetailResponse
 }
 
 pub async fn create(current_user: CurrentUser, uri: String) -> Result<()> {
-    let t = TOTP::from_url(uri.as_str()).map_err(|_| Error::TotpParse)?;
+    let t = TOTP::from_url_unchecked(uri.as_str()).map_err(|e| {
+        println!("totp parse error: {}", e);
+
+        Error::TotpParse
+    })?;
 
     totp::insert(CreateTotp {
         user_id: current_user.id,
@@ -60,7 +64,7 @@ pub async fn delete(current_user: CurrentUser, id: i64) -> Result<()> {
 }
 
 pub fn generate_code(totp: Totp) -> String {
-    let totp = TOTP::new(
+    let totp = TOTP::new_unchecked(
         Algorithm::SHA1,
         6,
         1,
@@ -68,8 +72,7 @@ pub fn generate_code(totp: Totp) -> String {
         Secret::Encoded(totp.secret).to_bytes().unwrap(),
         totp.issuer,
         totp.username,
-    )
-    .unwrap();
+    );
 
     totp.generate_current().unwrap()
 }

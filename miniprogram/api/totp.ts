@@ -13,7 +13,7 @@ const all = async () => {
 
 const detail = async (id: number) => {
   try {
-    return await http.get<ITotpItemResponse>(URL.DETAIL, {id} as ITotpDetailRequest)
+    return await http.post<ITotpItemResponse>(URL.DETAIL, {id} as ITotpDetailRequest)
   } catch (e) {
     return await api.resolveReject(e, CODE.HTTP_API_TOTP_DETAIL)
   }

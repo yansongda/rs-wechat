@@ -13,7 +13,7 @@ const login = async (code: string) => {
 
 const detail = async () => {
   try {
-    return await http.get<IUserDetailResponse>(URL.DETAIL)
+    return await http.post<IUserDetailResponse>(URL.DETAIL)
   } catch (e) {
     return await api.resolveReject(e, CODE.HTTP_API_USER_DETAIL)
   }
