@@ -4,8 +4,16 @@ use crate::repository;
 use crate::service::wechat;
 
 pub async fn login(code: &str) -> Result<User> {
+    let open_id = wechat::login(code).await?.openid.unwrap();
+
+    let user = repository::user::find(&open_id).await;
+
+    if user.is_ok() {
+        return user;
+    }
+
     repository::user::insert(CreateUser {
-        open_id: wechat::login(code).await?.openid.unwrap(),
+        open_id
     })
     .await
 }

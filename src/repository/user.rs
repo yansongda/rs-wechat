@@ -10,7 +10,11 @@ pub async fn find(open_id: &str) -> Result<User> {
         .filter(Column::OpenId.eq(open_id))
         .one(Pool::get("default"))
         .await
-        .map_err(|_| Error::Database)?;
+        .map_err(|e| {
+            println!("查询用户失败: {:?}", e);
+
+            Error::Database
+        })?;
 
     if let Some(user) = result {
         return Ok(user);
@@ -23,7 +27,11 @@ pub async fn insert(user: CreateUser) -> Result<User> {
     user.into_active_model()
         .insert(Pool::get("default"))
         .await
-        .map_err(|_| Error::DatabaseInsert)
+        .map_err(|e| {
+            println!("插入用户失败: {:?}", e);
+
+            Error::DatabaseInsert
+        })
 }
 
 pub async fn update(model: User, updated: UpdateUser) -> Result<User> {
@@ -34,5 +42,9 @@ pub async fn update(model: User, updated: UpdateUser) -> Result<User> {
     active_model
         .update(Pool::get("default"))
         .await
-        .map_err(|_| Error::DatabaseUpdate)
+        .map_err(|e| {
+            println!("更新用户失败: {:?}", e);
+
+            Error::DatabaseUpdate
+        })
 }

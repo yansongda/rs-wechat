@@ -1,13 +1,16 @@
 import http from '@utils/http'
 import { URL } from '@constant/shortlink'
 import { CODE } from '@constant/error'
-import api from '@utils/api'
+import { HttpApiError } from '@models/error'
+import { error } from '@utils/logger'
 
 const create = async (link: string) => {
   try {
     return await http.post<IShortlinkCreateResponse>(URL.CREATE, {link} as IShortlinkCreateRequest)
   } catch (e) {
-    return await api.resolveReject(e, CODE.HTTP_API_SHORTLINK_CREATE)
+    error('创建短链接失败', e.code, e.message)
+    
+    return Promise.reject(new HttpApiError(CODE.HTTP_API_SHORTLINK_CREATE))
   }
 }
 

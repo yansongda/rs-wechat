@@ -22,3 +22,4 @@ miniprogram/miniprogram_npm/
 .env
 miniprogram.sqlite3
 config.toml
+http-client.private.env.json

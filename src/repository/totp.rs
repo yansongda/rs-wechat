@@ -10,14 +10,22 @@ pub async fn all(user: User) -> Result<Vec<Totp>> {
     user.find_related(Entity)
         .all(Pool::get("default"))
         .await
-        .map_err(|_| Error::Database)
+        .map_err(|e| {
+            println!("查询用户所有的 Totp 失败: {:?}", e);
+
+            Error::Database
+        })
 }
 
 pub async fn find(id: i64) -> Result<Totp> {
     let result = Entity::find_by_id(id)
         .one(Pool::get("default"))
         .await
-        .map_err(|_| Error::Database)?;
+        .map_err(|e| {
+            println!("查询 Totp 失败: {:?}", e);
+
+            Error::Database
+        })?;
 
     if let Some(result) = result {
         return Ok(result);
@@ -31,7 +39,11 @@ pub async fn insert(totp: CreateTotp) -> Result<Totp> {
         .into_active_model()
         .insert(Pool::get("default"))
         .await
-        .map_err(|_| Error::DatabaseInsert)?;
+        .map_err(|e| {
+            println!("插入 Totp 失败: {:?}", e);
+
+            Error::DatabaseInsert
+        })?;
 
     Ok(result)
 }
@@ -44,7 +56,11 @@ pub async fn update(model: Totp, updated: UpdateTotp) -> Result<()> {
     active_model
         .update(Pool::get("default"))
         .await
-        .map_err(|_| Error::DatabaseInsert)?;
+        .map_err(|e| {
+            println!("更新 Totp 失败: {:?}", e);
+
+            Error::DatabaseInsert
+        })?;
 
     Ok(())
 }
@@ -53,7 +69,11 @@ pub async fn delete(model: Totp) -> Result<()> {
     model
         .delete(Pool::get("default"))
         .await
-        .map_err(|_| Error::DatabaseDelete)?;
+        .map_err(|e| {
+            println!("删除 Totp 失败: {:?}", e);
+
+            Error::DatabaseDelete
+        })?;
 
     Ok(())
 }
