@@ -4,7 +4,7 @@ WORKDIR /www
 
 COPY ./ .
 
-RUN apk add --no-cache musl-dev libssl-dev \
+RUN apk add --no-cache musl-dev libressl-dev \
     && cargo build --release
 
 
