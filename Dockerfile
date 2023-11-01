@@ -4,7 +4,8 @@ WORKDIR /www
 
 COPY ./ .
 
-RUN cargo build --release
+RUN apk add --no-cache musl-dev \
+    && cargo build --release
 
 
 FROM alpine:latest AS runtime
