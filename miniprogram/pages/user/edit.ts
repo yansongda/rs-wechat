@@ -33,6 +33,8 @@ Page({
     await wx.showToast({title: '更新中', icon: 'loading', mask: true, duration: 3000})
 
     await api.update(e.detail.value as IUserUpdateRequest)
+
+    // 同步完成之后更新下全局的用户信息状态
     await utils.sync()
 
     wx.showToast({

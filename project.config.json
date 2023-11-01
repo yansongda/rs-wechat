@@ -40,5 +40,7 @@
     "ignore": [],
     "include": []
   },
-  "appid": "wx36601dc74412c674"
+  "appid": "wx36601dc74412c674",
+  "projectname": "yansongda",
+  "libVersion": "3.1.4"
 }

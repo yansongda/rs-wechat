@@ -1,5 +1,6 @@
 import api from '@api/user'
 import { STORAGE } from '@constant/app'
+import { DEFAULT } from '@constant/user'
 
 // 初始化时会调用用户详情接口，用户详情需要 openID
 // 但是初始化时 app 并没有加载完成，此时不能从全局数据里拿数据
@@ -15,9 +16,9 @@ const sync = async (): Promise<IUserUpdateResult> => {
   const detail = await api.detail()
 
   const user: IUser = {
-    avatar: detail.avatar,
-    nickname: detail.nickname,
-    slogan: detail.slogan,
+    avatar: detail.avatar || DEFAULT.avatar,
+    nickname: detail.nickname || DEFAULT.nickname,
+    slogan: detail.slogan || DEFAULT.slogan,
     openId: detail.open_id,
   }
 

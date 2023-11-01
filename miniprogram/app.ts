@@ -3,13 +3,14 @@ import userApi from '@api/user'
 import userUtils from '@utils/user'
 import { EError, WeixinError } from '@models/error'
 import { CODE, MESSAGE } from '@constant/error'
+import { DEFAULT } from '@constant/user'
 
 App<IGlobalData>({
   globalData: {
     user: {
-      avatar: '/images/default-avatar.png',
-      nickname: '微信用户',
-      slogan: '让科技更便利',
+      avatar: DEFAULT.avatar,
+      nickname: DEFAULT.nickname,
+      slogan: DEFAULT.slogan,
       openId: '',
     }
   },
@@ -27,8 +28,9 @@ App<IGlobalData>({
       success: async (res) => {
         const loginResponse: IUserLoginResponse = await userApi.login(res.code)
         
-        // 初始化时 app 并没有加载完成，调用 updateUser 需要读取用户 openId
-        // 此时不能从全局数据里拿数据，所以初始化的时候从 stroage 里拿数据
+        // 初始化时 app 并没有加载完成，而下面的 userUtils.sync 中会调用 user.detail 去获取用户详细信息
+        // 而调用获取用户详细信息需要有用户 openId，但此时 App 又没有加载完，所以
+        // 此时不能从全局数据里拿数据，所以这个时候就只能从 stroage 里拿数据，这里 storage 就是这个用的
         await wx.setStorage({key: STORAGE.OPEN_ID, data: loginResponse.open_id}).catch(() => Promise.reject(new WeixinError(CODE.WEIXIN_STORAGE_SET)))
 
         const updateResult: IUserUpdateResult = await userUtils.sync()
