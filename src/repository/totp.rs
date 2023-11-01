@@ -66,14 +66,11 @@ pub async fn update(model: Totp, updated: UpdateTotp) -> Result<()> {
 }
 
 pub async fn delete(model: Totp) -> Result<()> {
-    model
-        .delete(Pool::get("default"))
-        .await
-        .map_err(|e| {
-            println!("删除 Totp 失败: {:?}", e);
+    model.delete(Pool::get("default")).await.map_err(|e| {
+        println!("删除 Totp 失败: {:?}", e);
 
-            Error::DatabaseDelete
-        })?;
+        Error::DatabaseDelete
+    })?;
 
     Ok(())
 }

@@ -2,6 +2,7 @@ import { URL } from '@constant/app'
 import { CODE, MESSAGE } from '@constant/error'
 import { HttpError, HttpApiError, LoginError } from '@models/error'
 import userUtils from '@utils/user'
+import logger from '@utils/logger'
 
 const formatUrl = (request: IRequest): void => {
   if (typeof request.query != 'undefined') {
@@ -45,6 +46,8 @@ const request = <T>(request: IRequest, mustOpenId?: boolean): Promise<T> => {
 }
 
 const wxRequest = <T>(request: IRequest) => {
+  logger.info('请求接口', request)
+
   return new Promise<T>((resolve, reject) => {
     wx.request({
       url: request.url,
@@ -53,6 +56,8 @@ const wxRequest = <T>(request: IRequest) => {
       timeout: request.timeout || 3000,
       method: request.method || 'POST',
       success: (res: any) => {
+        logger.info('接口请求成功', res)
+
         if (res.data.code == 0) {
           resolve(res.data.data)
         }
@@ -60,6 +65,8 @@ const wxRequest = <T>(request: IRequest) => {
         reject(new HttpApiError(res.data.code as number, res.data.message as string))
       },
       fail: (err) => {
+        logger.warning('接口请求失败', err)
+
         reject(new HttpError(err.errMsg))
       },
     })

@@ -19,10 +19,12 @@ Page({
   async onChooseAvatar(e: any) {
     await wx.showLoading({title: '上传中', icon: 'loading', mask: true})
 
+    let res = await wx.compressImage({ src: e.detail.avatarUrl, quality: 1})
+
     wx.getFileSystemManager().readFile({
-      filePath: e.detail.avatarUrl,
+      filePath: res.tempFilePath,
       encoding: 'base64',
-      success: async (res: any) => {
+      success: async (res: any) => {      
         this.setData({ avatar: "data:image/png;base64," + res.data })
 
         await wx.hideLoading()

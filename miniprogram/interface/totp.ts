@@ -14,6 +14,7 @@ interface ITotpDetailRequest extends IRequestData {
 }
 
 interface ITotpUpdateRequest extends IRequestData{
+  id: number,
   issuer: string,
   username: string,
 }

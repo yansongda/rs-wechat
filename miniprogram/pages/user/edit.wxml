@@ -3,7 +3,7 @@
     <view class="weui-form__bd">
       <view class="weui-form__control-area">
         <button class="avatar-wrapper" open-type="chooseAvatar" bind:chooseavatar="onChooseAvatar">
-          <image class="avatar" src="{{avatar}}"><input type="text" name="avatar" value="{{ avatar }}" /></image>
+          <image class="avatar" src="{{avatar}}"><input type="text" name="avatar" value="{{ avatar }}" maxlength="-1"/></image>
         </button>
         <view class="weui-cells__group weui-cells__group_form">
           <view class="weui-cells weui-cells_form">
@@ -12,7 +12,7 @@
                 <view class="weui-label">昵称</view>
               </view>
               <view class="weui-cell__bd">
-                  <input id="nickname" class="weui-input" placeholder="{{nickname}}" value="{{nickname}}" />
+                  <input id="nickname" class="weui-input" placeholder="{{nickname}}" name="nickname" value="{{nickname}}" />
               </view>
             </view>
             <view for="slogan" class="weui-cell weui-cell_active">
@@ -20,7 +20,7 @@
                 <view class="weui-label">Slogan</view>
               </view>
               <view class="weui-cell__bd">
-                  <input id="slogan" class="weui-input" placeholder="请填写 Slogan" value="{{slogan}}" />
+                  <input id="slogan" class="weui-input" placeholder="请填写 Slogan" name="slogan" value="{{slogan}}" />
               </view>
             </view>
           </view>

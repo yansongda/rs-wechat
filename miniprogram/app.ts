@@ -4,6 +4,7 @@ import userUtils from '@utils/user'
 import { EError, WeixinError } from '@models/error'
 import { CODE, MESSAGE } from '@constant/error'
 import { DEFAULT } from '@constant/user'
+import logger from '@utils/logger'
 
 App<IGlobalData>({
   globalData: {
@@ -42,15 +43,19 @@ App<IGlobalData>({
     })
   },
   onError(e: any) {
-    console.log(e)
+    logger.error('小程序异常', e)
 
     wx.showToast({title: '小程序异常', icon: 'error'})
   },
   onUnhandledRejection(e: any) {
     if (e.reason instanceof EError) {
       wx.showToast({title: e.reason.message || MESSAGE[e.reason.code], icon: 'error'})
-    } else {
-      wx.showToast({title: '未知错误', icon: 'error'})
+
+      return;
     }
+
+    logger.error('未知错误', e)
+
+    wx.showToast({title: '未知错误', icon: 'error'})
   }
 })

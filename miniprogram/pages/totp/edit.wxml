@@ -9,7 +9,7 @@
                 <view class="weui-label">提供商</view>
               </view>
               <view class="weui-cell__bd">
-                  <input id="issuer" class="weui-input" placeholder="请输入提供商" value="{{issuer}}" />
+                  <input id="issuer" class="weui-input" placeholder="请输入提供商" name="issuer" value="{{issuer}}" />
               </view>
             </view>
             <view for="username" class="weui-cell weui-cell_active">
@@ -17,7 +17,7 @@
                 <view class="weui-label">账号</view>
               </view>
               <view class="weui-cell__bd">
-                  <input id="username" class="weui-input" placeholder="请填写您的账号" value="{{username}}" />
+                  <input id="username" class="weui-input" placeholder="请填写您的账号" name="username" value="{{username}}" />
               </view>
             </view>
           </view>

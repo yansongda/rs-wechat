@@ -12,10 +12,7 @@ pub async fn login(code: &str) -> Result<User> {
         return user;
     }
 
-    repository::user::insert(CreateUser {
-        open_id
-    })
-    .await
+    repository::user::insert(CreateUser { open_id }).await
 }
 
 pub async fn detail(open_id: &str) -> Result<User> {

@@ -1,11 +1,15 @@
-const logger = wx.getRealtimeLogManager ? wx.getRealtimeLogManager() : null
+const l = wx.getRealtimeLogManager ? wx.getRealtimeLogManager() : null
 
-const info = (...args: any[]) => {
-  logger?.info(args)
+const logger = {
+  info: (...args: any[]) => {
+    l?.info(args)
+  },
+  warning: (...args: any[]) => {
+    l?.warn(args)
+  },
+  error: (...args: any[]) => {
+    l?.error(args)
+  }
 }
 
-const error = (...args: any[]) => {
-  logger?.error(args)
-}
-
-export { info, error }
+export default logger

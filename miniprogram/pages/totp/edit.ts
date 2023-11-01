@@ -7,12 +7,13 @@ Page({
     username: '',
   },
   onLoad(query: any) {
-    this.data.id = query.id || 0
+    this.data.id = Number(query.id || 0)
   },
   async onShow() {
-    const {issuer, username} = await api.detail(this.data.id)
+    const {id, issuer, username} = await api.detail(this.data.id)
 
     this.setData({
+      id,
       issuer: issuer ?? '',
       username: username ?? '',
     })
@@ -20,7 +21,7 @@ Page({
   async submit(e: any) {
     await wx.showToast({title: '更新中', icon: 'loading', mask: true, duration: 3000})
 
-    await api.update(e.detail.value as ITotpUpdateRequest)
+    await api.update({id: this.data.id, ...e.detail.value} as ITotpUpdateRequest)
 
     wx.showToast({
       title: '修改成功',

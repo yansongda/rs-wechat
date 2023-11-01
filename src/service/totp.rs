@@ -14,7 +14,7 @@ pub async fn all(user: User) -> Result<Vec<DetailResponse>> {
 pub async fn detail(current_user: CurrentUser, id: i64) -> Result<DetailResponse> {
     let t = totp::find(id).await?;
 
-    if current_user.id != t.id {
+    if current_user.id != t.user_id {
         return Err(Error::TotpNotFound);
     }
 
