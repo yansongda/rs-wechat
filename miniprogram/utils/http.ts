@@ -56,7 +56,7 @@ const wxRequest = <T>(request: IRequest) => {
       timeout: request.timeout || 3000,
       method: request.method || 'POST',
       success: (res: any) => {
-        logger.info('接口请求成功', res)
+        logger.info('接口请求成功', request.url.indexOf('users/detail') !== -1 ? res : '用户详情')
 
         if (res.data.code == 0) {
           resolve(res.data.data)
