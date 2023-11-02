@@ -12,7 +12,7 @@
                 <view class="weui-label">昵称</view>
               </view>
               <view class="weui-cell__bd">
-                  <input id="nickname" class="weui-input" placeholder="{{nickname}}" name="nickname" value="{{nickname}}" />
+                  <input id="nickname" type="nickname" class="weui-input" placeholder="{{nickname}}" name="nickname" value="{{nickname}}" />
               </view>
             </view>
             <view for="slogan" class="weui-cell weui-cell_active">

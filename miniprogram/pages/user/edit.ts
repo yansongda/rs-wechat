@@ -19,7 +19,7 @@ Page({
   async onChooseAvatar(e: any) {
     await wx.showLoading({title: '上传中', icon: 'loading', mask: true})
 
-    let res = await wx.compressImage({ src: e.detail.avatarUrl, quality: 1})
+    let res = await wx.compressImage({ src: e.detail.avatarUrl, quality: 50})
 
     wx.getFileSystemManager().readFile({
       filePath: res.tempFilePath,
