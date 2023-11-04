@@ -1,3 +1,8 @@
+<mp-toptips msg="{{toptipError}}" type="error" show="{{toptipError}}"></mp-toptips>
+<mp-dialog title="查询最新信息失败" buttons="{{dialogButtons}}" show="{{dialogShow}}" bindbuttontap="dialogTap" bindclose="dialogClose">
+  <view>请问是否重试？</view>
+</mp-dialog>
+
 <form bindsubmit="submit">
   <view class="weui-form">
     <view class="weui-form__bd">

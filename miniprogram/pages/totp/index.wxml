@@ -1,3 +1,5 @@
+<mp-toptips msg="{{toptipError}}" type="error" show="{{toptipError}}"></mp-toptips>
+
 <progress percent="{{ remainSeconds / 30 * 100 }}" stroke-width="2" class="progress"></progress>
 <view class="{{ items.length > 0 ? 'has-data' : 'no-data' }}">暂无数据</view>
 <view class="items">

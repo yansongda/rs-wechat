@@ -1,6 +1,6 @@
 import { URL } from '@constant/app'
-import { CODE, MESSAGE } from '@constant/error'
-import { HttpError, HttpApiError, LoginError } from '@models/error'
+import { CODE, WECHAT_MESSAGE } from '@constant/error'
+import { HttpError, LoginError } from '@models/error'
 import userUtils from '@utils/user'
 import logger from '@utils/logger'
 
@@ -46,7 +46,7 @@ const request = <T>(request: IRequest, mustOpenId?: boolean): Promise<T> => {
 }
 
 const wxRequest = <T>(request: IRequest) => {
-  logger.info('请求接口', request)
+  logger.info('请求接口', request.url.indexOf('users/update') === -1 ? request : '用户更新')
 
   return new Promise<T>((resolve, reject) => {
     wx.request({
@@ -54,33 +54,35 @@ const wxRequest = <T>(request: IRequest) => {
       data: request.data || {},
       header: request.headers ?? {},
       timeout: request.timeout || 3000,
-      method: request.method || 'POST',
+      method: request.method || 'GET',
       success: (res: any) => {
         logger.info('接口请求成功', request.url.indexOf('users/detail') === -1 ? res : '用户详情')
 
-        if (res.data.code == 0) {
+        if (Number(res.data.code) === 0) {
           resolve(res.data.data)
         }
   
-        reject(new HttpApiError(res.data.code as number, res.data.message as string))
+        reject(new HttpError(parseInt(res.data.code), res.data.message as string))
       },
-      fail: (err) => {
+      fail: (err: any) => {
         logger.warning('接口请求失败', err)
 
-        reject(new HttpError(err.errMsg))
+        reject(new HttpError(err.errno, WECHAT_MESSAGE[err.errno as keyof typeof WECHAT_MESSAGE] || ('接口请求失败：' + err.errMsg)))
       },
     })
   })
 }
 
 const wxUpload = <T>(request: IRequest) => {
+  logger.info('请求上传接口', request.url, request.headers)
+
   return new Promise<T>((resolve, reject) => {
     const filePath: string = request.data?.filePath ?? ''
     const name: string = request.data?.name ?? ''
     const formData: IRequestData = request.data ?? {}
 
     if (!filePath || !name) {
-      reject(new HttpError(MESSAGE[CODE.HTTP_API]))
+      reject(new HttpError(CODE.HTTP_PARAMS))
     }
 
     delete formData.filePath
@@ -94,25 +96,29 @@ const wxUpload = <T>(request: IRequest) => {
       header: request.headers ?? {},
       timeout: request.timeout || 10000,
       success: (res: any) => {
+        logger.info('接口请求成功', res)
+
         if (res.data.code == 0) {
           resolve(res.data.data)
         }
   
-        reject(new HttpApiError(res.data.code as number, res.data.message as string))
+        reject(new HttpError(parseInt(res.data.code), res.data.message as string))
       },
       fail: (err) => {
-        reject(new HttpError(err.errMsg))
+        logger.warning('接口请求失败', err)
+
+        reject(new HttpError(undefined, '接口请求失败：' + err.errMsg))
       },
     })
   })
 }
 
 const post = <T>(url: string, data?: IRequestData, isUploadFile?: boolean, mustOpenId?: boolean): Promise<T> => {
-  return request<T>({url, data, isUploadFile} as IRequest, mustOpenId)
+  return request<T>({url, data, isUploadFile, method: 'POST'} as IRequest, mustOpenId)
 }
 
 const get = <T>(url: string, query?: IRequestQuery, mustOpenId?: boolean): Promise<T> => {
-  return request<T>({url, query} as IRequest, mustOpenId)
+  return request<T>({url, query, method: 'GET'} as IRequest, mustOpenId)
 }
 
 export default { request, post, get }

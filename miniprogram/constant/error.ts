@@ -9,8 +9,6 @@ const CODE = {
   LOGIN: 1000,
   // http 调用错误
   HTTP: 2000,
-  // http 业务错误
-  HTTP_API: 2001,
   // http 内部参数错误
   HTTP_PARAMS: 2002,
   // http 业务错误 - 用户接口
@@ -36,7 +34,6 @@ const MESSAGE = {
   [CODE.LOGIN]: '登录失败',
   [CODE.HTTP]: '网络请求失败',
   [CODE.HTTP_PARAMS]: '内部参数错误',
-  [CODE.HTTP_API]: '业务处理失败',
   [CODE.HTTP_API_USER_LOGIN]: '业务登录失败',
   [CODE.HTTP_API_USER_DETAIL]: '查询详情失败',
   [CODE.HTTP_API_USER_UPDATE]: '更新失败',
@@ -48,4 +45,9 @@ const MESSAGE = {
   [CODE.HTTP_API_SHORTLINK_CREATE]: '生成失败',
 }
 
-export { CODE, MESSAGE }
+const WECHAT_MESSAGE = {
+  3: '系统权限未授予微信',
+  5: '请求超时',
+}
+
+export { CODE, MESSAGE, WECHAT_MESSAGE }

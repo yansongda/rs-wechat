@@ -5,45 +5,34 @@ class EError extends Error implements IERROR {
 
   constructor(code?: number, message?: string) {
     super()
-
+    
     this.code = code || CODE.UNKNOWN
-    this.message = message || MESSAGE[this.code]
+    this.message = message || MESSAGE[this.code] || MESSAGE[CODE.UNKNOWN]
   }
 }
 
-class WeixinError extends EError {}
+class WeixinError extends EError {
+  constructor(code?: number, message?: string) {
+    super(code || CODE.WEIXIN, message)
+  }
+}
 
 class LoginError extends EError implements ILoginError {
-  describe?: string;
-
-  constructor(describe?: string, code?: number, message?: string) {
+  constructor(code?: number, message?: string) {
     super(code || CODE.LOGIN, message)
-
-    this.describe = describe
   }
 }
 
 class HttpError extends EError implements IHttpError {
-  describe?: string;
   url?: string;
   headers?: IRequestHeaders;
-  timeout?: number;
-
-  constructor(describe?: string, code?: number, message?: string) {
-    super(code || CODE.HTTP, message)
-
-    this.describe = describe
-  }
-}
-
-class HttpApiError extends EError implements IHttpApiError {
   query?: IRequestQuery;
   data?: IRequestData;
-  headers?: IRequestHeaders;
+  timeout?: number;
 
   constructor(code?: number, message?: string) {
-    super(code || CODE.HTTP_API, message)
+    super(code || CODE.HTTP, message)
   }
 }
 
-export { EError, WeixinError, LoginError, HttpError, HttpApiError }
+export { EError, WeixinError, LoginError, HttpError }
