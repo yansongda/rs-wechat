@@ -1,7 +1,8 @@
 {
   "usingComponents": {
     "mp-icon": "weui-miniprogram/icon/icon",
-    "mp-loading": "weui-miniprogram/loading/loading"
+    "mp-toptips": "weui-miniprogram/toptips/toptips",
+    "mp-dialog": "weui-miniprogram/dialog/dialog"
   },
   "navigationBarTitleText": "TOTP身份验证器"
 }

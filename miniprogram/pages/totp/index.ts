@@ -4,6 +4,7 @@ import { WeixinError } from '@models/error'
 
 Page({
   data: {
+    toptipError: '',
     remainSeconds: 30,
     items: [] as ITotpItem[],
     intervalIdentity: 0,
@@ -15,6 +16,8 @@ Page({
     this.timing()
 
     if (this.data.isScanQrCode) {
+      this.data.isScanQrCode = false
+
       return;
     }
 
@@ -52,19 +55,21 @@ Page({
   async all() {
     await wx.showLoading({title: '加载中'})
 
-    const response = await api.all()
-
-    const items: ITotpItem[] = []
-    response.forEach((v: ITotpItemResponse) => {
-      items.push({
-        isTouchMove: false,
-        ...v
+    api.all().then((response) => {
+      const items: ITotpItem[] = []
+      response.forEach((v: ITotpItemResponse) => {
+        items.push({
+          isTouchMove: false,
+          ...v
+        })
       })
+  
+      this.setData({items})
+    }).catch((e) => {
+      this.setData({toptipError: e.message})
+    }).finally(async () => {
+      await wx.hideLoading()
     })
-
-    this.setData({items})
-
-    await wx.hideLoading()
   },
   async create() {
     this.data.isScanQrCode = true
@@ -73,22 +78,28 @@ Page({
     
     this.data.isScanQrCode = false
     
-    await api.create(scan.result)
-    
-    await this.all()
+    api.create(scan.result).catch(async (e) => {
+      this.setData({toptipError: e.message})
+      await this.all()
+    })
   },
   async edit(e: any) {
-    await wx.navigateTo({url: '/pages/totp/edit?id=' + e.currentTarget.dataset.id})
-
     this.clearInterval()
+
+    await wx.navigateTo({url: '/pages/totp/edit?id=' + e.currentTarget.dataset.id})
   },
   async delete(e: any) {
     const result = await wx.showModal({title: '是否确定删除？', content: '删除后数据不可恢复'})
 
-    if (result.confirm) {
-      await api.deleteTotp(e.currentTarget.dataset.id)
-      await this.all()
+    if (result.cancel) {
+      return;
     }
+
+    api.deleteTotp(e.currentTarget.dataset.id).catch((e) => {
+      this.setData({toptipError: e.message})
+    }).finally(async () => {
+      await this.all()
+    })
   },
   clearInterval() {
     clearInterval(this.data.intervalIdentity)

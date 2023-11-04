@@ -1,3 +1,5 @@
+<mp-toptips msg="{{toptipError}}" type="error" show="{{toptipError}}"></mp-toptips>
+
 <form bindsubmit="submit">
   <view class="weui-form">
     <view class="weui-form__bd">

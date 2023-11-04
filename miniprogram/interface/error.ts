@@ -4,18 +4,12 @@ interface IERROR {
 }
 
 interface ILoginError extends IERROR {
-  describe?: string,
 }
 
 interface IHttpError extends IERROR {
-  describe?: string,
   url?: string,
   headers?: IRequestHeaders,
-  timeout?: number,
-}
-
-interface IHttpApiError extends IERROR {
   query?: IRequestQuery,
   data?: IRequestData,
-  headers?: IRequestHeaders,
+  timeout?: number,
 }
