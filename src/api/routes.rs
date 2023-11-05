@@ -33,5 +33,12 @@ pub fn api_v1() -> Router {
         )
         .layer(ServiceBuilder::new().layer(middleware::from_fn(authorization)));
 
-    unauthorized.merge(users).merge(totp)
+    let shortlink = Router::new()
+        .nest(
+            "/shortlink",
+            Router::new().route("/create", post(v1::shortlink::create)),
+        )
+        .layer(ServiceBuilder::new().layer(middleware::from_fn(authorization)));
+
+    unauthorized.merge(users).merge(totp).merge(shortlink)
 }

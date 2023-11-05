@@ -41,13 +41,13 @@ Page({
   async cancel() {
     await wx.navigateBack()
   },
-  dialogTap(e: any) {
+  async dialogTap(e: any) {
     this.setData({dialogShow: false})
 
     const {index} = e.detail
 
     if (index === 1) {
-      this.onShow()
+      await this.onShow()
     }
   },
   dialogClose() {

@@ -15,6 +15,7 @@ pub enum Error {
     UserNotFound,
     TotpNotFound,
     TotpParse,
+    ShortlinkNotFound,
     Database,
     DatabaseInsert,
     DatabaseUpdate,
@@ -49,6 +50,7 @@ impl Error {
                 (Self::UserNotFound, (2001, "用户未找到")),
                 (Self::TotpNotFound, (2002, "TOTP 信息未找到")),
                 (Self::TotpParse, (2003, "TOTP 链接解析失败")),
+                (Self::ShortlinkNotFound, (2004, "短连接未找到")),
                 (Self::Database, (5000, "发生了一些问题，请联系管理员")),
                 (
                     Self::DatabaseInsert,

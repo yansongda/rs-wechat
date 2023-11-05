@@ -26,11 +26,23 @@ pub enum Relation {
         to = "crate::model::totp::Column::UserId"
     )]
     Totp,
+    #[sea_orm(
+        has_many = "crate::model::shortlink::Entity",
+        from = "Column::Id",
+        to = "crate::model::shortlink::Column::UserId"
+    )]
+    Shortlink,
 }
 
 impl Related<crate::model::totp::Entity> for Entity {
     fn to() -> RelationDef {
         Relation::Totp.def()
+    }
+}
+
+impl Related<crate::model::shortlink::Entity> for Entity {
+    fn to() -> RelationDef {
+        Relation::Shortlink.def()
     }
 }
 

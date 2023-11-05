@@ -6,6 +6,7 @@ use sea_orm::{ConnectOptions, Database, DatabaseConnection};
 
 use crate::config::Config;
 
+pub mod shortlink;
 pub mod totp;
 pub mod user;
 
