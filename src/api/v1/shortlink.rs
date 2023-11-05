@@ -11,7 +11,7 @@ pub async fn create(
     Json(params): Json<CreateRequest>,
 ) -> Resp<CreateResponse> {
     let link = params.link;
-    let shortlink = service::shortlink::create(current_user, link.clone())?;
+    let shortlink = service::shortlink::create(current_user, link.clone()).await?;
 
-    Ok(Response::success(CreateResponse { link, shortlink }))
+    Ok(Response::success(CreateResponse::from(shortlink)))
 }

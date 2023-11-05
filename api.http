@@ -62,3 +62,12 @@ Authorization: Bearer {{open_id}}
 {
   "id": 1
 }
+
+### 短链 - 创建
+POST {{domain}}/api/v1/shortlink/create
+Content-Type: application/json
+Authorization: Bearer {{open_id}}
+
+{
+  "link": "https://yansongda.cn"
+}

@@ -36,8 +36,8 @@ pub async fn find(short: String) -> Result<Shortlink> {
     Err(Error::ShortlinkNotFound)
 }
 
-pub async fn insert(totp: CreateShortlink) -> Result<Shortlink> {
-    let result = totp
+pub async fn insert(link: CreateShortlink) -> Result<Shortlink> {
+    let result = link
         .into_active_model()
         .insert(Pool::get("default"))
         .await

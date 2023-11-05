@@ -4,7 +4,7 @@ use sea_orm::{prelude::async_trait::async_trait, ActiveValue};
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, Eq, PartialEq, Serialize, Deserialize, DeriveEntityModel)]
-#[sea_orm(table_name = "totp")]
+#[sea_orm(table_name = "shortlink")]
 pub struct Model {
     #[sea_orm(primary_key)]
     pub id: i64,
@@ -60,6 +60,15 @@ pub struct CreateRequest {
 pub struct CreateResponse {
     pub link: String,
     pub shortlink: String,
+}
+
+impl From<Model> for CreateResponse {
+    fn from(model: Model) -> Self {
+        Self {
+            link: model.link,
+            shortlink: model.short,
+        }
+    }
 }
 
 #[derive(Debug, DeriveIntoActiveModel)]
