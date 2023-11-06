@@ -7,6 +7,7 @@ use tower_http::cors::CorsLayer;
 use tower_http::request_id::{MakeRequestUuid, PropagateRequestIdLayer, SetRequestIdLayer};
 
 use crate::config::Config;
+use crate::model::result::Response;
 use crate::repository::Pool;
 
 mod middleware;
@@ -50,6 +51,9 @@ impl App {
         Router::new()
             .nest("/health", routes::health())
             .nest("/api/v1", routes::api_v1())
+            .fallback(|| async {
+                Response::<String>::new(Some(404), Some("Not Found".to_string()), None)
+            })
             .layer(
                 ServiceBuilder::new()
                     .layer(SetRequestIdLayer::x_request_id(MakeRequestUuid))

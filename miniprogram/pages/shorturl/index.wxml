@@ -26,7 +26,7 @@
   <view class="weui-cells weui-cells_form">
     <view for="shortlink" class="weui-cell weui-cell_active weui-cell_vertical">
       <view class="weui-cell__bd">
-        <textarea id="shortlink" class="weui-textarea" placeholder="等待生成短链接地址，生成后点击复制" disabled="true" value="{{ shortlink }}" />
+        <textarea id="shortlink" class="weui-textarea" placeholder="等待生成短链接地址，生成后点击复制" disabled="true" value="{{ short }}" />
       </view>
     </view>
   </view>

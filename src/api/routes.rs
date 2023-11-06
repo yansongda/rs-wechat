@@ -10,7 +10,9 @@ pub fn health() -> Router {
 }
 
 pub fn api_v1() -> Router {
-    let unauthorized = Router::new().route("/users/login", post(v1::users::login));
+    let unauthorized = Router::new()
+        .route("/users/login", post(v1::users::login))
+        .route("/shortlink/detail", get(v1::shortlink::detail));
 
     let users = Router::new()
         .nest(

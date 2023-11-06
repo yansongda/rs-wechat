@@ -19,7 +19,8 @@ miniprogram/miniprogram_npm/
 
 /target
 
-.env
+# 开发
 miniprogram.sqlite3
 config.toml
 http-client.private.env.json
+project.private.config.json

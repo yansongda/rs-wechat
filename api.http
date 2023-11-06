@@ -71,3 +71,7 @@ Authorization: Bearer {{open_id}}
 {
   "link": "https://yansongda.cn"
 }
+
+### 短链 - 访问
+GET {{domain}}/api/v1/shortlink/detail?short={{short}}
+

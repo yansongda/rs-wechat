@@ -3,6 +3,8 @@ use sea_orm::entity::prelude::*;
 use sea_orm::{prelude::async_trait::async_trait, ActiveValue};
 use serde::{Deserialize, Serialize};
 
+use crate::config::Config;
+
 #[derive(Debug, Clone, Eq, PartialEq, Serialize, Deserialize, DeriveEntityModel)]
 #[sea_orm(table_name = "shortlink")]
 pub struct Model {
@@ -59,14 +61,18 @@ pub struct CreateRequest {
 #[derive(Debug, Serialize)]
 pub struct CreateResponse {
     pub link: String,
-    pub shortlink: String,
+    pub short: String,
 }
 
 impl From<Model> for CreateResponse {
     fn from(model: Model) -> Self {
         Self {
             link: model.link,
-            shortlink: model.short,
+            short: format!(
+                "{}/{}",
+                Config::get::<String>("shortlink.domain"),
+                model.short
+            ),
         }
     }
 }
@@ -76,4 +82,28 @@ pub struct CreateShortlink {
     pub user_id: i64,
     pub link: String,
     pub short: String,
+}
+
+#[derive(Debug, Deserialize)]
+pub struct DetailRequest {
+    pub short: String,
+}
+
+#[derive(Debug, Serialize)]
+pub struct DetailResponse {
+    pub link: String,
+    pub short: String,
+}
+
+impl From<Model> for DetailResponse {
+    fn from(model: Model) -> Self {
+        Self {
+            link: model.link,
+            short: format!(
+                "{}/{}",
+                Config::get::<String>("shortlink.domain"),
+                model.short
+            ),
+        }
+    }
 }
