@@ -12,7 +12,7 @@ pub fn health() -> Router {
 pub fn api_v1() -> Router {
     let unauthorized = Router::new()
         .route("/users/login", post(v1::users::login))
-        .route("/shortlink/detail", get(v1::shortlink::detail));
+        .route("/shortlink/redirect/:short", get(v1::shortlink::redirect));
 
     let users = Router::new()
         .nest(
@@ -38,7 +38,9 @@ pub fn api_v1() -> Router {
     let shortlink = Router::new()
         .nest(
             "/shortlink",
-            Router::new().route("/create", post(v1::shortlink::create)),
+            Router::new()
+                .route("/create", post(v1::shortlink::create))
+                .route("/detail", get(v1::shortlink::detail)),
         )
         .layer(ServiceBuilder::new().layer(middleware::from_fn(authorization)));
 
