@@ -1,9 +1,9 @@
 use axum::extract::{Path, Query};
-use axum::{Extension, Json};
 use axum::response::Redirect;
+use axum::{Extension, Json};
 
 use crate::api::response::Resp;
-use crate::model::result::{Result, Response};
+use crate::model::result::{Response, Result};
 use crate::model::shortlink::{CreateRequest, CreateResponse, DetailRequest, DetailResponse};
 use crate::model::user::CurrentUser;
 use crate::service;
