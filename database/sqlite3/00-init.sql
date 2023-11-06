@@ -28,5 +28,5 @@ create table totp
     updated_at text
 );
 
-create index idx_user_id
+create index idx_totp_user_id
     on totp (user_id);
