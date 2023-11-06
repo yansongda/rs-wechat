@@ -1,11 +1,14 @@
-FROM rust:alpine AS builder
+FROM rust:latest AS builder
 
 WORKDIR /www
 
 COPY ./ .
 
-RUN apk add --no-cache musl-dev libressl-dev \
-    && cargo build --release
+RUN apt-get update  \
+    && update-ca-certificates  \
+    && apt-get install -y musl-tools libssl-dev \
+    && rustup target add x86_64-unknown-linux-musl \
+    && cargo build --target x86_64-unknown-linux-musl --release
 
 
 FROM alpine:latest AS runtime
@@ -14,7 +17,7 @@ WORKDIR /www
 
 ENV TZ=Asia/Shanghai
 
-COPY --from=builder /www/target/release/miniprogram-api ./app
+COPY --from=builder /www/target/x86_64-unknown-linux-musl/release/miniprogram-api ./app
 
 RUN apk add -U --no-cache tzdata \
     && sed -i 's/dl-cdn.alpinelinux.org/mirrors.tuna.tsinghua.edu.cn/g' /etc/apk/repositories \
