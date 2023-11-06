@@ -1,16 +1,14 @@
-FROM rust:latest AS builder
+FROM rust:alpine AS builder
 
 WORKDIR /www
 
 COPY ./ .
 
-RUN apt-get update  \
-    && update-ca-certificates  \
-    && apt-get install -y pkg-config libssl-dev \
+RUN apk add --no-cache musl-dev pkgconfig libressl-dev g++ \
     && cargo build --release
 
 
-FROM debian:stable-slim AS runtime
+FROM alpine:latest AS runtime
 
 WORKDIR /www
 
@@ -18,8 +16,8 @@ ENV TZ=Asia/Shanghai
 
 COPY --from=builder /www/target/release/miniprogram-api ./app
 
-RUN apt-get update && apt-get install tzdata \
-    && rm -rf /var/lib/apt/lists/* /tmp/pear ~/.pearrc \
+RUN apk add -U --no-cache tzdata \
+    && sed -i 's/dl-cdn.alpinelinux.org/mirrors.tuna.tsinghua.edu.cn/g' /etc/apk/repositories \
     && ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone && date
 
 CMD ["/www/app"]
