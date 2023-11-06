@@ -6,7 +6,7 @@ COPY ./ .
 
 RUN apt-get update  \
     && update-ca-certificates  \
-    && apt-get install -y musl-tools libssl-dev \
+    && apt-get install -y musl-tools libssl-dev pkg-config \
     && rustup target add x86_64-unknown-linux-musl \
     && cargo build --target x86_64-unknown-linux-musl --release
 
