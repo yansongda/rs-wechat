@@ -20,7 +20,7 @@ COPY --from=builder /www/target/release/miniprogram-api ./app
 
 RUN apt-get update \
     && apt-get install -y libssl-dev \
-    && rm -rm /var/lib/apt/lists/* \
+    && rm -rf /var/lib/apt/lists/* \
     && ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone && date
 
 CMD ["/www/app"]
