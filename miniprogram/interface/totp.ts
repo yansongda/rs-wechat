@@ -1,7 +1,3 @@
-interface ITotpItem extends ITotpItemResponse {
-  isTouchMove: boolean,
-}
-
 interface ITotpItemResponse {
   id: number,
   issuer: string,

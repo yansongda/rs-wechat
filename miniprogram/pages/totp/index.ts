@@ -5,12 +5,11 @@ import { WeixinError } from '@models/error'
 Page({
   data: {
     toptipError: '',
+    slideViewButtons: [{"text": "备注"}, {"type": "warn", "text": "删除"}],
     remainSeconds: 30,
-    items: [] as ITotpItem[],
+    items: [] as ITotpItemResponse[],
     intervalIdentity: 0,
     isScanQrCode: false,
-    startX: 0,
-    startY: 0
   },
   async onShow() {
     this.timing()
@@ -56,15 +55,7 @@ Page({
     await wx.showLoading({title: '加载中'})
 
     api.all().then((response) => {
-      const items: ITotpItem[] = []
-      response.forEach((v: ITotpItemResponse) => {
-        items.push({
-          isTouchMove: false,
-          ...v
-        })
-      })
-  
-      this.setData({items})
+      this.setData({items: response})
     }).catch((e) => {
       this.setData({toptipError: e.message})
     }).finally(async () => {
@@ -83,19 +74,33 @@ Page({
       await this.all()
     })
   },
-  async edit(e: any) {
+  async slideviewButtontap(e: any) {
+    const id = Number(e.currentTarget.id)
+
+    switch(e.detail.index) {
+      case 0:
+        // 备注
+        await this.edit(id)
+        break;
+      case 1:
+        // 删除
+        await this.delete(id)
+        break;
+    }
+  },
+  async edit(id: number) {
     this.clearInterval()
 
-    await wx.navigateTo({url: '/pages/totp/edit?id=' + e.currentTarget.dataset.id})
+    await wx.navigateTo({url: '/pages/totp/edit?id=' + id})
   },
-  async delete(e: any) {
+  async delete(id: number) {
     const result = await wx.showModal({title: '是否确定删除？', content: '删除后数据不可恢复'})
 
     if (result.cancel) {
       return;
     }
 
-    api.deleteTotp(e.currentTarget.dataset.id).catch((e) => {
+    api.deleteTotp(id).catch((e) => {
       this.setData({toptipError: e.message})
     }).finally(async () => {
       await this.all()
@@ -105,52 +110,6 @@ Page({
     clearInterval(this.data.intervalIdentity)
     
     this.data.intervalIdentity = 0
-  },
-  touchstart(e: any) {
-    // 开始触摸时 重置所有删除
-    this.data.items.forEach(function (v: ITotpItem) {
-      if (v.isTouchMove) {
-        v.isTouchMove = false;
-      }
-    })
-
-    // 手指触摸动作开始 记录起点X坐标
-    this.setData({
-      startX: e.changedTouches[0].clientX,
-      startY: e.changedTouches[0].clientY,
-
-      items: this.data.items
-    })
-  },
-  touchmove(e: any) {    
-    const index = e.currentTarget.dataset.index;
-    const startX = this.data.startX;
-    const startY = this.data.startY;
-    const touchMoveX = e.changedTouches[0].clientX;
-    const touchMoveY = e.changedTouches[0].clientY;
-    
-    // 获取滑动角度
-    const angle = this.angle({ X: startX, Y: startY }, { X: touchMoveX, Y: touchMoveY });
-
-    this.data.items.forEach(function (v: ITotpItem, i: number) {
-      v.isTouchMove = false
-
-      if (Math.abs(angle) > 30 || i != index) {
-        return;
-      }
-
-      v.isTouchMove = touchMoveX <= startX;
-    })
-
-    this.setData({
-      items: this.data.items
-    })
-  },
-  angle(start: any, end: any) {
-    const _X = end.X - start.X
-    const _Y = end.Y - start.Y
-
-    return 360 * Math.atan(_Y / _X) / (2 * Math.PI);
   },
 })
 
