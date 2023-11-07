@@ -18,6 +18,9 @@ ENV TZ=Asia/Shanghai
 
 COPY --from=builder /www/target/release/miniprogram-api ./app
 
-RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone && date
+RUN apt-get update \
+    && apt-get install -y libssl-dev \
+    && rm -rm /var/lib/apt/lists/* \
+    && ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone && date
 
 CMD ["/www/app"]
