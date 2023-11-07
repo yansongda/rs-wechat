@@ -5,8 +5,8 @@
 <view class="{{ items.length > 0 ? 'has-data' : 'no-data' }}">暂无数据</view>
 
 <view class="items">
-  <view class="item" wx:for="{{items}}" wx:for-index="index" wx:key="id">
-    <mp-slideview class="item-slideview" buttons="{{slideViewButtons}}" bindbuttontap="slideviewButtontap" id="{{ item.id }}">
+  <!-- <view class="item" wx:for="{{items}}" wx:for-index="index" wx:key="id"> -->
+    <mp-slideview class="item" wx:for="{{items}}" wx:for-index="index" wx:key="id" buttons="{{slideViewButtons}}" bindbuttontap="slideviewButtontap" id="{{ item.id }}">
       <view class="item-body">
           <view class="item-body-info">
             <view class="item-body-info-issuer">{{item.issuer}}</view>
@@ -15,7 +15,7 @@
           <view class="item-body-code">{{item.code}}</view>
         </view>
     </mp-slideview>
-  </view>
+  <!-- </view> -->
 </view>
 
 <view class="footer">
