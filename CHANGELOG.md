@@ -5,6 +5,10 @@
 - fixed(frontend:totp): totp 创建后未自动刷新列表(#15)
 - fixed(frontend:totp): totp 列表多时，创建按钮会被覆盖(#18)
 
+### chore
+
+- chore: 请求报错：unable to get local issuer certificate(#20)
+
 ## v1.1.2
 
 ### optimized
