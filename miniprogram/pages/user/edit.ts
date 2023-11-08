@@ -35,20 +35,25 @@ Page({
   async submit(e: any) {
     await wx.showToast({title: '更新中', icon: 'loading', mask: true, duration: 3000})
 
-    api.update(e.detail.value as IUserUpdateRequest).catch((e) => {
-      this.setData({toptipError: e.message})
-    }).then(async () => {
+    try {
+      await api.update(e.detail.value as IUserUpdateRequest)
+
       // 同步完成之后更新下全局的用户信息状态
       await utils.sync()
+    } catch (e: any) {
+      this.setData({toptipError: e.message})
+      await wx.hideToast()
 
-      wx.showToast({
-        title: '修改成功',
-        icon: 'success',
-        mask: true,
-        success: () => {
-          setTimeout(() => wx.navigateBack(), 1000);
-        }
-      })
+      return;
+    }
+
+    wx.showToast({
+      title: '修改成功',
+      icon: 'success',
+      mask: true,
+      success: () => {
+        setTimeout(() => wx.navigateBack(), 1000);
+      }
     })
   },
   async cancel() {
