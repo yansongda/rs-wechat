@@ -7,10 +7,11 @@ import { DEFAULT } from '@constant/user'
 // 所以初始化的时候尝试从 storage 里拿数据
 //
 // 需要使用闭包，因为小程序初始化时都为空
-const getOpenId = () => getApp<IGlobalData>()?.globalData.user.openId || wx.getStorageSync(STORAGE.OPEN_ID) || ''
+const getOpenId = () =>
+  getApp<IGlobalData>()?.globalData.user.openId || wx.getStorageSync(STORAGE.OPEN_ID) || ''
 
 const sync = async (): Promise<IUserUpdateResult> => {
-  let result: IUserUpdateResult = {isGlobalDataUpdated: true}
+  const result: IUserUpdateResult = { isGlobalDataUpdated: true }
 
   const app = getApp<IGlobalData>()
   const detail = await api.detail()
@@ -19,7 +20,7 @@ const sync = async (): Promise<IUserUpdateResult> => {
     avatar: detail.avatar || DEFAULT.avatar,
     nickname: detail.nickname || DEFAULT.nickname,
     slogan: detail.slogan || DEFAULT.slogan,
-    openId: detail.open_id,
+    openId: detail.open_id
   }
 
   wx.setStorageSync(STORAGE.USER, user)
@@ -27,7 +28,7 @@ const sync = async (): Promise<IUserUpdateResult> => {
   if (app) {
     app.globalData.user = user
 
-    return result;
+    return result
   }
 
   result.isGlobalDataUpdated = false

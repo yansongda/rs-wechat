@@ -1,8 +1,8 @@
 interface IShortlinkCreateRequest extends IRequestData {
-  link: string,
+  link: string
 }
 
 interface IShortlinkCreateResponse {
-  link: string,
-  short: string,
+  link: string
+  short: string
 }

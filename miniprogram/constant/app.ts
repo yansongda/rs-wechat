@@ -4,7 +4,7 @@ const STORAGE = {
 }
 
 const URL = {
-  BASE: 'https://miniprogram.yanda.net.cn',
+  BASE: 'https://miniprogram.yanda.net.cn'
 }
 
 export { STORAGE, URL }

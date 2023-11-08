@@ -3,9 +3,9 @@ Page({
     dialogs: [
       {
         id: 'timestampConvert',
-        name: '时间戳转换',
-      },
-    ],
+        name: '时间戳转换'
+      }
+    ]
   },
   timestampConvertClose() {
     this.setData({
@@ -20,16 +20,24 @@ Page({
   timestampConvertSubmit(e: any) {
     const timestamp = e.detail.value.timestamp
     const date = (t: number) => {
-      const  now = new Date(t)
+      const now = new Date(t)
       const y = now.getFullYear()
-      const m = now. getMonth() + 1
-      const d = now. getDate ()
+      const m = now.getMonth() + 1
+      const d = now.getDate()
 
-      return y + '-' + (m < 10 ? '0' + m : m) + '-' + (d < 10 ? "0" + d : d) + ' ' + now.toTimeString().substr(0, 8)
+      return (
+        y +
+        '-' +
+        (m < 10 ? '0' + m : m) +
+        '-' +
+        (d < 10 ? '0' + d : d) +
+        ' ' +
+        now.toTimeString().substr(0, 8)
+      )
     }
 
     this.setData({
       timestampConvertValue: date(timestamp * 1000)
     })
-  },
+  }
 })

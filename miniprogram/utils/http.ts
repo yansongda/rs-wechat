@@ -8,10 +8,12 @@ const formatUrl = (request: IRequest): void => {
   if (typeof request.query != 'undefined') {
     const query = request.query
 
-    let paramsArray = <any>[]
+    const paramsArray = <any>[]
 
-    Object.keys(request.query).forEach(key => query[key] && paramsArray.push(`${key}=${query[key]}`))
-  
+    Object.keys(request.query).forEach(
+      (key) => query[key] && paramsArray.push(`${key}=${query[key]}`)
+    )
+
     request.url += (request.url.search(/\?/) === -1 ? '?' : '&') + `${paramsArray.join('&')}`
   }
 
@@ -25,7 +27,7 @@ const formatHeaders = (request: IRequest, openId: string): void => {
     request.headers = {}
   }
 
-  request.headers.authorization = "Bearer " + openId
+  request.headers.authorization = 'Bearer ' + openId
 }
 
 const request = <T>(request: IRequest, mustOpenId?: boolean): Promise<T> => {
@@ -61,14 +63,20 @@ const wxRequest = <T>(request: IRequest) => {
         if (Number(res.data.code) === 0) {
           resolve(res.data.data)
         }
-  
+
         reject(new HttpError(parseInt(res.data.code), res.data.message as string))
       },
       fail: (err: any) => {
         logger.warning('接口请求失败', err)
 
-        reject(new HttpError(err.errno, WECHAT_MESSAGE[err.errno as keyof typeof WECHAT_MESSAGE] || ('接口请求失败：' + err.errMsg)))
-      },
+        reject(
+          new HttpError(
+            err.errno,
+            WECHAT_MESSAGE[err.errno as keyof typeof WECHAT_MESSAGE] ||
+              '接口请求失败：' + err.errMsg
+          )
+        )
+      }
     })
   })
 }
@@ -101,24 +109,29 @@ const wxUpload = <T>(request: IRequest) => {
         if (res.data.code == 0) {
           resolve(res.data.data)
         }
-  
+
         reject(new HttpError(parseInt(res.data.code), res.data.message as string))
       },
       fail: (err) => {
         logger.warning('接口请求失败', err)
 
         reject(new HttpError(undefined, '接口请求失败：' + err.errMsg))
-      },
+      }
     })
   })
 }
 
-const post = <T>(url: string, data?: IRequestData, isUploadFile?: boolean, mustOpenId?: boolean): Promise<T> => {
-  return request<T>({url, data, isUploadFile, method: 'POST'} as IRequest, mustOpenId)
+const post = <T>(
+  url: string,
+  data?: IRequestData,
+  isUploadFile?: boolean,
+  mustOpenId?: boolean
+): Promise<T> => {
+  return request<T>({ url, data, isUploadFile, method: 'POST' } as IRequest, mustOpenId)
 }
 
 const get = <T>(url: string, query?: IRequestQuery, mustOpenId?: boolean): Promise<T> => {
-  return request<T>({url, query, method: 'GET'} as IRequest, mustOpenId)
+  return request<T>({ url, query, method: 'GET' } as IRequest, mustOpenId)
 }
 
 export default { request, post, get }

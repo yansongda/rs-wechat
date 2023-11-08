@@ -1,11 +1,11 @@
 interface IRequest {
-  url: string,
-  query?: IRequestQuery,
-  data?: IRequestData,
-  headers?: IRequestHeaders,
-  method?: "POST" | "OPTIONS" | "GET" | "HEAD" | "PUT" | "DELETE" | "TRACE" | "CONNECT" | undefined,
-  timeout?: number,
-  isUploadFile?: boolean,
+  url: string
+  query?: IRequestQuery
+  data?: IRequestData
+  headers?: IRequestHeaders
+  method?: 'POST' | 'OPTIONS' | 'GET' | 'HEAD' | 'PUT' | 'DELETE' | 'TRACE' | 'CONNECT' | undefined
+  timeout?: number
+  isUploadFile?: boolean
 }
 
 interface IRequestQuery {

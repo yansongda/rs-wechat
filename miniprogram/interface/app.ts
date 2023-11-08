@@ -1,5 +1,5 @@
 interface IGlobalData {
   globalData: {
-    user: IUser,
-  },
+    user: IUser
+  }
 }

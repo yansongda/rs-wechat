@@ -6,7 +6,12 @@ import { HttpError } from '@models/error'
 
 const login = async (code: string) => {
   try {
-    return await http.post<IUserLoginResponse>(URL.LOGIN, {code} as IUserLoginRequest, false, false)
+    return await http.post<IUserLoginResponse>(
+      URL.LOGIN,
+      { code } as IUserLoginRequest,
+      false,
+      false
+    )
   } catch (e: any) {
     logger.error('登录接口请求失败', e)
 
@@ -19,7 +24,7 @@ const detail = async () => {
     return await http.post<IUserDetailResponse>(URL.DETAIL)
   } catch (e: any) {
     logger.error('查询用户详情失败', e)
-    
+
     throw new HttpError(CODE.HTTP_API_USER_DETAIL, e.message)
   }
 }
@@ -29,7 +34,7 @@ const update = async (updated: IUserUpdateRequest) => {
     return await http.post<IUserUpdateResponse>(URL.UPDATE, updated)
   } catch (e: any) {
     logger.error('更新用户信息失败', e)
-    
+
     throw new HttpError(CODE.HTTP_API_USER_UPDATE, e.message)
   }
 }
