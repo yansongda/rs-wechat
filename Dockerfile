@@ -19,7 +19,7 @@ ENV TZ=Asia/Shanghai
 COPY --from=builder /www/target/release/miniprogram-api ./app
 
 RUN apt-get update \
-    && apt-get install -y libssl-dev \
+    && apt-get install -y ca-certificates \
     && rm -rf /var/lib/apt/lists/* \
     && ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone && date
 
