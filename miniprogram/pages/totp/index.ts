@@ -71,10 +71,11 @@ Page({
     
     api.create(scan.result).catch(async (e) => {
       this.setData({toptipError: e.message})
+    }).finally(async () => {
       await this.all()
     })
   },
-  async slideviewButtontap(e: any) {
+  async slideviewButtonTap(e: any) {
     const id = Number(e.currentTarget.id)
 
     switch(e.detail.index) {
@@ -100,7 +101,7 @@ Page({
       return;
     }
 
-    api.deleteTotp(id).catch((e) => {
+    api.deleteTotp(id).catch((e: any) => {
       this.setData({toptipError: e.message})
     }).finally(async () => {
       await this.all()
