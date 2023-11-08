@@ -1,21 +1,21 @@
-interface IRequest {
+export interface Request {
   url: string
-  query?: IRequestQuery
-  data?: IRequestData
-  headers?: IRequestHeaders
+  query?: RequestQuery
+  data?: RequestData
+  headers?: RequestHeaders
   method?: 'POST' | 'OPTIONS' | 'GET' | 'HEAD' | 'PUT' | 'DELETE' | 'TRACE' | 'CONNECT' | undefined
   timeout?: number
   isUploadFile?: boolean
 }
 
-interface IRequestQuery {
+export interface RequestQuery {
   [key: string]: number | string | undefined
 }
 
-interface IRequestData {
-  [key: string]: any
+export interface RequestData {
+  [key: string]: unknown
 }
 
-interface IRequestHeaders {
+export interface RequestHeaders {
   [key: string]: string | undefined
 }

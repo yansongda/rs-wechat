@@ -1,37 +1,39 @@
-interface IUserLoginRequest extends IRequestData {
+import { RequestData } from './http'
+
+export interface LoginRequest extends RequestData {
   code: string
 }
 
-interface IUserLoginResponse {
+export interface LoginResponse {
   open_id: string
 }
 
-interface IUserDetailResponse {
+export interface DetailResponse {
   open_id: string
   avatar: string
   nickname: string
   slogan: string
 }
 
-interface IUserUpdateRequest extends IRequestData {
+export interface UpdateRequest extends RequestData {
   avatar?: string
   nickname?: string
   slogan?: string
 }
 
-interface IUserUpdateResponse {
+export interface UpdateResponse {
   open_id: string
   avatar: string
   nickname: string
   slogan: string
 }
 
-interface IUserUpdateResult {
+export interface UpdateResult {
   isGlobalDataUpdated: boolean
-  user?: IUser
+  user?: 
 }
 
-interface IUser {
+export interface User {
   openId: string
   avatar: string
   nickname: string
