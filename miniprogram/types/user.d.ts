@@ -30,7 +30,7 @@ export interface UpdateResponse {
 
 export interface UpdateResult {
   isGlobalDataUpdated: boolean
-  user?: 
+  user?: User
 }
 
 export interface User {

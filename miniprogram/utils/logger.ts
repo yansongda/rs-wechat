@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 const l = wx.getRealtimeLogManager ? wx.getRealtimeLogManager() : null
 
 const logger = {

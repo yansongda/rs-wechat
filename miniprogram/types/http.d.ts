@@ -9,13 +9,19 @@ export interface Request {
 }
 
 export interface RequestQuery {
-  [key: string]: number | string | undefined
+  [key: string]: number | string
 }
 
 export interface RequestData {
-  [key: string]: unknown
+  [key: string]: number | string | object | number[] | string[] | object[] | undefined
 }
 
 export interface RequestHeaders {
-  [key: string]: string | undefined
+  [key: string]: number | string
+}
+
+export interface Response<T> {
+  code: number | string
+  message: string
+  data: T
 }

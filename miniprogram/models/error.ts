@@ -1,7 +1,9 @@
 import { CODE, MESSAGE } from '@constant/error'
+import type { RequestData, RequestHeaders, RequestQuery } from 'miniprogram/types/http'
 
-class EError extends Error implements IERROR {
+export class EE extends Error {
   code: number
+  message: string
 
   constructor(code?: number, message?: string) {
     super()
@@ -11,28 +13,26 @@ class EError extends Error implements IERROR {
   }
 }
 
-class WeixinError extends EError {
+export class WeixinError extends EE {
   constructor(code?: number, message?: string) {
     super(code || CODE.WEIXIN, message)
   }
 }
 
-class LoginError extends EError implements ILoginError {
+export class LoginError extends EE {
   constructor(code?: number, message?: string) {
     super(code || CODE.LOGIN, message)
   }
 }
 
-class HttpError extends EError implements IHttpError {
+export class HttpError extends EE {
   url?: string
-  headers?: IRequestHeaders
-  query?: IRequestQuery
-  data?: IRequestData
+  headers?: RequestHeaders
+  query?: RequestQuery
+  data?: RequestData
   timeout?: number
 
   constructor(code?: number, message?: string) {
     super(code || CODE.HTTP, message)
   }
 }
-
-export { EError, WeixinError, LoginError, HttpError }

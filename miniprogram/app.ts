@@ -1,12 +1,15 @@
 import { STORAGE } from '@constant/app'
 import userApi from '@api/user'
 import userUtils from '@utils/user'
-import { EError, WeixinError } from '@models/error'
+import { EE, WeixinError } from '@models/error'
 import { CODE, MESSAGE } from '@constant/error'
 import { DEFAULT } from '@constant/user'
 import logger from '@utils/logger'
+import type { GlobalData } from './types/app'
+import type { LoginResponse, UpdateResult, User } from './types/user'
+import { AppOnUnhandledRejection } from './types/wechat'
 
-App<IGlobalData>({
+App<GlobalData>({
   globalData: {
     user: {
       avatar: DEFAULT.avatar,
@@ -22,11 +25,13 @@ App<IGlobalData>({
       this.globalData.user = storage.data
 
       return
-    } catch (e) {}
+    } catch (e) {
+      /* empty */
+    }
 
     wx.login({
       success: async (res) => {
-        const loginResponse: IUserLoginResponse = await userApi.login(res.code)
+        const loginResponse: LoginResponse = await userApi.login(res.code)
 
         // 初始化时 app 并没有加载完成，而下面的 userUtils.sync 中会调用 user.detail 去获取用户详细信息
         // 而调用获取用户详细信息需要有用户 openId，但此时 App 又没有加载完，所以
@@ -35,21 +40,21 @@ App<IGlobalData>({
           .setStorage({ key: STORAGE.OPEN_ID, data: loginResponse.open_id })
           .catch(() => Promise.reject(new WeixinError(CODE.WEIXIN_STORAGE_SET)))
 
-        const updateResult: IUserUpdateResult = await userUtils.sync()
+        const updateResult: UpdateResult = await userUtils.sync()
         if (!updateResult.isGlobalDataUpdated) {
-          this.globalData.user = updateResult.user as IUser
+          this.globalData.user = updateResult.user as User
         }
       },
       fail: async () => Promise.reject(new WeixinError(CODE.WEIXIN_LOGIN))
     })
   },
-  onError(e: any) {
+  onError(e: string) {
     logger.error('小程序异常', e)
 
     wx.showToast({ title: '小程序异常', icon: 'error' })
   },
-  onUnhandledRejection(e: any) {
-    if (e.reason instanceof EError) {
+  onUnhandledRejection(e: AppOnUnhandledRejection) {
+    if (e.reason instanceof EE) {
       wx.showToast({ title: e.reason.message || MESSAGE[e.reason.code], icon: 'error' })
 
       return

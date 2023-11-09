@@ -3,12 +3,14 @@ import { CODE, WECHAT_MESSAGE } from '@constant/error'
 import { HttpError, LoginError } from '@models/error'
 import userUtils from '@utils/user'
 import logger from '@utils/logger'
+import type { Request, RequestData, RequestQuery, Response } from 'miniprogram/types/http'
+import type { WxRequestFail, WxRequestSuccess } from 'miniprogram/types/wechat'
 
-const formatUrl = (request: IRequest): void => {
+const formatUrl = (request: Request): void => {
   if (typeof request.query != 'undefined') {
     const query = request.query
 
-    const paramsArray = <any>[]
+    const paramsArray: string[] = []
 
     Object.keys(request.query).forEach(
       (key) => query[key] && paramsArray.push(`${key}=${query[key]}`)
@@ -22,7 +24,7 @@ const formatUrl = (request: IRequest): void => {
   }
 }
 
-const formatHeaders = (request: IRequest, openId: string): void => {
+const formatHeaders = (request: Request, openId: string): void => {
   if (typeof request.headers == 'undefined') {
     request.headers = {}
   }
@@ -30,7 +32,7 @@ const formatHeaders = (request: IRequest, openId: string): void => {
   request.headers.authorization = 'Bearer ' + openId
 }
 
-const request = <T>(request: IRequest, mustOpenId?: boolean): Promise<T> => {
+const request = <T>(request: Request, mustOpenId?: boolean): Promise<T> => {
   const openId = userUtils.getOpenId()
 
   if (openId == '' && (mustOpenId ?? true)) {
@@ -47,7 +49,7 @@ const request = <T>(request: IRequest, mustOpenId?: boolean): Promise<T> => {
   return wxRequest(request)
 }
 
-const wxRequest = <T>(request: IRequest) => {
+const wxRequest = <T>(request: Request) => {
   logger.info('请求接口', request.url.indexOf('users/update') === -1 ? request : '用户更新')
 
   return new Promise<T>((resolve, reject) => {
@@ -57,16 +59,16 @@ const wxRequest = <T>(request: IRequest) => {
       header: request.headers ?? {},
       timeout: request.timeout || 3000,
       method: request.method || 'GET',
-      success: (res: any) => {
+      success: (res: WxRequestSuccess<T>) => {
         logger.info('接口请求成功', request.url.indexOf('users/detail') === -1 ? res : '用户详情')
 
         if (Number(res.data.code) === 0) {
           resolve(res.data.data)
         }
 
-        reject(new HttpError(parseInt(res.data.code), res.data.message as string))
+        reject(new HttpError(Number(res.data.code), res.data.message))
       },
-      fail: (err: any) => {
+      fail: (err: WxRequestFail) => {
         logger.warning('接口请求失败', err)
 
         reject(
@@ -81,13 +83,13 @@ const wxRequest = <T>(request: IRequest) => {
   })
 }
 
-const wxUpload = <T>(request: IRequest) => {
+const wxUpload = <T>(request: Request) => {
   logger.info('请求上传接口', request.url, request.headers)
 
   return new Promise<T>((resolve, reject) => {
-    const filePath: string = request.data?.filePath ?? ''
-    const name: string = request.data?.name ?? ''
-    const formData: IRequestData = request.data ?? {}
+    const filePath: string = (request.data?.filePath ?? '') as string
+    const name: string = (request.data?.name ?? '') as string
+    const formData = request.data ?? {}
 
     if (!filePath || !name) {
       reject(new HttpError(CODE.HTTP_PARAMS))
@@ -103,14 +105,16 @@ const wxUpload = <T>(request: IRequest) => {
       formData,
       header: request.headers ?? {},
       timeout: request.timeout || 10000,
-      success: (res: any) => {
+      success: (res) => {
         logger.info('接口请求成功', res)
 
-        if (res.data.code == 0) {
-          resolve(res.data.data)
+        const response = JSON.parse(res.data) as Response<T>
+
+        if (response.code == 0) {
+          resolve(response.data)
         }
 
-        reject(new HttpError(parseInt(res.data.code), res.data.message as string))
+        reject(new HttpError(Number(response.code), response.message))
       },
       fail: (err) => {
         logger.warning('接口请求失败', err)
@@ -123,15 +127,15 @@ const wxUpload = <T>(request: IRequest) => {
 
 const post = <T>(
   url: string,
-  data?: IRequestData,
+  data?: RequestData,
   isUploadFile?: boolean,
   mustOpenId?: boolean
 ): Promise<T> => {
-  return request<T>({ url, data, isUploadFile, method: 'POST' } as IRequest, mustOpenId)
+  return request<T>({ url, data, isUploadFile, method: 'POST' } as Request, mustOpenId)
 }
 
-const get = <T>(url: string, query?: IRequestQuery, mustOpenId?: boolean): Promise<T> => {
-  return request<T>({ url, query, method: 'GET' } as IRequest, mustOpenId)
+const get = <T>(url: string, query?: RequestQuery, mustOpenId?: boolean): Promise<T> => {
+  return request<T>({ url, query, method: 'GET' } as Request, mustOpenId)
 }
 
 export default { request, post, get }
