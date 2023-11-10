@@ -37,23 +37,19 @@ Page({
       .finally(() => wx.hideLoading())
   },
   async submit(e: FormSubmit<FormData>) {
-    await wx.showToast({ title: '更新中', icon: 'loading', mask: true, duration: 3000 })
+    await wx.showToast({ title: '更新中', icon: 'loading', mask: true })
 
-    api
-      .update({ id: this.data.id, ...e.detail.value } as UpdateRequest)
-      .then(() => {
-        wx.showToast({
-          title: '修改成功',
-          icon: 'success',
-          mask: true,
-          success: () => {
-            setTimeout(() => wx.navigateBack(), 1500)
-          }
-        })
-      })
-      .catch((e: unknown) => {
+    try {
+        await api.update({ id: this.data.id, ...e.detail.value } as UpdateRequest)
+
+        await wx.showToast({ title: '修改成功', icon: 'success', mask: true })
+
+        setTimeout(() => wx.navigateBack(), 1500)
+    } catch (e: unknown) {
         this.setData({ toptipError: e instanceof Error ? e.message : '未知异常' })
-      })
+    }
+
+    await wx.hideToast()
   },
   async cancel() {
     await wx.navigateBack()
