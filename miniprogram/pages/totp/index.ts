@@ -1,13 +1,19 @@
 import api from '@api/totp'
 import { CODE } from '@constant/error'
 import { WeixinError } from '@models/error'
+import type { Item } from 'miniprogram/types/totp'
+import type { WeuiSlideviewButtonTap } from 'miniprogram/types/wechat'
+
+interface Dataset {
+  id: string
+}
 
 Page({
   data: {
     toptipError: '',
     slideViewButtons: [{ text: '备注' }, { type: 'warn', text: '删除' }],
     remainSeconds: 30,
-    items: [] as ITotpItemResponse[],
+    items: [] as Item[],
     intervalIdentity: 0,
     isScanQrCode: false
   },
@@ -86,8 +92,8 @@ Page({
         await this.all()
       })
   },
-  async slideviewButtonTap(e: any) {
-    const id = Number(e.currentTarget.id)
+  async slideviewButtonTap(e: WeuiSlideviewButtonTap<Dataset, unknown>) {
+    const id = Number(e.currentTarget.dataset.id)
 
     switch (e.detail.index) {
       case 0:
@@ -114,8 +120,8 @@ Page({
 
     api
       .deleteTotp(id)
-      .catch((e: any) => {
-        this.setData({ toptipError: e.message })
+      .catch((e: unknown) => {
+        this.setData({ toptipError: e instanceof Error ? e.message : '未知异常' })
       })
       .finally(async () => {
         await this.all()

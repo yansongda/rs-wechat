@@ -18,3 +18,48 @@ export interface AppOnUnhandledRejection {
   /** 拒绝原因，一般是一个 Error 对象 */
   reason: Error | string
 }
+
+export interface Tap<T, D> {
+  type: string
+  currentTarget: {
+    id: string
+    dataset: T
+  }
+  target: {
+    id: string
+    dataset: D
+  }
+}
+
+export interface FormSubmit<T> {
+  detail: {
+    formId: string
+    value: T
+  }
+}
+
+export interface WeuiDialogTap {
+  detail: {
+    index: number
+    item: {
+      text?: string
+      extClass?: string
+    }
+  }
+}
+
+export interface WeuiSlideviewButtonTap<T, D> extends Tap<T, D> {
+  detail: {
+    index: number
+  }
+}
+
+export interface ChooseAvatarButtonTap<T, D> extends Tap<T, D> {
+  detail: {
+    avatarUrl: string
+  }
+}
+
+export interface WxGetFileSystemManagerReadFileSuccess {
+  data: string | ArrayBuffer
+}

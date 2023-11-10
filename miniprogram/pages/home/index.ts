@@ -1,3 +1,9 @@
+import type { Tap } from 'miniprogram/types/wechat'
+
+interface CurrentTargetDataset {
+  url: string
+}
+
 Page({
   data: {
     tools: [
@@ -18,7 +24,7 @@ Page({
       }
     ]
   },
-  async navigate(e: any) {
+  async navigate(e: Tap<CurrentTargetDataset, unknown>) {
     const { url } = e.currentTarget.dataset
 
     await wx.navigateTo({ url })

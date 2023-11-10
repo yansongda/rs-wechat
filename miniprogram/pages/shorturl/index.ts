@@ -1,4 +1,9 @@
 import api from '@api/shorturl'
+import type { FormSubmit } from 'miniprogram/types/wechat'
+
+interface FormData {
+  link: string
+}
 
 Page({
   data: {
@@ -6,7 +11,7 @@ Page({
     link: '',
     short: ''
   },
-  async submit(e: any) {
+  async submit(e: FormSubmit<FormData>) {
     await wx.showLoading({ title: '生成中', mask: true })
 
     const { link } = e.detail.value

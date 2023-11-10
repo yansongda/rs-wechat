@@ -1,3 +1,9 @@
+import type { FormSubmit } from 'miniprogram/types/wechat'
+
+interface FormData {
+  timestamp: number
+}
+
 Page({
   data: {
     dialogs: [
@@ -17,8 +23,9 @@ Page({
       timestampConvert: true
     })
   },
-  timestampConvertSubmit(e: any) {
-    const timestamp = e.detail.value.timestamp
+  timestampConvertSubmit(e: FormSubmit<FormData>) {
+    const { timestamp } = e.detail.value
+
     const date = (t: number) => {
       const now = new Date(t)
       const y = now.getFullYear()
@@ -32,7 +39,7 @@ Page({
         '-' +
         (d < 10 ? '0' + d : d) +
         ' ' +
-        now.toTimeString().substr(0, 8)
+        now.toTimeString().substring(0, 8)
       )
     }
 

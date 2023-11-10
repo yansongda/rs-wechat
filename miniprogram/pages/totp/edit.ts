@@ -1,4 +1,15 @@
 import api from '@api/totp'
+import type { UpdateRequest } from 'miniprogram/types/totp'
+import type { FormSubmit, WeuiDialogTap } from 'miniprogram/types/wechat'
+
+interface Query {
+  id?: string
+}
+
+interface FormData {
+  issuer: string
+  username: string
+}
 
 Page({
   data: {
@@ -9,7 +20,7 @@ Page({
     issuer: '',
     username: ''
   },
-  onLoad(query: any) {
+  onLoad(query: Query) {
     this.data.id = Number(query.id || 0)
   },
   async onShow() {
@@ -25,11 +36,11 @@ Page({
       })
       .finally(() => wx.hideLoading())
   },
-  async submit(e: any) {
+  async submit(e: FormSubmit<FormData>) {
     await wx.showToast({ title: '更新中', icon: 'loading', mask: true, duration: 3000 })
 
     api
-      .update({ id: this.data.id, ...e.detail.value } as ITotpUpdateRequest)
+      .update({ id: this.data.id, ...e.detail.value } as UpdateRequest)
       .then(() => {
         wx.showToast({
           title: '修改成功',
@@ -40,14 +51,14 @@ Page({
           }
         })
       })
-      .catch(() => {
-        this.setData({ toptipError: e.message })
+      .catch((e: unknown) => {
+        this.setData({ toptipError: e instanceof Error ? e.message : '未知异常' })
       })
   },
   async cancel() {
     await wx.navigateBack()
   },
-  async dialogTap(e: any) {
+  async dialogTap(e: WeuiDialogTap) {
     this.setData({ dialogShow: false })
 
     const { index } = e.detail
