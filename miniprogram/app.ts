@@ -7,7 +7,10 @@ import { DEFAULT } from '@constant/user'
 import logger from '@utils/logger'
 import type { GlobalData } from './types/app'
 import type { LoginResponse, UpdateResult, User } from './types/user'
-import { AppOnUnhandledRejection } from './types/wechat'
+import type {
+  AppOnUnhandledRejection,
+  WxGetUpdateManagerOnCheckForUpdateResult
+} from './types/wechat'
 
 App<GlobalData>({
   globalData: {
@@ -46,6 +49,31 @@ App<GlobalData>({
         }
       },
       fail: async () => Promise.reject(new WeixinError(CODE.WEIXIN_LOGIN))
+    })
+  },
+  onShow() {
+    const updateManager = wx.getUpdateManager()
+
+    updateManager.onCheckForUpdate((res: WxGetUpdateManagerOnCheckForUpdateResult) => {
+      if (res.hasUpdate) {
+        logger.info('小程序有最新版本，后续将自动更新')
+      }
+    })
+
+    updateManager.onUpdateReady(() => {
+      wx.showModal({
+        title: '更新提示',
+        content: '新版本已经准备好，是否重启应用？',
+        success(res) {
+          if (res.confirm) {
+            updateManager.applyUpdate()
+          }
+        }
+      })
+    })
+
+    updateManager.onUpdateFailed(() => {
+      logger.error('小程序更新下载异常')
     })
   },
   onError(e: string) {
