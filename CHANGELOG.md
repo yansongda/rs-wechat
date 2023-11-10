@@ -8,7 +8,6 @@
 
 - optimized(style): 消除 ts 的 any，增加 eslint 等检查(#23)
 
-
 ## v1.1.3
 
 ### fixed

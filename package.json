@@ -1,6 +1,6 @@
 {
   "name": "yansongda",
-  "version": "1.0.0",
+  "version": "1.1.4",
   "description": "",
   "scripts": {
     "lint": "eslint --ext js,cjs,mjs,ts,tsx miniprogram",
