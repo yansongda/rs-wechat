@@ -26,15 +26,15 @@ Page({
   async onShow() {
     await wx.showLoading({ title: '加载中' })
 
-    api
-      .detail(this.data.id)
-      .then(({ id, issuer, username }) => {
-        this.setData({ id, issuer: issuer ?? '', username: username ?? '' })
-      })
-      .catch(() => {
-        this.setData({ dialogShow: true })
-      })
-      .finally(() => wx.hideLoading())
+    try {
+      const { id, issuer, username } = await api.detail(this.data.id)
+
+      this.setData({ id, issuer: issuer ?? '', username: username ?? '' })
+    } catch (e: unknown) {
+      this.setData({ dialogShow: true })
+    }
+
+    await wx.hideLoading()
   },
   async submit(e: FormSubmit<FormData>) {
     await wx.showToast({ title: '更新中', icon: 'loading', mask: true })
