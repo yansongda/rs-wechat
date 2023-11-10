@@ -19,7 +19,7 @@ Page({
 
       this.setData({ short })
     } catch (e: unknown) {
-        this.setData({ toptipError: e instanceof Error ? e.message : '未知异常' })
+      this.setData({ toptipError: e instanceof Error ? e.message : '未知异常' })
     }
 
     await wx.hideLoading()
