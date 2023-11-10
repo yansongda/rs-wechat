@@ -9,8 +9,8 @@ on:
       - main
 
 jobs:
-  check:
-    name: Check
+  check-backend:
+    name: Check - Backend
     runs-on: ubuntu-latest
     steps:
       - name: Checkout sources
@@ -35,8 +35,8 @@ jobs:
         run: |
           cargo check --all-features
 
-  lints:
-    name: Lints
+  lint-backend:
+    name: Lint - Backend
     runs-on: ubuntu-latest
     steps:
       - name: Checkout sources
@@ -64,3 +64,36 @@ jobs:
       - name: Run cargo clippy
         run: |
           cargo clippy -- -D warnings
+
+  lint-frontend:
+    name: Lint - Frontend
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout sources
+        uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: latest
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: latest
+          run_install: false
+      - name: Get pnpm store directory
+        shell: bash
+        run: |
+          echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+      - name: Setup pnpm cache
+        uses: actions/cache@v3
+        with:
+          path: ${{ env.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+      - name: Run pnpm install
+        run: |
+          pnpm i
+      - name: Run pnpm lint
+        run: |
+          pnpm run lint

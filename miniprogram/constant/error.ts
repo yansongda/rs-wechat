@@ -22,7 +22,7 @@ const CODE = {
   HTTP_API_TOTP_UPDATE: 2203,
   HTTP_API_TOTP_DELETE: 2204,
   // http 业务错误 - shortlink 接口
-  HTTP_API_SHORTLINK_CREATE: 2300,
+  HTTP_API_SHORTLINK_CREATE: 2300
 }
 
 const MESSAGE = {
@@ -42,12 +42,12 @@ const MESSAGE = {
   [CODE.HTTP_API_TOTP_CREATE]: '新增失败',
   [CODE.HTTP_API_TOTP_UPDATE]: '更新失败',
   [CODE.HTTP_API_TOTP_DELETE]: '删除失败',
-  [CODE.HTTP_API_SHORTLINK_CREATE]: '生成失败',
+  [CODE.HTTP_API_SHORTLINK_CREATE]: '生成失败'
 }
 
 const WECHAT_MESSAGE = {
   3: '系统权限未授予微信',
-  5: '请求超时',
+  5: '请求超时'
 }
 
 export { CODE, MESSAGE, WECHAT_MESSAGE }

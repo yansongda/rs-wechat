@@ -6,7 +6,7 @@ Page({
   data: {
     avatar: app.globalData.user.avatar,
     nickname: app.globalData.user.nickname,
-    slogan: app.globalData.user.slogan,
+    slogan: app.globalData.user.slogan
   },
   async onLoad() {
     await utils.sync()
@@ -15,13 +15,11 @@ Page({
     this.setData({
       avatar: app.globalData.user.avatar,
       nickname: app.globalData.user.nickname,
-      slogan: app.globalData.user.slogan,
+      slogan: app.globalData.user.slogan
     })
   },
-  onHide() {
-  },
-  onReady() {
-  }
+  onHide() {},
+  onReady() {}
 })
 
 export default {}
