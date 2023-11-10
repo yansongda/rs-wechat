@@ -7,7 +7,10 @@ import { DEFAULT } from '@constant/user'
 import logger from '@utils/logger'
 import type { GlobalData } from './types/app'
 import type { LoginResponse, UpdateResult, User } from './types/user'
-import type { AppOnUnhandledRejection, WxGetUpdateManagerOnCheckForUpdateResult } from './types/wechat'
+import type {
+  AppOnUnhandledRejection,
+  WxGetUpdateManagerOnCheckForUpdateResult
+} from './types/wechat'
 
 App<GlobalData>({
   globalData: {
