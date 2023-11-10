@@ -1,8 +1,12 @@
 ## v1.1.4
 
+### feat
+
+- feat(frontend:core): 增加小程序升级提示功能(#25)
+
 ### optimized
 
-- optimized(style): 消除 ts 的 any，增加 eslint 等检查 (#23)
+- optimized(style): 消除 ts 的 any，增加 eslint 等检查(#23)
 
 ## v1.1.3
 

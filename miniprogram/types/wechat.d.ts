@@ -63,3 +63,7 @@ export interface ChooseAvatarButtonTap<T, D> extends Tap<T, D> {
 export interface WxGetFileSystemManagerReadFileSuccess {
   data: string | ArrayBuffer
 }
+
+export interface WxGetUpdateManagerOnCheckForUpdateResult {
+  hasUpdate: boolean
+}
