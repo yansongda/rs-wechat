@@ -1,24 +1,3 @@
 .weui-form {
   padding: 0;
 }
-
-.weui-cell_vertical {
-  flex-direction: column;
-  align-items: flex-start;
-
-  .weui-cell__hd {
-    width: 100%;
-    padding-right: 0;
-    margin-bottom: 12px;
-  }
-
-  .weui-cell__bd {
-    width: 100%;
-  }
-}
-
-.weui-form__opr-area {
-  &:last-child {
-    margin-bottom: 48px;
-  }
-}
