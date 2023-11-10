@@ -56,7 +56,7 @@ Page({
 
       await wx.showToast({ title: '修改成功', icon: 'success', mask: true })
 
-      setTimeout(() => wx.navigateBack(), 1000)
+      setTimeout(() => wx.navigateBack(), 1500)
     } catch (e: unknown) {
       await wx.hideToast()
 

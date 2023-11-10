@@ -40,16 +40,16 @@ Page({
     await wx.showToast({ title: '更新中', icon: 'loading', mask: true })
 
     try {
-        await api.update({ id: this.data.id, ...e.detail.value } as UpdateRequest)
+      await api.update({ id: this.data.id, ...e.detail.value } as UpdateRequest)
 
-        await wx.showToast({ title: '修改成功', icon: 'success', mask: true })
+      await wx.showToast({ title: '修改成功', icon: 'success', mask: true })
 
-        setTimeout(() => wx.navigateBack(), 1500)
+      setTimeout(() => wx.navigateBack(), 1500)
     } catch (e: unknown) {
-        this.setData({ toptipError: e instanceof Error ? e.message : '未知异常' })
-    }
+      await wx.hideToast()
 
-    await wx.hideToast()
+      this.setData({ toptipError: e instanceof Error ? e.message : '未知异常' })
+    }
   },
   async cancel() {
     await wx.navigateBack()
