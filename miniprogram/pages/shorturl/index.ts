@@ -14,19 +14,15 @@ Page({
   async submit(e: FormSubmit<FormData>) {
     await wx.showLoading({ title: '生成中', mask: true })
 
-    const { link } = e.detail.value
+    try {
+      const { short } = await api.create(e.detail.value.link)
 
-    api
-      .create(link)
-      .then(({ short }) => {
-        this.setData({ short })
-      })
-      .catch((e) => {
-        this.setData({ toptipError: e.message })
-      })
-      .finally(async () => {
-        await wx.hideLoading()
-      })
+      this.setData({ short })
+    } catch (e: unknown) {
+      this.setData({ toptipError: e instanceof Error ? e.message : '未知异常' })
+    }
+
+    await wx.hideLoading()
   },
   async copy() {
     if (this.data.short == '') {

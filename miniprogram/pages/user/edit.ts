@@ -46,28 +46,22 @@ Page({
     })
   },
   async submit(e: FormSubmit<FormData>) {
-    await wx.showToast({ title: '更新中', icon: 'loading', mask: true, duration: 3000 })
+    await wx.showToast({ title: '更新中', icon: 'loading', mask: true })
 
     try {
       await api.update(e.detail.value as UpdateRequest)
 
       // 同步完成之后更新下全局的用户信息状态
       await utils.sync()
+
+      await wx.showToast({ title: '修改成功', icon: 'success', mask: true })
+
+      setTimeout(() => wx.navigateBack(), 1500)
     } catch (e: unknown) {
-      this.setData({ toptipError: e instanceof Error ? e.message : '未知异常' })
       await wx.hideToast()
 
-      return
+      this.setData({ toptipError: e instanceof Error ? e.message : '未知异常' })
     }
-
-    wx.showToast({
-      title: '修改成功',
-      icon: 'success',
-      mask: true,
-      success: () => {
-        setTimeout(() => wx.navigateBack(), 1000)
-      }
-    })
   },
   async cancel() {
     await wx.navigateBack()

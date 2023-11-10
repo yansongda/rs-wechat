@@ -1,3 +1,9 @@
+## v1.1.5
+
+### optimized
+
+- optimized(frontend:submit): 优化提交中的 Promise 逻辑(#26)
+
 ## v1.1.4
 
 ### feat
