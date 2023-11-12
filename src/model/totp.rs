@@ -20,7 +20,7 @@ pub struct Model {
     pub updated_at: Option<NaiveDateTime>,
 }
 
-#[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]
+#[derive(Debug, Copy, Clone, EnumIter, DeriveRelation)]
 pub enum Relation {
     #[sea_orm(
         belongs_to = "crate::model::user::Entity",
@@ -53,12 +53,12 @@ impl ActiveModelBehavior for ActiveModel {
     }
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Debug, Deserialize)]
 pub struct DetailRequest {
     pub id: i64,
 }
 
-#[derive(Serialize, Debug)]
+#[derive(Debug, Serialize)]
 pub struct DetailResponse {
     pub id: i64,
     pub issuer: String,
@@ -77,12 +77,12 @@ impl From<Model> for DetailResponse {
     }
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Debug, Deserialize)]
 pub struct CreateRequest {
     pub uri: String,
 }
 
-#[derive(DeriveIntoActiveModel)]
+#[derive(Debug, DeriveIntoActiveModel)]
 pub struct CreateTotp {
     pub user_id: i64,
     pub username: String,
@@ -90,13 +90,14 @@ pub struct CreateTotp {
     pub secret: String,
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Debug, Deserialize)]
 pub struct UpdateRequest {
     pub id: i64,
     pub issuer: Option<String>,
     pub username: Option<String>,
 }
 
+#[derive(Debug)]
 pub struct UpdateTotp {
     pub issuer: Option<String>,
     pub username: Option<String>,
@@ -125,7 +126,7 @@ impl From<UpdateRequest> for UpdateTotp {
     }
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Debug, Deserialize)]
 pub struct DeleteRequest {
     pub id: i64,
 }

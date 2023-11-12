@@ -1,4 +1,5 @@
 use axum::Extension;
+use garde::Validate;
 
 use crate::api::extra::Json;
 use crate::api::response::Resp;
@@ -9,6 +10,8 @@ use crate::model::user::{
 use crate::service;
 
 pub async fn login(Json(params): Json<LoginRequest>) -> Resp<LoginResponse> {
+    params.validate(&())?;
+
     let user: User = service::user::login(&params.code).await?;
 
     Ok(Response::success(user.into()))

@@ -27,7 +27,7 @@ pub enum Error {
     HttpWechatResponseParse,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct Response<D: Serialize> {
     pub code: u16,
     pub message: String,

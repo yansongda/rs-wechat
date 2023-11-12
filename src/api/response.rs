@@ -1,6 +1,7 @@
 use axum::body::Body;
 use axum::extract::rejection::JsonRejection;
 use axum::response::IntoResponse;
+use garde::Report;
 use serde::Serialize;
 
 use crate::model::result::{Error, Response, Result};
@@ -39,6 +40,14 @@ impl IntoResponse for Error {
 
 impl From<JsonRejection> for Error {
     fn from(r: JsonRejection) -> Self {
+        println!("{:?}", r);
+
+        Error::Params
+    }
+}
+
+impl From<Report> for Error {
+    fn from(r: Report) -> Self {
         println!("{:?}", r);
 
         Error::Params
