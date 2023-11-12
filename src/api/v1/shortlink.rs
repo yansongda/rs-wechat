@@ -1,7 +1,8 @@
-use axum::extract::{Path, Query};
+use axum::extract::Path;
 use axum::response::Redirect;
-use axum::{Extension, Json};
+use axum::Extension;
 
+use crate::api::extra::Json;
 use crate::api::response::Resp;
 use crate::model::result::{Response, Result};
 use crate::model::shortlink::{CreateRequest, CreateResponse, DetailRequest, DetailResponse};
@@ -18,7 +19,7 @@ pub async fn create(
     Ok(Response::success(CreateResponse::from(shortlink)))
 }
 
-pub async fn detail(Query(params): Query<DetailRequest>) -> Resp<DetailResponse> {
+pub async fn detail(Json(params): Json<DetailRequest>) -> Resp<DetailResponse> {
     let shortlink = service::shortlink::detail(&(params.short)).await?;
 
     Ok(Response::success(DetailResponse::from(shortlink)))

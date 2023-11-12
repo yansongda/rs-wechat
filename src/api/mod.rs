@@ -10,6 +10,7 @@ use crate::config::Config;
 use crate::model::result::Response;
 use crate::repository::Pool;
 
+mod extra;
 mod middleware;
 mod response;
 mod routes;

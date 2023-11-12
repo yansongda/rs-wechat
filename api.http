@@ -2,9 +2,9 @@
 POST {{domain}}/api/v1/users/login
 Content-Type: application/json
 
-{
-  "code": "999"
-}
+//{
+//  "code": "999"
+//}
 
 ### 用户 - 详情
 POST {{domain}}/api/v1/users/detail
@@ -70,6 +70,15 @@ Authorization: Bearer {{open_id}}
 
 {
   "link": "https://yansongda.cn"
+}
+
+### 短链 - 详情
+POST {{domain}}/api/v1/shortlink/detail
+Content-Type: application/json
+Authorization: Bearer {{open_id}}
+
+{
+  "short": "3ULY6"
 }
 
 ### 短链 - 访问

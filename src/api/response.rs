@@ -1,4 +1,5 @@
 use axum::body::Body;
+use axum::extract::rejection::JsonRejection;
 use axum::response::IntoResponse;
 use serde::Serialize;
 
@@ -33,5 +34,13 @@ impl Error {
 impl IntoResponse for Error {
     fn into_response(self) -> axum::response::Response {
         self.to_http_response().into_response()
+    }
+}
+
+impl From<JsonRejection> for Error {
+    fn from(r: JsonRejection) -> Self {
+        println!("{:?}", r);
+
+        Error::Params
     }
 }
