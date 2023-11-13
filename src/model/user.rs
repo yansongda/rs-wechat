@@ -105,7 +105,7 @@ impl From<Model> for CurrentUser {
 
 #[derive(Debug, Deserialize, Validate)]
 pub struct LoginRequest {
-    #[garde(ascii, length(min=8))]
+    #[garde(ascii, length(min = 8))]
     pub code: String,
 }
 
@@ -156,10 +156,13 @@ impl From<CurrentUser> for DetailResponse {
     }
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, Validate)]
 pub struct UpdateRequest {
+    #[garde(ascii, length(min = 8))]
     pub avatar: Option<String>,
+    #[garde(length(min = 1, max = 10))]
     pub nickname: Option<String>,
+    #[garde(length(min = 1, max = 50))]
     pub slogan: Option<String>,
 }
 

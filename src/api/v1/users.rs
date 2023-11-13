@@ -25,6 +25,8 @@ pub async fn update(
     Extension(current_user): Extension<CurrentUser>,
     Json(params): Json<UpdateRequest>,
 ) -> Resp<()> {
+    params.validate(&())?;
+
     service::user::update(current_user, params).await?;
 
     Ok(Response::success(()))
