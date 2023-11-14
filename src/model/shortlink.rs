@@ -1,4 +1,5 @@
 use chrono::NaiveDateTime;
+use garde::Validate;
 use sea_orm::entity::prelude::*;
 use sea_orm::{prelude::async_trait::async_trait, ActiveValue};
 use serde::{Deserialize, Serialize};
@@ -53,8 +54,9 @@ impl ActiveModelBehavior for ActiveModel {
     }
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, Validate)]
 pub struct CreateRequest {
+    #[garde(url)]
     pub link: String,
 }
 
@@ -84,8 +86,9 @@ pub struct CreateShortlink {
     pub short: String,
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, Validate)]
 pub struct DetailRequest {
+    #[garde(ascii, length(min = 3))]
     pub short: String,
 }
 

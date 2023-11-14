@@ -1,4 +1,5 @@
 use chrono::NaiveDateTime;
+use garde::Validate;
 use sea_orm::entity::prelude::*;
 use sea_orm::{prelude::async_trait::async_trait, ActiveValue, IntoActiveModel};
 use serde::{Deserialize, Serialize};
@@ -77,8 +78,9 @@ impl From<Model> for DetailResponse {
     }
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, Validate)]
 pub struct CreateRequest {
+    #[garde(ascii, length(min = 20))]
     pub uri: String,
 }
 
@@ -90,10 +92,13 @@ pub struct CreateTotp {
     pub secret: String,
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, Validate)]
 pub struct UpdateRequest {
+    #[garde(skip)]
     pub id: i64,
+    #[garde(ascii, length(min = 1, max = 10))]
     pub issuer: Option<String>,
+    #[garde(ascii, length(min = 1, max = 25))]
     pub username: Option<String>,
 }
 

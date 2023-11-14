@@ -1,6 +1,7 @@
 use axum::extract::Path;
 use axum::response::Redirect;
 use axum::Extension;
+use garde::Validate;
 
 use crate::api::extra::Json;
 use crate::api::response::Resp;
@@ -13,6 +14,8 @@ pub async fn create(
     Extension(current_user): Extension<CurrentUser>,
     Json(params): Json<CreateRequest>,
 ) -> Resp<CreateResponse> {
+    params.validate(&())?;
+
     let link = params.link;
     let shortlink = service::shortlink::create(current_user, &link).await?;
 
@@ -20,6 +23,8 @@ pub async fn create(
 }
 
 pub async fn detail(Json(params): Json<DetailRequest>) -> Resp<DetailResponse> {
+    params.validate(&())?;
+
     let shortlink = service::shortlink::detail(&(params.short)).await?;
 
     Ok(Response::success(DetailResponse::from(shortlink)))

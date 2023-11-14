@@ -1,4 +1,5 @@
 use axum::Extension;
+use garde::Validate;
 
 use crate::api::extra::Json;
 use crate::api::response::Resp;
@@ -28,6 +29,8 @@ pub async fn create(
     Extension(current_user): Extension<CurrentUser>,
     Json(params): Json<CreateRequest>,
 ) -> Resp<()> {
+    params.validate(&())?;
+
     service::totp::create(current_user, params.uri).await?;
 
     Ok(Response::success(()))
@@ -37,6 +40,8 @@ pub async fn update(
     Extension(current_user): Extension<CurrentUser>,
     Json(params): Json<UpdateRequest>,
 ) -> Resp<()> {
+    params.validate(&())?;
+
     service::totp::update(current_user, params).await?;
 
     Ok(Response::success(()))
