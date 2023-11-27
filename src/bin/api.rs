@@ -4,8 +4,11 @@ use miniprogram::api::App;
 async fn main() {
     let app = App::init().await;
 
-    axum::Server::bind(app.get_listen())
-        .serve(app.get_router().clone().into_make_service())
+    let listener = tokio::net::TcpListener::bind(app.get_listen())
+        .await
+        .unwrap();
+
+    axum::serve(listener, app.get_router().clone())
         .await
         .unwrap();
 }

@@ -42,7 +42,7 @@ impl From<JsonRejection> for Error {
     fn from(r: JsonRejection) -> Self {
         println!("{:?}", r);
 
-        Error::Params
+        Error::Params(None)
     }
 }
 
@@ -50,6 +50,6 @@ impl From<Report> for Error {
     fn from(r: Report) -> Self {
         println!("{:?}", r);
 
-        Error::Params
+        Error::Params(None)
     }
 }

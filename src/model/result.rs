@@ -11,7 +11,7 @@ pub enum Error {
     Unknown,
     AuthorizationMissing,
     AuthorizationNotFound,
-    Params,
+    Params(Option<&'static str>),
     UserNotFound,
     TotpNotFound,
     TotpParse,
@@ -37,7 +37,7 @@ pub struct Response<D: Serialize> {
 pub type Result<D> = std::result::Result<D, Error>;
 
 impl Error {
-    pub fn code_message(&self) -> (u16, &'static str) {
+    pub fn default_message(&self) -> (u16, &'static str) {
         let messages = G_ERROR_CODE_MESSAGE.get_or_init(|| {
             HashMap::from([
                 (Self::Unknown, (9999, "未知错误，请联系管理员")),
@@ -46,7 +46,10 @@ impl Error {
                     Self::AuthorizationNotFound,
                     (1001, "认证信息不正确，认证失败"),
                 ),
-                (Self::Params, (2000, "参数错误，请确认您的参数是否符合规范")),
+                (
+                    Self::Params(None),
+                    (2000, "参数错误，请确认您的参数是否符合规范"),
+                ),
                 (Self::UserNotFound, (2001, "用户未找到")),
                 (Self::TotpNotFound, (2002, "TOTP 信息未找到")),
                 (Self::TotpParse, (2003, "TOTP 链接解析失败")),
@@ -102,7 +105,7 @@ impl<D: Serialize> Response<D> {
     }
 
     pub fn error(error: Error) -> Self {
-        let (code, message) = error.code_message();
+        let (code, message) = error.default_message();
 
         Response::new(Some(code), Some(message.to_string()), None)
     }

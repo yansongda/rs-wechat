@@ -1,11 +1,11 @@
-use axum::http::Request;
+use axum::extract::Request;
 use axum::middleware::Next;
 use axum::response::{IntoResponse, Response};
 
 use crate::model::result::{Error, Result};
 use crate::model::user::{CurrentUser, Model as User};
 
-pub async fn authorization<B>(mut request: Request<B>, next: Next<B>) -> Response {
+pub async fn authorization(mut request: Request, next: Next) -> Response {
     let authorization = request.headers().get("Authorization");
 
     if authorization.is_none() {
