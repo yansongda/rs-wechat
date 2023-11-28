@@ -3,7 +3,7 @@ use axum::response::Redirect;
 use axum::Extension;
 use garde::Validate;
 
-use crate::api::extra::Json;
+use crate::api::extract::Json;
 use crate::api::response::Resp;
 use crate::model::result::{Response, Result};
 use crate::model::shortlink::{CreateRequest, CreateResponse, DetailRequest, DetailResponse};
