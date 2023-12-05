@@ -15,7 +15,7 @@ pub async fn detail(current_user: CurrentUser, id: i64) -> Result<DetailResponse
     let t = repository::totp::find(id).await?;
 
     if current_user.id != t.user_id {
-        return Err(Error::TotpNotFound);
+        return Err(Error::TotpNotFound(None));
     }
 
     Ok(t.into())
@@ -25,7 +25,7 @@ pub async fn create(current_user: CurrentUser, uri: String) -> Result<()> {
     let t = TOTP::from_url_unchecked(uri.as_str()).map_err(|e| {
         println!("totp parse error: {}", e);
 
-        Error::TotpParse
+        Error::TotpParse(None)
     })?;
 
     repository::totp::insert(CreateTotp {
@@ -43,7 +43,7 @@ pub async fn update(current_user: CurrentUser, params: UpdateRequest) -> Result<
     let model = repository::totp::find(params.id).await?;
 
     if current_user.id != model.user_id {
-        return Err(Error::TotpNotFound);
+        return Err(Error::TotpNotFound(None));
     }
 
     repository::totp::update(model, params.into()).await?;
@@ -55,7 +55,7 @@ pub async fn delete(current_user: CurrentUser, id: i64) -> Result<()> {
     let model = repository::totp::find(id).await?;
 
     if current_user.id != model.user_id {
-        return Err(Error::TotpNotFound);
+        return Err(Error::TotpNotFound(None));
     }
 
     repository::totp::delete(model).await?;

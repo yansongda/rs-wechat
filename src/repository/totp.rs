@@ -13,7 +13,7 @@ pub async fn all(user: User) -> Result<Vec<Totp>> {
         .map_err(|e| {
             println!("查询用户所有的 Totp 失败: {:?}", e);
 
-            Error::Database
+            Error::Database(None)
         })
 }
 
@@ -24,14 +24,14 @@ pub async fn find(id: i64) -> Result<Totp> {
         .map_err(|e| {
             println!("查询 Totp 失败: {:?}", e);
 
-            Error::Database
+            Error::Database(None)
         })?;
 
     if let Some(result) = result {
         return Ok(result);
     }
 
-    Err(Error::TotpNotFound)
+    Err(Error::TotpNotFound(None))
 }
 
 pub async fn insert(totp: CreateTotp) -> Result<Totp> {
@@ -42,7 +42,7 @@ pub async fn insert(totp: CreateTotp) -> Result<Totp> {
         .map_err(|e| {
             println!("插入 Totp 失败: {:?}", e);
 
-            Error::DatabaseInsert
+            Error::DatabaseInsert(None)
         })?;
 
     Ok(result)
@@ -59,7 +59,7 @@ pub async fn update(model: Totp, updated: UpdateTotp) -> Result<()> {
         .map_err(|e| {
             println!("更新 Totp 失败: {:?}", e);
 
-            Error::DatabaseInsert
+            Error::DatabaseInsert(None)
         })?;
 
     Ok(())
@@ -69,7 +69,7 @@ pub async fn delete(model: Totp) -> Result<()> {
     model.delete(Pool::get("default")).await.map_err(|e| {
         println!("删除 Totp 失败: {:?}", e);
 
-        Error::DatabaseDelete
+        Error::DatabaseDelete(None)
     })?;
 
     Ok(())

@@ -1,8 +1,10 @@
+use crate::model::result::Error;
 use chrono::NaiveDateTime;
-use garde::Validate;
 use sea_orm::entity::prelude::*;
 use sea_orm::{prelude::async_trait::async_trait, ActiveValue};
 use serde::{Deserialize, Serialize};
+
+use crate::validation::Validator;
 
 #[derive(Debug, Clone, Serialize, Eq, PartialEq, Deserialize, DeriveEntityModel)]
 #[sea_orm(table_name = "user")]
@@ -103,10 +105,37 @@ impl From<Model> for CurrentUser {
     }
 }
 
-#[derive(Debug, Deserialize, Validate)]
+#[derive(Debug, Clone, Deserialize)]
 pub struct LoginRequest {
-    #[garde(ascii, length(min = 8))]
+    pub code: Option<String>,
+}
+
+pub struct LoginParams {
     pub code: String,
+}
+
+impl From<&LoginRequest> for LoginParams {
+    fn from(value: &LoginRequest) -> Self {
+        Self {
+            code: value.code.clone().unwrap(),
+        }
+    }
+}
+
+impl Validator for LoginRequest {
+    type Data = LoginParams;
+
+    fn validate(&self) -> crate::model::result::Result<Self::Data> {
+        if self.code.is_none() {
+            return Err(Error::Params(Some("code 不能为空")));
+        }
+
+        if self.code.to_owned().unwrap().len() < 8 {
+            return Err(Error::Params(Some("code 必须大于 8 位")));
+        }
+
+        Ok(Self::Data::from(self))
+    }
 }
 
 #[derive(Debug, Serialize)]
@@ -156,13 +185,10 @@ impl From<CurrentUser> for DetailResponse {
     }
 }
 
-#[derive(Debug, Deserialize, Validate)]
+#[derive(Debug, Deserialize)]
 pub struct UpdateRequest {
-    #[garde(ascii, length(min = 8))]
     pub avatar: Option<String>,
-    #[garde(length(min = 1, max = 10))]
     pub nickname: Option<String>,
-    #[garde(length(min = 1, max = 50))]
     pub slogan: Option<String>,
 }
 

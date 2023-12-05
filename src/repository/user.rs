@@ -13,14 +13,14 @@ pub async fn find(open_id: &str) -> Result<User> {
         .map_err(|e| {
             println!("查询用户失败: {:?}", e);
 
-            Error::Database
+            Error::Database(None)
         })?;
 
     if let Some(user) = result {
         return Ok(user);
     }
 
-    Err(Error::UserNotFound)
+    Err(Error::UserNotFound(None))
 }
 
 pub async fn insert(user: CreateUser) -> Result<User> {
@@ -30,7 +30,7 @@ pub async fn insert(user: CreateUser) -> Result<User> {
         .map_err(|e| {
             println!("插入用户失败: {:?}", e);
 
-            Error::DatabaseInsert
+            Error::DatabaseInsert(None)
         })
 }
 
@@ -45,6 +45,6 @@ pub async fn update(model: User, updated: UpdateUser) -> Result<User> {
         .map_err(|e| {
             println!("更新用户失败: {:?}", e);
 
-            Error::DatabaseUpdate
+            Error::DatabaseUpdate(None)
         })
 }

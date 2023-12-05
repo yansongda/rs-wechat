@@ -9,7 +9,7 @@ pub async fn authorization(mut request: Request, next: Next) -> Response {
     let authorization = request.headers().get("Authorization");
 
     if authorization.is_none() {
-        return Error::AuthorizationMissing.into_response();
+        return Error::AuthorizationMissing(None).into_response();
     }
 
     let open_id = authorization
@@ -21,7 +21,7 @@ pub async fn authorization(mut request: Request, next: Next) -> Response {
     let user: Result<User> = crate::service::user::detail(open_id.as_str()).await;
 
     if user.is_err() {
-        return Error::AuthorizationNotFound.into_response();
+        return Error::AuthorizationNotFound(None).into_response();
     }
 
     request

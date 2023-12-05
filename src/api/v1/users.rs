@@ -1,5 +1,4 @@
 use axum::Extension;
-use garde::Validate;
 
 use crate::api::extract::Json;
 use crate::api::response::Resp;
@@ -8,11 +7,12 @@ use crate::model::user::{
     CurrentUser, DetailResponse, LoginRequest, LoginResponse, Model as User, UpdateRequest,
 };
 use crate::service;
+use crate::validation::Validator;
 
-pub async fn login(Json(params): Json<LoginRequest>) -> Resp<LoginResponse> {
-    params.validate(&())?;
+pub async fn login(Json(request): Json<LoginRequest>) -> Resp<LoginResponse> {
+    let params = request.validate()?;
 
-    let user: User = service::user::login(&params.code).await?;
+    let user: User = service::user::login(params.code.as_str()).await?;
 
     Ok(Response::success(user.into()))
 }
@@ -25,7 +25,7 @@ pub async fn update(
     Extension(current_user): Extension<CurrentUser>,
     Json(params): Json<UpdateRequest>,
 ) -> Resp<()> {
-    params.validate(&())?;
+    // params.validate()?;
 
     service::user::update(current_user, params).await?;
 
