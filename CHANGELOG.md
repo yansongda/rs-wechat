@@ -1,3 +1,9 @@
+## v1.1.6
+
+### feat
+
+- feat(backend): 参数验证(#28)
+
 ## v1.1.5
 
 ### optimized

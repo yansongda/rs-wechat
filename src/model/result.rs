@@ -1,90 +1,90 @@
-use std::collections::HashMap;
 use std::fmt::{Debug, Display, Formatter};
-use std::sync::OnceLock;
 
 use serde::{Deserialize, Serialize};
 
-static G_ERROR_CODE_MESSAGE: OnceLock<HashMap<Error, (u16, &'static str)>> = OnceLock::new();
+pub type Result<D> = std::result::Result<D, Error>;
 
 #[derive(PartialEq, Eq, Hash, Debug, Copy, Clone)]
 pub enum Error {
-    Unknown,
-    AuthorizationMissing,
-    AuthorizationNotFound,
-    Params,
-    UserNotFound,
-    TotpNotFound,
-    TotpParse,
-    ShortlinkNotFound,
-    Database,
-    DatabaseInsert,
-    DatabaseUpdate,
-    DatabaseDelete,
-    Http,
-    HttpResponse,
-    HttpWechat,
-    HttpWechatResponse,
-    HttpWechatResponseParse,
+    AuthorizationMissing(Option<&'static str>),
+    AuthorizationNotFound(Option<&'static str>),
+    Params(Option<&'static str>),
+    UserNotFound(Option<&'static str>),
+    TotpNotFound(Option<&'static str>),
+    TotpParse(Option<&'static str>),
+    ShortlinkNotFound(Option<&'static str>),
+    Database(Option<&'static str>),
+    DatabaseInsert(Option<&'static str>),
+    DatabaseUpdate(Option<&'static str>),
+    DatabaseDelete(Option<&'static str>),
+    Http(Option<&'static str>),
+    HttpResponse(Option<&'static str>),
+    HttpWechat(Option<&'static str>),
+    HttpWechatResponse(Option<&'static str>),
+    HttpWechatResponseParse(Option<&'static str>),
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct Response<D: Serialize> {
     pub code: u16,
     pub message: String,
     pub data: Option<D>,
 }
 
-pub type Result<D> = std::result::Result<D, Error>;
-
 impl Error {
-    pub fn code_message(&self) -> (u16, &'static str) {
-        let messages = G_ERROR_CODE_MESSAGE.get_or_init(|| {
-            HashMap::from([
-                (Self::Unknown, (9999, "未知错误，请联系管理员")),
-                (Self::AuthorizationMissing, (1000, "缺少认证信息，认证失败")),
-                (
-                    Self::AuthorizationNotFound,
-                    (1001, "认证信息不正确，认证失败"),
-                ),
-                (Self::Params, (2000, "参数错误，请确认您的参数是否符合规范")),
-                (Self::UserNotFound, (2001, "用户未找到")),
-                (Self::TotpNotFound, (2002, "TOTP 信息未找到")),
-                (Self::TotpParse, (2003, "TOTP 链接解析失败")),
-                (Self::ShortlinkNotFound, (2004, "短连接未找到")),
-                (Self::Database, (5000, "发生了一些问题，请联系管理员")),
-                (
-                    Self::DatabaseInsert,
-                    (5001, "保存数据出现了一些问题，请联系管理员"),
-                ),
-                (
-                    Self::DatabaseUpdate,
-                    (5002, "更新数据出现了一些问题，请联系管理员"),
-                ),
-                (
-                    Self::DatabaseDelete,
-                    (5003, "删除数据出现了一些问题，请联系管理员"),
-                ),
-                (Self::Http, (9800, "第三方 API 请求出错，请联系管理员")),
-                (
-                    Self::HttpResponse,
-                    (9801, "第三方 API 响应出错，请联系管理员"),
-                ),
-                (Self::HttpWechat, (9802, "微信 API 请求出错，请联系管理员")),
-                (
-                    Self::HttpWechatResponseParse,
-                    (9803, "微信 API 解析出错，请联系管理员"),
-                ),
-                (
-                    Self::HttpWechatResponse,
-                    (9804, "微信 API 结果出错，请联系管理员"),
-                ),
-            ])
-        });
-
-        messages
-            .get(self)
-            .unwrap_or_else(|| messages.get(&Self::Unknown).unwrap())
-            .to_owned()
+    pub fn get_code_message(&self) -> (u16, &'static str) {
+        match self {
+            Error::AuthorizationMissing(message) => {
+                (1000, message.unwrap_or_else(|| "缺少认证信息，认证失败"))
+            }
+            Error::AuthorizationNotFound(message) => {
+                (1001, message.unwrap_or_else(|| "认证信息不正确，认证失败"))
+            }
+            Error::Params(message) => (
+                2000,
+                message.unwrap_or_else(|| "参数错误，请确认您的参数是否符合规范"),
+            ),
+            Error::UserNotFound(message) => (2001, message.unwrap_or_else(|| "用户未找到")),
+            Error::TotpNotFound(message) => (2002, message.unwrap_or_else(|| "TOTP 信息未找到")),
+            Error::TotpParse(message) => (2003, message.unwrap_or_else(|| "TOTP 链接解析失败")),
+            Error::ShortlinkNotFound(message) => (2004, message.unwrap_or_else(|| "短连接未找到")),
+            Error::Database(message) => (
+                5000,
+                message.unwrap_or_else(|| "发生了一些问题，请联系管理员"),
+            ),
+            Error::DatabaseInsert(message) => (
+                5001,
+                message.unwrap_or_else(|| "保存数据出现了一些问题，请联系管理员"),
+            ),
+            Error::DatabaseUpdate(message) => (
+                5002,
+                message.unwrap_or_else(|| "更新数据出现了一些问题，请联系管理员"),
+            ),
+            Error::DatabaseDelete(message) => (
+                5003,
+                message.unwrap_or_else(|| "删除数据出现了一些问题，请联系管理员"),
+            ),
+            Error::Http(message) => (
+                9800,
+                message.unwrap_or_else(|| "第三方 API 请求出错，请联系管理员"),
+            ),
+            Error::HttpResponse(message) => (
+                9801,
+                message.unwrap_or_else(|| "第三方 API 响应出错，请联系管理员"),
+            ),
+            Error::HttpWechat(message) => (
+                9802,
+                message.unwrap_or_else(|| "微信 API 请求出错，请联系管理员"),
+            ),
+            Error::HttpWechatResponse(message) => (
+                9803,
+                message.unwrap_or_else(|| "微信 API 解析出错，请联系管理员"),
+            ),
+            Error::HttpWechatResponseParse(message) => (
+                9804,
+                message.unwrap_or_else(|| "微信 API 结果出错，请联系管理员"),
+            ),
+        }
     }
 }
 
@@ -102,7 +102,7 @@ impl<D: Serialize> Response<D> {
     }
 
     pub fn error(error: Error) -> Self {
-        let (code, message) = error.code_message();
+        let (code, message) = error.get_code_message();
 
         Response::new(Some(code), Some(message.to_string()), None)
     }

@@ -3,6 +3,7 @@ use sea_orm::entity::prelude::*;
 use sea_orm::{prelude::async_trait::async_trait, ActiveValue, IntoActiveModel};
 use serde::{Deserialize, Serialize};
 
+use crate::request::totp::UpdateRequest;
 use crate::service::totp;
 
 #[derive(Debug, Clone, Eq, PartialEq, Serialize, Deserialize, DeriveEntityModel)]
@@ -20,7 +21,7 @@ pub struct Model {
     pub updated_at: Option<NaiveDateTime>,
 }
 
-#[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]
+#[derive(Debug, Copy, Clone, EnumIter, DeriveRelation)]
 pub enum Relation {
     #[sea_orm(
         belongs_to = "crate::model::user::Entity",
@@ -53,12 +54,7 @@ impl ActiveModelBehavior for ActiveModel {
     }
 }
 
-#[derive(Deserialize, Debug)]
-pub struct DetailRequest {
-    pub id: i64,
-}
-
-#[derive(Serialize, Debug)]
+#[derive(Debug, Serialize)]
 pub struct DetailResponse {
     pub id: i64,
     pub issuer: String,
@@ -77,12 +73,7 @@ impl From<Model> for DetailResponse {
     }
 }
 
-#[derive(Deserialize, Debug)]
-pub struct CreateRequest {
-    pub uri: String,
-}
-
-#[derive(DeriveIntoActiveModel)]
+#[derive(Debug, DeriveIntoActiveModel)]
 pub struct CreateTotp {
     pub user_id: i64,
     pub username: String,
@@ -90,14 +81,9 @@ pub struct CreateTotp {
     pub secret: String,
 }
 
-#[derive(Deserialize, Debug)]
-pub struct UpdateRequest {
-    pub id: i64,
-    pub issuer: Option<String>,
-    pub username: Option<String>,
-}
-
+#[derive(Debug)]
 pub struct UpdateTotp {
+    pub id: i64,
     pub issuer: Option<String>,
     pub username: Option<String>,
 }
@@ -116,16 +102,12 @@ impl IntoActiveModel<ActiveModel> for UpdateTotp {
     }
 }
 
-impl From<UpdateRequest> for UpdateTotp {
-    fn from(params: UpdateRequest) -> Self {
+impl From<&UpdateRequest> for UpdateTotp {
+    fn from(request: &UpdateRequest) -> Self {
         Self {
-            username: params.username,
-            issuer: params.issuer,
+            id: request.id.unwrap(),
+            username: request.username.clone(),
+            issuer: request.issuer.clone(),
         }
     }
-}
-
-#[derive(Deserialize, Debug)]
-pub struct DeleteRequest {
-    pub id: i64,
 }

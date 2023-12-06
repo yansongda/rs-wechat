@@ -12,14 +12,14 @@ pub async fn find(short: &str) -> Result<Shortlink> {
         .map_err(|e| {
             println!("查询 短连接 失败: {:?}", e);
 
-            Error::Database
+            Error::Database(None)
         })?;
 
     if let Some(result) = result {
         return Ok(result);
     }
 
-    Err(Error::ShortlinkNotFound)
+    Err(Error::ShortlinkNotFound(None))
 }
 
 pub async fn insert(link: CreateShortlink) -> Result<Shortlink> {
@@ -30,7 +30,7 @@ pub async fn insert(link: CreateShortlink) -> Result<Shortlink> {
         .map_err(|e| {
             println!("插入 短连接 失败: {:?}", e);
 
-            Error::DatabaseInsert
+            Error::DatabaseInsert(None)
         })?;
 
     Ok(result)
@@ -49,6 +49,6 @@ pub async fn update_count(link: Shortlink) {
         .map_err(|e| {
             println!("更新 短连接 访问次数 失败: {:?}", e);
 
-            Error::DatabaseUpdate
+            Error::DatabaseUpdate(None)
         });
 }

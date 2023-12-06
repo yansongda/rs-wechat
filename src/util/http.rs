@@ -24,7 +24,7 @@ pub async fn request(request: Request) -> Result<HttpResponse> {
     let response = client.execute(request).await.map_err(|e| {
         println!("请求失败: {:?}", e);
 
-        Error::Http
+        Error::Http(None)
     })?;
 
     let status = response.status().as_u16();
@@ -33,7 +33,10 @@ pub async fn request(request: Request) -> Result<HttpResponse> {
         .iter()
         .map(|(k, v)| (k.to_string(), v.to_str().unwrap().to_string()))
         .collect::<HashMap<String, String>>();
-    let body = response.text().await.map_err(|_| Error::HttpResponse)?;
+    let body = response
+        .text()
+        .await
+        .map_err(|_| Error::HttpResponse(None))?;
 
     println!("请求结果: {:?}", body);
 

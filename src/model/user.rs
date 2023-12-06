@@ -3,6 +3,8 @@ use sea_orm::entity::prelude::*;
 use sea_orm::{prelude::async_trait::async_trait, ActiveValue};
 use serde::{Deserialize, Serialize};
 
+use crate::request::user::{LoginRequest, UpdateRequest};
+
 #[derive(Debug, Clone, Serialize, Eq, PartialEq, Deserialize, DeriveEntityModel)]
 #[sea_orm(table_name = "user")]
 pub struct Model {
@@ -77,7 +79,7 @@ impl From<CurrentUser> for Model {
     }
 }
 
-#[derive(Clone, Debug)]
+#[derive(Debug, Clone)]
 pub struct CurrentUser {
     pub id: i64,
     pub open_id: String,
@@ -102,12 +104,19 @@ impl From<Model> for CurrentUser {
     }
 }
 
-#[derive(Deserialize)]
-pub struct LoginRequest {
+pub struct LoginParams {
     pub code: String,
 }
 
-#[derive(Serialize)]
+impl From<&LoginRequest> for LoginParams {
+    fn from(value: &LoginRequest) -> Self {
+        Self {
+            code: value.code.clone().unwrap(),
+        }
+    }
+}
+
+#[derive(Debug, Serialize)]
 pub struct LoginResponse {
     pub open_id: String,
 }
@@ -120,12 +129,12 @@ impl From<Model> for LoginResponse {
     }
 }
 
-#[derive(DeriveIntoActiveModel)]
+#[derive(Debug, DeriveIntoActiveModel)]
 pub struct CreateUser {
     pub open_id: String,
 }
 
-#[derive(Serialize)]
+#[derive(Debug, Serialize)]
 pub struct DetailResponse {
     pub id: i64,
     pub open_id: String,
@@ -154,22 +163,31 @@ impl From<CurrentUser> for DetailResponse {
     }
 }
 
-#[derive(Deserialize)]
-pub struct UpdateRequest {
+pub struct UpdateParams {
     pub avatar: Option<String>,
     pub nickname: Option<String>,
     pub slogan: Option<String>,
 }
 
-#[derive(DeriveIntoActiveModel)]
+impl From<&UpdateRequest> for UpdateParams {
+    fn from(value: &UpdateRequest) -> Self {
+        Self {
+            avatar: value.avatar.clone(),
+            nickname: value.nickname.clone(),
+            slogan: value.slogan.clone(),
+        }
+    }
+}
+
+#[derive(Debug, DeriveIntoActiveModel)]
 pub struct UpdateUser {
     pub avatar: Option<String>,
     pub nickname: Option<String>,
     pub slogan: Option<String>,
 }
 
-impl From<UpdateRequest> for UpdateUser {
-    fn from(value: UpdateRequest) -> Self {
+impl From<UpdateParams> for UpdateUser {
+    fn from(value: UpdateParams) -> Self {
         Self {
             avatar: value.avatar,
             nickname: value.nickname,

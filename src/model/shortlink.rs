@@ -53,11 +53,6 @@ impl ActiveModelBehavior for ActiveModel {
     }
 }
 
-#[derive(Debug, Deserialize)]
-pub struct CreateRequest {
-    pub link: String,
-}
-
 #[derive(Debug, Serialize)]
 pub struct CreateResponse {
     pub link: String,
@@ -81,11 +76,6 @@ impl From<Model> for CreateResponse {
 pub struct CreateShortlink {
     pub user_id: i64,
     pub link: String,
-    pub short: String,
-}
-
-#[derive(Debug, Deserialize)]
-pub struct DetailRequest {
     pub short: String,
 }
 

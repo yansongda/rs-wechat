@@ -40,7 +40,7 @@ pub fn api_v1() -> Router {
             "/shortlink",
             Router::new()
                 .route("/create", post(v1::shortlink::create))
-                .route("/detail", get(v1::shortlink::detail)),
+                .route("/detail", post(v1::shortlink::detail)),
         )
         .layer(ServiceBuilder::new().layer(middleware::from_fn(authorization)));
 

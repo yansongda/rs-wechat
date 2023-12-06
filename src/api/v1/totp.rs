@@ -1,11 +1,12 @@
-use axum::{Extension, Json};
+use axum::Extension;
 
+use crate::api::extract::Json;
 use crate::api::response::Resp;
 use crate::model::result::Response;
-use crate::model::totp::{
-    CreateRequest, DeleteRequest, DetailRequest, DetailResponse, UpdateRequest,
-};
+use crate::model::totp::DetailResponse;
 use crate::model::user::CurrentUser;
+use crate::request::totp::{CreateRequest, DeleteRequest, DetailRequest, UpdateRequest};
+use crate::request::Validator;
 use crate::service;
 
 pub async fn all(Extension(current_user): Extension<CurrentUser>) -> Resp<Vec<DetailResponse>> {
@@ -16,26 +17,32 @@ pub async fn all(Extension(current_user): Extension<CurrentUser>) -> Resp<Vec<De
 
 pub async fn detail(
     Extension(current_user): Extension<CurrentUser>,
-    Json(params): Json<DetailRequest>,
+    Json(request): Json<DetailRequest>,
 ) -> Resp<DetailResponse> {
+    let id = request.validate()?;
+
     Ok(Response::success(
-        service::totp::detail(current_user, params.id).await?,
+        service::totp::detail(current_user, id).await?,
     ))
 }
 
 pub async fn create(
     Extension(current_user): Extension<CurrentUser>,
-    Json(params): Json<CreateRequest>,
+    Json(request): Json<CreateRequest>,
 ) -> Resp<()> {
-    service::totp::create(current_user, params.uri).await?;
+    let uri = request.validate()?;
+
+    service::totp::create(current_user, uri).await?;
 
     Ok(Response::success(()))
 }
 
 pub async fn update(
     Extension(current_user): Extension<CurrentUser>,
-    Json(params): Json<UpdateRequest>,
+    Json(request): Json<UpdateRequest>,
 ) -> Resp<()> {
+    let params = request.validate()?;
+
     service::totp::update(current_user, params).await?;
 
     Ok(Response::success(()))
@@ -43,9 +50,11 @@ pub async fn update(
 
 pub async fn delete(
     Extension(current_user): Extension<CurrentUser>,
-    Json(params): Json<DeleteRequest>,
+    Json(request): Json<DeleteRequest>,
 ) -> Resp<()> {
-    service::totp::delete(current_user, params.id).await?;
+    let id = request.validate()?;
+
+    service::totp::delete(current_user, id).await?;
 
     Ok(Response::success(()))
 }
