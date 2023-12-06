@@ -1,6 +1,6 @@
+pub mod shortlink;
 pub mod totp;
 pub mod user;
-pub mod shortlink;
 
 use crate::model::result::Result;
 

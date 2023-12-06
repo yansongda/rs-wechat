@@ -17,7 +17,8 @@ impl Validator for CreateRequest {
             return Err(Error::Params(Some("URL 链接不能为空")));
         }
 
-        Url::parse(self.link.clone().unwrap().as_str()).map_err(|_| Error::Params(Some("URL 链接格式不正确")))?;
+        Url::parse(self.link.clone().unwrap().as_str())
+            .map_err(|_| Error::Params(Some("URL 链接格式不正确")))?;
 
         Ok(self.link.clone().unwrap())
     }
