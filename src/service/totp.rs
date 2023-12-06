@@ -1,7 +1,7 @@
 use totp_rs::{Algorithm, Secret, TOTP};
 
 use crate::model::result::{Error, Result};
-use crate::model::totp::{CreateTotp, DetailResponse, Model as Totp, UpdateRequest};
+use crate::model::totp::{CreateTotp, DetailResponse, Model as Totp, UpdateTotp};
 use crate::model::user::{CurrentUser, Model as User};
 use crate::repository;
 
@@ -39,14 +39,14 @@ pub async fn create(current_user: CurrentUser, uri: String) -> Result<()> {
     Ok(())
 }
 
-pub async fn update(current_user: CurrentUser, params: UpdateRequest) -> Result<()> {
+pub async fn update(current_user: CurrentUser, params: UpdateTotp) -> Result<()> {
     let model = repository::totp::find(params.id).await?;
 
     if current_user.id != model.user_id {
         return Err(Error::TotpNotFound(None));
     }
 
-    repository::totp::update(model, params.into()).await?;
+    repository::totp::update(model, params).await?;
 
     Ok(())
 }

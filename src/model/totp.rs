@@ -3,6 +3,7 @@ use sea_orm::entity::prelude::*;
 use sea_orm::{prelude::async_trait::async_trait, ActiveValue, IntoActiveModel};
 use serde::{Deserialize, Serialize};
 
+use crate::request::totp::UpdateRequest;
 use crate::service::totp;
 
 #[derive(Debug, Clone, Eq, PartialEq, Serialize, Deserialize, DeriveEntityModel)]
@@ -53,11 +54,6 @@ impl ActiveModelBehavior for ActiveModel {
     }
 }
 
-#[derive(Debug, Deserialize)]
-pub struct DetailRequest {
-    pub id: i64,
-}
-
 #[derive(Debug, Serialize)]
 pub struct DetailResponse {
     pub id: i64,
@@ -77,11 +73,6 @@ impl From<Model> for DetailResponse {
     }
 }
 
-#[derive(Debug, Deserialize)]
-pub struct CreateRequest {
-    pub uri: String,
-}
-
 #[derive(Debug, DeriveIntoActiveModel)]
 pub struct CreateTotp {
     pub user_id: i64,
@@ -90,15 +81,9 @@ pub struct CreateTotp {
     pub secret: String,
 }
 
-#[derive(Debug, Deserialize)]
-pub struct UpdateRequest {
-    pub id: i64,
-    pub issuer: Option<String>,
-    pub username: Option<String>,
-}
-
 #[derive(Debug)]
 pub struct UpdateTotp {
+    pub id: i64,
     pub issuer: Option<String>,
     pub username: Option<String>,
 }
@@ -117,16 +102,12 @@ impl IntoActiveModel<ActiveModel> for UpdateTotp {
     }
 }
 
-impl From<UpdateRequest> for UpdateTotp {
-    fn from(params: UpdateRequest) -> Self {
+impl From<&UpdateRequest> for UpdateTotp {
+    fn from(request: &UpdateRequest) -> Self {
         Self {
-            username: params.username,
-            issuer: params.issuer,
+            id: request.id.unwrap(),
+            username: request.username.clone(),
+            issuer: request.issuer.clone(),
         }
     }
-}
-
-#[derive(Debug, Deserialize)]
-pub struct DeleteRequest {
-    pub id: i64,
 }
