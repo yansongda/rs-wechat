@@ -41,6 +41,10 @@ impl App {
         &self.router
     }
 
+    fn logger() {
+
+    }
+
     fn listen() -> SocketAddr {
         let listen = Config::get::<String>("bin.api.listen");
         let port = Config::get::<u16>("bin.api.port");
