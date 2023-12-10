@@ -33,12 +33,10 @@ impl App {
     pub async fn init() -> Self {
         Config::init();
 
-        let _logger = App::logger();
-
         Pool::init().await;
 
         App {
-            _logger,
+            _logger: App::logger(),
             listen: App::listen(),
             router: App::router(),
         }
@@ -53,24 +51,26 @@ impl App {
     }
 
     fn logger() -> WorkerGuard {
-        let mut level = "info";
-
-        if Config::get::<bool>("bin.api.debug") {
-            level = "debug";
-        }
-
         let (non_blocking, guard) = NonBlockingBuilder::default().finish(std::io::stdout());
 
         tracing_subscriber::registry()
             .with(
                 filter::Targets::new()
                     .with_target("sea_orm", Level::DEBUG)
-                    .with_default(LevelFilter::from_str(level).unwrap()),
+                    .with_default(
+                        LevelFilter::from_str(if Config::get::<bool>("bin.api.debug") {
+                            "debug"
+                        } else {
+                            "info"
+                        })
+                        .unwrap(),
+                    ),
             )
             .with(
                 tracing_subscriber::fmt::layer()
                     .with_writer(non_blocking)
-                    .with_timer(ChronoLocal::new("%Y-%m-%d %H:%M:%S%.6f".to_string())),
+                    .with_timer(ChronoLocal::new("%Y-%m-%d %H:%M:%S%.6f".to_string()))
+                    .json(),
             )
             .init();
 
