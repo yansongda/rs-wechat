@@ -3,6 +3,7 @@ use std::sync::OnceLock;
 use std::time::Duration;
 
 use reqwest::{Client, Request};
+use tracing::{info, warn};
 
 use crate::model::http::HttpResponse;
 use crate::model::result::{Error, Result};
@@ -19,10 +20,10 @@ pub async fn request(request: Request) -> Result<HttpResponse> {
             .unwrap()
     });
 
-    println!("请求参数: {:?}", request);
+    info!("请求参数: {:?}", request);
 
     let response = client.execute(request).await.map_err(|e| {
-        println!("请求失败: {:?}", e);
+        warn!("请求失败: {:?}", e);
 
         Error::Http(None)
     })?;
@@ -38,7 +39,7 @@ pub async fn request(request: Request) -> Result<HttpResponse> {
         .await
         .map_err(|_| Error::HttpResponse(None))?;
 
-    println!("请求结果: {:?}", body);
+    info!("请求结果: {:?}", body);
 
     Ok(HttpResponse {
         status,

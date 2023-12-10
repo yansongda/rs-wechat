@@ -5,6 +5,13 @@ use axum::Router;
 use tower::ServiceBuilder;
 use tower_http::cors::CorsLayer;
 use tower_http::request_id::{MakeRequestUuid, PropagateRequestIdLayer, SetRequestIdLayer};
+use tracing::metadata::LevelFilter;
+use tracing::Level;
+use tracing_appender::non_blocking::{NonBlockingBuilder, WorkerGuard};
+use tracing_subscriber::filter;
+use tracing_subscriber::fmt::time::ChronoLocal;
+use tracing_subscriber::layer::SubscriberExt;
+use tracing_subscriber::util::SubscriberInitExt;
 
 use crate::config::Config;
 use crate::model::result::Response;
@@ -17,6 +24,7 @@ mod routes;
 mod v1;
 
 pub struct App {
+    _logger: WorkerGuard,
     listen: SocketAddr,
     router: Router,
 }
@@ -25,9 +33,12 @@ impl App {
     pub async fn init() -> Self {
         Config::init();
 
+        let _logger = App::logger();
+
         Pool::init().await;
 
         App {
+            _logger,
             listen: App::listen(),
             router: App::router(),
         }
@@ -41,8 +52,29 @@ impl App {
         &self.router
     }
 
-    fn logger() {
+    fn logger() -> WorkerGuard {
+        let mut level = "info";
 
+        if Config::get::<bool>("bin.api.debug") {
+            level = "debug";
+        }
+
+        let (non_blocking, guard) = NonBlockingBuilder::default().finish(std::io::stdout());
+
+        tracing_subscriber::registry()
+            .with(
+                filter::Targets::new()
+                    .with_target("sea_orm", Level::DEBUG)
+                    .with_default(LevelFilter::from_str(level).unwrap()),
+            )
+            .with(
+                tracing_subscriber::fmt::layer()
+                    .with_writer(non_blocking)
+                    .with_timer(ChronoLocal::new("%Y-%m-%d %H:%M:%S%.6f".to_string())),
+            )
+            .init();
+
+        guard
     }
 
     fn listen() -> SocketAddr {

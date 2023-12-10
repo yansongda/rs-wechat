@@ -1,4 +1,5 @@
 use totp_rs::{Algorithm, Secret, TOTP};
+use tracing::error;
 
 use crate::model::result::{Error, Result};
 use crate::model::totp::{CreateTotp, DetailResponse, Model as Totp, UpdateTotp};
@@ -23,7 +24,7 @@ pub async fn detail(current_user: CurrentUser, id: i64) -> Result<DetailResponse
 
 pub async fn create(current_user: CurrentUser, uri: String) -> Result<()> {
     let t = TOTP::from_url_unchecked(uri.as_str()).map_err(|e| {
-        println!("totp parse error: {}", e);
+        error!("TOTP 链接解析失败: {}", e);
 
         Error::TotpParse(None)
     })?;

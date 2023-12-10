@@ -1,4 +1,5 @@
 use sea_orm::{ActiveModelTrait, ColumnTrait, EntityTrait, IntoActiveModel, QueryFilter};
+use tracing::error;
 
 use crate::model::result::{Error, Result};
 use crate::model::shortlink::{Column, CreateShortlink, Entity, Model as Shortlink};
@@ -10,7 +11,7 @@ pub async fn find(short: &str) -> Result<Shortlink> {
         .one(Pool::get("default"))
         .await
         .map_err(|e| {
-            println!("查询 短连接 失败: {:?}", e);
+            error!("查询 短连接 失败: {:?}", e);
 
             Error::Database(None)
         })?;
@@ -28,7 +29,7 @@ pub async fn insert(link: CreateShortlink) -> Result<Shortlink> {
         .insert(Pool::get("default"))
         .await
         .map_err(|e| {
-            println!("插入 短连接 失败: {:?}", e);
+            error!("插入 短连接 失败: {:?}", e);
 
             Error::DatabaseInsert(None)
         })?;
@@ -47,7 +48,7 @@ pub async fn update_count(link: Shortlink) {
         .update(Pool::get("default"))
         .await
         .map_err(|e| {
-            println!("更新 短连接 访问次数 失败: {:?}", e);
+            error!("更新 短连接 访问次数 失败: {:?}", e);
 
             Error::DatabaseUpdate(None)
         });

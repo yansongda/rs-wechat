@@ -1,5 +1,6 @@
 use sea_orm::ActiveValue::Set;
 use sea_orm::{ActiveModelTrait, EntityTrait, IntoActiveModel, ModelTrait};
+use tracing::error;
 
 use crate::model::result::{Error, Result};
 use crate::model::totp::{CreateTotp, Entity, Model as Totp, UpdateTotp};
@@ -11,7 +12,7 @@ pub async fn all(user: User) -> Result<Vec<Totp>> {
         .all(Pool::get("default"))
         .await
         .map_err(|e| {
-            println!("查询用户所有的 Totp 失败: {:?}", e);
+            error!("查询用户所有的 Totp 失败: {:?}", e);
 
             Error::Database(None)
         })
@@ -22,7 +23,7 @@ pub async fn find(id: i64) -> Result<Totp> {
         .one(Pool::get("default"))
         .await
         .map_err(|e| {
-            println!("查询 Totp 失败: {:?}", e);
+            error!("查询 Totp 失败: {:?}", e);
 
             Error::Database(None)
         })?;
@@ -40,7 +41,7 @@ pub async fn insert(totp: CreateTotp) -> Result<Totp> {
         .insert(Pool::get("default"))
         .await
         .map_err(|e| {
-            println!("插入 Totp 失败: {:?}", e);
+            error!("插入 Totp 失败: {:?}", e);
 
             Error::DatabaseInsert(None)
         })?;
@@ -57,7 +58,7 @@ pub async fn update(model: Totp, updated: UpdateTotp) -> Result<()> {
         .update(Pool::get("default"))
         .await
         .map_err(|e| {
-            println!("更新 Totp 失败: {:?}", e);
+            error!("更新 Totp 失败: {:?}", e);
 
             Error::DatabaseInsert(None)
         })?;
@@ -67,7 +68,7 @@ pub async fn update(model: Totp, updated: UpdateTotp) -> Result<()> {
 
 pub async fn delete(model: Totp) -> Result<()> {
     model.delete(Pool::get("default")).await.map_err(|e| {
-        println!("删除 Totp 失败: {:?}", e);
+        error!("删除 Totp 失败: {:?}", e);
 
         Error::DatabaseDelete(None)
     })?;

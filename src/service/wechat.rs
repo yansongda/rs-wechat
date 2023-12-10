@@ -1,4 +1,5 @@
 use reqwest::{Method, Request, Url};
+use tracing::error;
 
 use crate::config::Config;
 use crate::model::result::{Error, Result};
@@ -30,7 +31,7 @@ pub async fn login(code: &str) -> Result<LoginResponse> {
         .map_err(|_| Error::HttpWechatResponseParse(None))?;
 
     if result.errcode.is_some() {
-        println!("微信 API 结果出错: {:?}", result);
+        error!("微信 API 结果出错: {:?}", result);
 
         return Err(Error::HttpWechatResponse(None));
     }

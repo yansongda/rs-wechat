@@ -2,6 +2,7 @@ use axum::body::Body;
 use axum::extract::rejection::JsonRejection;
 use axum::response::IntoResponse;
 use serde::Serialize;
+use tracing::info;
 
 use crate::model::result::{Error, Response, Result};
 
@@ -39,7 +40,7 @@ impl IntoResponse for Error {
 
 impl From<JsonRejection> for Error {
     fn from(r: JsonRejection) -> Self {
-        println!("{:?}", r);
+        info!("解析 Json 请求失败: {:?}", r);
 
         Error::Params(None)
     }

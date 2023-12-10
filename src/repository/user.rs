@@ -1,5 +1,6 @@
 use sea_orm::ActiveValue::Set;
 use sea_orm::{ActiveModelTrait, ColumnTrait, EntityTrait, IntoActiveModel, QueryFilter};
+use tracing::error;
 
 use crate::model::result::{Error, Result};
 use crate::model::user::{Column, CreateUser, Entity, Model as User, UpdateUser};
@@ -11,7 +12,7 @@ pub async fn find(open_id: &str) -> Result<User> {
         .one(Pool::get("default"))
         .await
         .map_err(|e| {
-            println!("查询用户失败: {:?}", e);
+            error!("查询用户失败: {:?}", e);
 
             Error::Database(None)
         })?;
@@ -28,7 +29,7 @@ pub async fn insert(user: CreateUser) -> Result<User> {
         .insert(Pool::get("default"))
         .await
         .map_err(|e| {
-            println!("插入用户失败: {:?}", e);
+            error!("插入用户失败: {:?}", e);
 
             Error::DatabaseInsert(None)
         })
@@ -43,7 +44,7 @@ pub async fn update(model: User, updated: UpdateUser) -> Result<User> {
         .update(Pool::get("default"))
         .await
         .map_err(|e| {
-            println!("更新用户失败: {:?}", e);
+            error!("更新用户失败: {:?}", e);
 
             Error::DatabaseUpdate(None)
         })

@@ -31,6 +31,7 @@ impl Pool {
         ));
 
         options
+            .sqlx_logging(false)
             .connect_timeout(Duration::from_secs(Config::get::<u64>(
                 format!("databases.{}.connection_timeout", pool).as_str(),
             )))
