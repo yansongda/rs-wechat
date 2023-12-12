@@ -1,14 +1,19 @@
+use std::fmt::Debug;
 use std::net::{IpAddr, SocketAddr};
 use std::str::FromStr;
+use std::time::Duration;
 
+use axum::http::Request;
 use axum::routing::get;
-use axum::Router;
+use axum::{http, Router};
 use tower::ServiceBuilder;
 use tower_http::cors::CorsLayer;
-use tower_http::request_id::{MakeRequestUuid, PropagateRequestIdLayer, SetRequestIdLayer};
-use tower_http::trace::{DefaultMakeSpan, DefaultOnRequest, DefaultOnResponse, TraceLayer};
+use tower_http::request_id::{
+    MakeRequestUuid, PropagateRequestIdLayer, RequestId, SetRequestIdLayer,
+};
+use tower_http::trace::{MakeSpan, OnRequest, OnResponse, TraceLayer};
 use tracing::metadata::LevelFilter;
-use tracing::Level;
+use tracing::{info, info_span, Level, Span};
 use tracing_appender::non_blocking::{NonBlockingBuilder, WorkerGuard};
 use tracing_subscriber::filter;
 use tracing_subscriber::fmt::time::ChronoLocal;
@@ -97,16 +102,51 @@ impl App {
                     .layer(SetRequestIdLayer::x_request_id(MakeRequestUuid))
                     .layer(
                         TraceLayer::new_for_http()
-                            .make_span_with(DefaultMakeSpan::new().level(Level::INFO))
-                            .on_request(DefaultOnRequest::new().level(Level::INFO))
-                            .on_response(
-                                DefaultOnResponse::new()
-                                    .level(Level::INFO)
-                                    .include_headers(false),
-                            ),
+                            .make_span_with(RequestIdMakeSpan)
+                            .on_request(OnRequestLayer)
+                            .on_response(OnResponseLayer),
                     )
                     .layer(PropagateRequestIdLayer::x_request_id())
                     .layer(CorsLayer::permissive()),
             )
+    }
+}
+
+#[derive(Debug, Clone)]
+struct RequestIdMakeSpan;
+
+impl<B> MakeSpan<B> for RequestIdMakeSpan {
+    fn make_span(&mut self, request: &Request<B>) -> Span {
+        let request_id = request
+            .extensions()
+            .get::<RequestId>()
+            .map(|request_id| request_id.header_value().to_str().unwrap())
+            .unwrap_or_else(|| "unknown");
+
+        info_span!("", request_id)
+    }
+}
+
+#[derive(Debug, Clone)]
+struct OnRequestLayer;
+
+impl<B: Debug> OnRequest<B> for OnRequestLayer {
+    fn on_request(&mut self, request: &Request<B>, _: &Span) {
+        info!(
+            method = %request.method(),
+            uri = %request.uri(),
+            headers = ?request.headers(),
+            inputs = ?request.body(),
+            "--> 接收到请求",
+        );
+    }
+}
+
+#[derive(Debug, Clone)]
+struct OnResponseLayer;
+
+impl<B: Debug> OnResponse<B> for OnResponseLayer {
+    fn on_response(self, _: &http::Response<B>, latency: Duration, _: &Span) {
+        info!(?latency, "<-- 请求处理完成");
     }
 }
