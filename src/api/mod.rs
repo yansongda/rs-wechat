@@ -11,9 +11,9 @@ use tower_http::cors::CorsLayer;
 use tower_http::request_id::{
     MakeRequestUuid, PropagateRequestIdLayer, RequestId, SetRequestIdLayer,
 };
-use tower_http::trace::{MakeSpan, OnRequest, OnResponse, TraceLayer};
+use tower_http::trace::{MakeSpan, OnFailure, OnRequest, OnResponse, TraceLayer};
 use tracing::metadata::LevelFilter;
-use tracing::{info, info_span, Level, Span};
+use tracing::{error, info, info_span, Level, Span};
 use tracing_appender::non_blocking::{NonBlockingBuilder, WorkerGuard};
 use tracing_subscriber::filter;
 use tracing_subscriber::fmt::time::ChronoLocal;
@@ -75,8 +75,11 @@ impl App {
             )
             .with(
                 tracing_subscriber::fmt::layer()
+                    // .event_format()
                     .with_writer(non_blocking)
-                    .with_timer(ChronoLocal::new("%Y-%m-%d %H:%M:%S%.6f".to_string())),
+                    .with_timer(ChronoLocal::new("%Y-%m-%d %H:%M:%S%.6f".to_string()))
+                    .with_target(false)
+                    .compact(),
             )
             .init();
 
@@ -103,8 +106,9 @@ impl App {
                     .layer(
                         TraceLayer::new_for_http()
                             .make_span_with(RequestIdMakeSpan)
-                            .on_request(OnRequestLayer)
-                            .on_response(OnResponseLayer),
+                            .on_request(OnRequestBehaviour)
+                            .on_response(OnResponseBehaviour)
+                            .on_failure(OnFailureBehaviour),
                     )
                     .layer(PropagateRequestIdLayer::x_request_id())
                     .layer(CorsLayer::permissive()),
@@ -128,9 +132,9 @@ impl<B> MakeSpan<B> for RequestIdMakeSpan {
 }
 
 #[derive(Debug, Clone)]
-struct OnRequestLayer;
+struct OnRequestBehaviour;
 
-impl<B: Debug> OnRequest<B> for OnRequestLayer {
+impl<B: Debug> OnRequest<B> for OnRequestBehaviour {
     fn on_request(&mut self, request: &Request<B>, _: &Span) {
         info!(
             method = %request.method(),
@@ -143,10 +147,22 @@ impl<B: Debug> OnRequest<B> for OnRequestLayer {
 }
 
 #[derive(Debug, Clone)]
-struct OnResponseLayer;
+struct OnResponseBehaviour;
 
-impl<B: Debug> OnResponse<B> for OnResponseLayer {
+impl<B: Debug> OnResponse<B> for OnResponseBehaviour {
     fn on_response(self, _: &http::Response<B>, latency: Duration, _: &Span) {
         info!(?latency, "<-- 请求处理完成");
+    }
+}
+
+#[derive(Debug, Clone)]
+struct OnFailureBehaviour;
+
+impl<FailureClass> OnFailure<FailureClass> for OnFailureBehaviour
+where
+    FailureClass: Debug,
+{
+    fn on_failure(&mut self, failure_classification: FailureClass, latency: Duration, _: &Span) {
+        error!(?failure_classification, ?latency, "<-- 请求处理失败",)
     }
 }
