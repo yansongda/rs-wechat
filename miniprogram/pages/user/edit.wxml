@@ -14,7 +14,7 @@
                 <view class="weui-label">昵称</view>
               </view>
               <view class="weui-cell__bd">
-                  <input id="nickname" type="nickname" class="weui-input" placeholder="{{nickname}}" name="nickname" value="{{nickname}}" />
+                <input id="nickname" type="nickname" class="weui-input" placeholder="{{nickname}}" name="nickname" value="{{nickname}}" />
               </view>
             </view>
             <view for="slogan" class="weui-cell weui-cell_active">
@@ -22,7 +22,7 @@
                 <view class="weui-label">Slogan</view>
               </view>
               <view class="weui-cell__bd">
-                  <input id="slogan" class="weui-input" placeholder="请填写 Slogan" name="slogan" value="{{slogan}}" />
+                <input id="slogan" class="weui-input" placeholder="请填写 Slogan" name="slogan" value="{{slogan}}" />
               </view>
             </view>
           </view>
