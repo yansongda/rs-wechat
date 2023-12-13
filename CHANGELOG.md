@@ -1,3 +1,9 @@
+## v1.1.7 - TBD
+
+### fixed
+
+- fix(frontend): 锁屏前在 TOTP 页面锁屏后小程序 js 报异常(#35)
+
 ## v1.1.6
 
 ### optimized

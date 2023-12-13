@@ -76,20 +76,18 @@ App<GlobalData>({
       logger.error('小程序更新下载异常')
     })
   },
-  onError(e: string) {
+  async onError(e: string) {
     logger.error('小程序异常', e)
 
-    wx.showToast({ title: '小程序异常', icon: 'error' })
+    await wx.showToast({ title: '小程序异常', icon: 'error' })
   },
-  onUnhandledRejection(e: AppOnUnhandledRejection) {
+  async onUnhandledRejection(e: AppOnUnhandledRejection) {
     if (e.reason instanceof EE) {
-      wx.showToast({ title: e.reason.message || MESSAGE[e.reason.code], icon: 'error' })
+      await wx.showToast({ title: e.reason.message || MESSAGE[e.reason.code], icon: 'error' })
 
       return
     }
 
     logger.error('未知错误', e)
-
-    wx.showToast({ title: '未知错误', icon: 'error' })
   }
 })

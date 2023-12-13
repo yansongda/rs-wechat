@@ -1,6 +1,7 @@
 import utils from '@utils/user'
+import type { GlobalData } from 'miniprogram/types/app'
 
-const app = getApp<IGlobalData>()
+const app = getApp<GlobalData>()
 
 Page({
   data: {
