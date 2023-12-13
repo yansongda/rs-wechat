@@ -2,7 +2,7 @@
 
 ### optimized
 
-- optimized(backend): 优化提示信息(#31)
+- optimized(backend): 优化提示信息(#32)
 
 ## v1.1.5
 
