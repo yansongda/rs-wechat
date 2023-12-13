@@ -9,6 +9,7 @@ use crate::request::totp::{CreateRequest, DeleteRequest, DetailRequest, UpdateRe
 use crate::request::Validator;
 use crate::service;
 
+#[tracing::instrument]
 pub async fn all(Extension(current_user): Extension<CurrentUser>) -> Resp<Vec<DetailResponse>> {
     Ok(Response::success(
         service::totp::all(current_user.into()).await?,

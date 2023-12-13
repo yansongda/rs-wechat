@@ -3,21 +3,22 @@ use std::net::{IpAddr, SocketAddr};
 use std::str::FromStr;
 use std::time::Duration;
 
+use axum::{http, Router};
 use axum::http::Request;
 use axum::routing::get;
-use axum::{http, Router};
 use tower::ServiceBuilder;
 use tower_http::cors::CorsLayer;
 use tower_http::request_id::{
     MakeRequestUuid, PropagateRequestIdLayer, RequestId, SetRequestIdLayer,
 };
 use tower_http::trace::{MakeSpan, OnFailure, OnRequest, OnResponse, TraceLayer};
+use tracing::{error, Event, Id, info, info_span, Level, Span, Subscriber};
 use tracing::metadata::LevelFilter;
-use tracing::{error, info, info_span, Level, Span};
 use tracing_appender::non_blocking::{NonBlockingBuilder, WorkerGuard};
 use tracing_subscriber::filter;
-use tracing_subscriber::fmt::time::ChronoLocal;
+use tracing_subscriber::fmt::{FmtContext, format, FormatEvent, FormatFields, FormattedFields};
 use tracing_subscriber::layer::SubscriberExt;
+use tracing_subscriber::registry::{LookupSpan, Scope};
 use tracing_subscriber::util::SubscriberInitExt;
 
 use crate::config::Config;
@@ -75,11 +76,8 @@ impl App {
             )
             .with(
                 tracing_subscriber::fmt::layer()
-                    // .event_format()
-                    .with_writer(non_blocking)
-                    .with_timer(ChronoLocal::new("%Y-%m-%d %H:%M:%S%.6f".to_string()))
-                    .with_target(false)
-                    .compact(),
+                    .event_format(TracingFormatter)
+                    .with_writer(non_blocking),
             )
             .init();
 
@@ -164,5 +162,43 @@ where
 {
     fn on_failure(&mut self, failure_classification: FailureClass, latency: Duration, _: &Span) {
         error!(?failure_classification, ?latency, "<-- 请求处理失败",)
+    }
+}
+
+#[derive(Debug, Clone)]
+struct TracingFormatter;
+
+impl<S, N> FormatEvent<S, N> for TracingFormatter
+where
+    S: Subscriber + for<'a> LookupSpan<'a>,
+    N: for<'a> FormatFields<'a> + 'static,
+{
+    fn format_event(
+        &self,
+        ctx: &FmtContext<'_, S, N>,
+        mut writer: format::Writer<'_>,
+        event: &Event<'_>,
+    ) -> std::fmt::Result {
+        write!(&mut writer, "{}|{}|", chrono::Local::now().format("%Y-%m-%d %H:%M:%S%.6f"), event.metadata().level())?;
+
+        // ctx.span(&Id::from_u64(1)).map(
+        //     |span| println!("{:?}", span.fields().to_string())
+        // );
+
+        for span in ctx
+            .event_scope()
+            .into_iter()
+            .flat_map(Scope::from_root)
+        {
+            if let Some(fields) = span.extensions().get::<FormattedFields<N>>() {
+                if !fields.is_empty() {
+                    write!(writer, "{}|", &fields.fields[12..])?;
+                }
+            }
+        }
+
+        ctx.field_format().format_fields(writer.by_ref(), event)?;
+
+        writeln!(writer)
     }
 }
