@@ -70,8 +70,8 @@ Page({
       .catch((e) => {
         this.setData({ toptipError: e.message })
       })
-      .finally(async () => {
-        await wx.hideLoading()
+      .finally(() => {
+        wx.hideLoading().catch()
       })
   },
   async create() {
