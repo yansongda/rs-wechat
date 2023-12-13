@@ -1,4 +1,5 @@
 use miniprogram::api::App;
+use tracing::info;
 
 #[tokio::main]
 async fn main() {
@@ -7,6 +8,8 @@ async fn main() {
     let listener = tokio::net::TcpListener::bind(app.get_listen())
         .await
         .unwrap();
+
+    info!("Listening on {}", app.get_listen());
 
     axum::serve(listener, app.get_router().clone())
         .await

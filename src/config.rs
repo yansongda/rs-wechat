@@ -13,6 +13,8 @@ impl Config {
             .unwrap()
             .set_default("bin.api.port", 8080)
             .unwrap()
+            .set_default("bin.api.debug", false)
+            .unwrap()
             .set_default("databases.default.url", "sqlite://miniprogram.sqlite3")
             .unwrap()
             .set_default("databases.default.connection_timeout", 1)
