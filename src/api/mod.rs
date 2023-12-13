@@ -3,20 +3,20 @@ use std::net::{IpAddr, SocketAddr};
 use std::str::FromStr;
 use std::time::Duration;
 
-use axum::{http, Router};
 use axum::http::Request;
 use axum::routing::get;
+use axum::{http, Router};
 use tower::ServiceBuilder;
 use tower_http::cors::CorsLayer;
 use tower_http::request_id::{
     MakeRequestUuid, PropagateRequestIdLayer, RequestId, SetRequestIdLayer,
 };
 use tower_http::trace::{MakeSpan, OnFailure, OnRequest, OnResponse, TraceLayer};
-use tracing::{error, Event, Id, info, info_span, Level, Span, Subscriber};
 use tracing::metadata::LevelFilter;
+use tracing::{error, info, info_span, Event, Level, Span, Subscriber};
 use tracing_appender::non_blocking::{NonBlockingBuilder, WorkerGuard};
 use tracing_subscriber::filter;
-use tracing_subscriber::fmt::{FmtContext, format, FormatEvent, FormatFields, FormattedFields};
+use tracing_subscriber::fmt::{format, FmtContext, FormatEvent, FormatFields, FormattedFields};
 use tracing_subscriber::layer::SubscriberExt;
 use tracing_subscriber::registry::{LookupSpan, Scope};
 use tracing_subscriber::util::SubscriberInitExt;
@@ -125,7 +125,7 @@ impl<B> MakeSpan<B> for RequestIdMakeSpan {
             .map(|request_id| request_id.header_value().to_str().unwrap())
             .unwrap_or_else(|| "unknown");
 
-        info_span!("", request_id)
+        info_span!("root", request_id)
     }
 }
 
@@ -179,20 +179,27 @@ where
         mut writer: format::Writer<'_>,
         event: &Event<'_>,
     ) -> std::fmt::Result {
-        write!(&mut writer, "{}|{}|", chrono::Local::now().format("%Y-%m-%d %H:%M:%S%.6f"), event.metadata().level())?;
+        write!(
+            &mut writer,
+            "{}|{}|",
+            chrono::Local::now().format("%Y-%m-%d %H:%M:%S%.6f"),
+            event.metadata().level()
+        )?;
 
-        // ctx.span(&Id::from_u64(1)).map(
-        //     |span| println!("{:?}", span.fields().to_string())
-        // );
-
-        for span in ctx
-            .event_scope()
-            .into_iter()
-            .flat_map(Scope::from_root)
-        {
+        for span in ctx.event_scope().into_iter().flat_map(Scope::from_root) {
             if let Some(fields) = span.extensions().get::<FormattedFields<N>>() {
                 if !fields.is_empty() {
-                    write!(writer, "{}|", &fields.fields[12..])?;
+                    let c = &fields.fields;
+
+                    write!(
+                        writer,
+                        "{}|",
+                        if c.starts_with("request_id") {
+                            &c[12..c.len() - 1]
+                        } else {
+                            c
+                        }
+                    )?;
                 }
             }
         }
