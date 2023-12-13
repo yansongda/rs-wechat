@@ -1,3 +1,9 @@
+## v1.1.6
+
+### optimized
+
+- optimized(backend): 优化提示信息(#32)
+
 ## v1.1.5
 
 ### optimized
@@ -7,6 +13,7 @@
 ### feat
 
 - feat(backend): 参数验证(#28)
+- feat(backend): 支持 tracing(#29)
 
 ## v1.1.4
 
