@@ -13,11 +13,11 @@ impl Validator for LoginRequest {
 
     fn validate(&self) -> crate::model::result::Result<Self::Data> {
         if self.code.is_none() {
-            return Err(Error::Params(Some("登录秘钥不能为空")));
+            return Err(Error::Params(Some("小程序错误：登录秘钥不能为空")));
         }
 
         if self.code.to_owned().unwrap().len() < 8 {
-            return Err(Error::Params(Some("登录秘钥必须大于 8 位")));
+            return Err(Error::Params(Some("小程序错误：登录秘钥必须大于 8 位")));
         }
 
         Ok(Self::Data::from(self))

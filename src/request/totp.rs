@@ -57,7 +57,7 @@ impl Validator for UpdateRequest {
         }
 
         if self.username.is_none() || self.username.clone().unwrap().is_empty() {
-            return Err(Error::Params(Some("username 不能为空")));
+            return Err(Error::Params(Some("账号 不能为空")));
         }
 
         Ok(Self::Data::from(self))
