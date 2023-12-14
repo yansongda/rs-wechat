@@ -3,6 +3,7 @@
 ### fixed
 
 - fix(frontend): 锁屏前在 TOTP 页面锁屏后小程序 js 报异常(#35)
+- fix(frontend): 优化二维码扫描出错时微信js报错(#36)
 
 ## v1.1.6
 
