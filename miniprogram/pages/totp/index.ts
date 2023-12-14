@@ -77,9 +77,9 @@ Page({
   async create() {
     this.data.isScanQrCode = true
 
-    const scan = await wx
-      .scanCode({ scanType: ['qrCode'] })
-      .catch(() => Promise.reject(new WeixinError(CODE.WEIXIN_QR_CODE)))
+    const scan = await wx.scanCode({ scanType: ['qrCode'] }).catch(() => {
+      throw new WeixinError(CODE.WEIXIN_QR_CODE)
+    })
 
     this.data.isScanQrCode = false
 
