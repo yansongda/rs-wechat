@@ -89,5 +89,7 @@ App<GlobalData>({
     }
 
     logger.error('未知错误', e)
+
+    await wx.showToast({ title: '出现未知错误', icon: 'error' })
   }
 })
