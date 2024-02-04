@@ -69,7 +69,7 @@ impl From<Model> for DetailResponse {
         Self {
             id: totp.id,
             issuer: totp.issuer.clone().unwrap_or("未知发行方".to_string()),
-            period: totp.period.clone(),
+            period: totp.period,
             username: totp.username.clone(),
             code: totp::generate_code(totp.clone()),
         }
