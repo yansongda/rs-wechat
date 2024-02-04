@@ -14,6 +14,7 @@ pub struct Model {
     pub user_id: i64,
     pub username: String,
     pub issuer: Option<String>,
+    pub period: u64,
     pub secret: String,
     #[sea_orm(column_type = "DateTime", nullable)]
     pub created_at: Option<NaiveDateTime>,
@@ -58,6 +59,7 @@ impl ActiveModelBehavior for ActiveModel {
 pub struct DetailResponse {
     pub id: i64,
     pub issuer: String,
+    pub period: u64,
     pub username: String,
     pub code: String,
 }
@@ -67,6 +69,7 @@ impl From<Model> for DetailResponse {
         Self {
             id: totp.id,
             issuer: totp.issuer.clone().unwrap_or("未知发行方".to_string()),
+            period: totp.period.clone(),
             username: totp.username.clone(),
             code: totp::generate_code(totp.clone()),
         }
@@ -78,6 +81,7 @@ pub struct CreateTotp {
     pub user_id: i64,
     pub username: String,
     pub issuer: Option<String>,
+    pub period: u64,
     pub secret: String,
 }
 
