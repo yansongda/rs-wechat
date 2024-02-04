@@ -1,3 +1,9 @@
+## v1.1.8 - TBD
+
+### added
+
+- feat(backend): totp 支持独立更新时间(#41)
+
 ## v1.1.7
 
 ### fixed
@@ -17,14 +23,14 @@
 
 - optimized(frontend:submit): 优化提交中的 Promise 逻辑(#26)
 
-### feat
+### added
 
 - feat(backend): 参数验证(#28)
 - feat(backend): 支持 tracing(#29)
 
 ## v1.1.4
 
-### feat
+### added
 
 - feat(frontend:core): 增加小程序升级提示功能(#25)
 
