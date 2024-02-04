@@ -33,7 +33,7 @@ pub async fn create(current_user: CurrentUser, uri: String) -> Result<()> {
         user_id: current_user.id,
         username: t.account_name,
         issuer: t.issuer,
-        period: t.step,
+        period: t.step as i64,
         secret: Secret::Raw(t.secret).to_encoded().to_string(),
     })
     .await?;

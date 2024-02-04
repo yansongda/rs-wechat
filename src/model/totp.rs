@@ -14,7 +14,7 @@ pub struct Model {
     pub user_id: i64,
     pub username: String,
     pub issuer: Option<String>,
-    pub period: u64,
+    pub period: i64,
     pub secret: String,
     #[sea_orm(column_type = "DateTime", nullable)]
     pub created_at: Option<NaiveDateTime>,
@@ -59,7 +59,7 @@ impl ActiveModelBehavior for ActiveModel {
 pub struct DetailResponse {
     pub id: i64,
     pub issuer: String,
-    pub period: u64,
+    pub period: i64,
     pub username: String,
     pub code: String,
 }
@@ -81,7 +81,7 @@ pub struct CreateTotp {
     pub user_id: i64,
     pub username: String,
     pub issuer: Option<String>,
-    pub period: u64,
+    pub period: i64,
     pub secret: String,
 }
 
