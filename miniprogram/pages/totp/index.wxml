@@ -13,7 +13,7 @@
         <view class="item-body-code">{{item.code}}</view>
       </view>
     </mp-slideview>
-    <progress class="item-progress" percent="50" stroke-width="2" ></progress>
+    <progress class="item-progress" percent="{{ item.remainSeconds / item.period * 100 }}" stroke-width="2" ></progress>
   </view>
 </view>
 

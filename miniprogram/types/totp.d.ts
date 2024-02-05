@@ -5,16 +5,9 @@ export interface Item {
   issuer: string
   username: string
   code: string
-}
-
-export interface Interval {
-
-}
-
-export interface IntervalItem {
-  id: number
-  interval: number
-  identity: number
+  period: number
+  remainSeconds?: number
+  intervalIdentity?: number
 }
 
 export interface DetailRequest extends RequestData {

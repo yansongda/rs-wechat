@@ -13,12 +13,9 @@ Page({
     toptipError: '',
     slideViewButtons: [{ text: '备注' }, { type: 'warn', text: '删除' }],
     isScanQrCode: false,
-    interval: {},
     items: [] as Item[],
   },
   async onShow() {
-    // this.timing()
-
     if (this.data.isScanQrCode) {
       this.data.isScanQrCode = false
 
@@ -33,31 +30,6 @@ Page({
   onUnload() {
     this.clearInterval()
   },
-  timing() {
-    // let remainSeconds = 30 - new Date().getSeconds()
-    // if (remainSeconds < 0) {
-    //   remainSeconds += 30
-    // }
-
-    // this.setData({ remainSeconds })
-
-    // this.data.intervalIdentity =
-    //   this.data.intervalIdentity ||
-    //   setInterval(async () => {
-    //     let remainSeconds = this.data.remainSeconds
-
-    //     remainSeconds -= 1
-    //     if (remainSeconds <= 0) {
-    //       remainSeconds = 30
-    //     }
-
-    //     this.setData({ remainSeconds })
-
-    //     if (remainSeconds == 30) {
-    //       await this.all()
-    //     }
-    //   }, 1000)
-  },
   async all() {
     await wx.showLoading({ title: '加载中' })
 
@@ -65,6 +37,7 @@ Page({
       .all()
       .then((response) => {
         this.setData({ items: response })
+        this.timing()
       })
       .catch((e) => {
         this.setData({ toptipError: e.message })
@@ -91,20 +64,6 @@ Page({
         await this.all()
       })
   },
-  async slideviewButtonTap(e: WeuiSlideviewButtonTap<Dataset, unknown>) {
-    const id = Number(e.currentTarget.dataset.id)
-
-    switch (e.detail.index) {
-      case 0:
-        // 备注
-        await this.edit(id)
-        break
-      case 1:
-        // 删除
-        await this.delete(id)
-        break
-    }
-  },
   async edit(id: number) {
     this.clearInterval()
 
@@ -126,10 +85,53 @@ Page({
         await this.all()
       })
   },
-  clearInterval() {
-    // clearInterval(this.data.intervalIdentity)
+  async slideviewButtonTap(e: WeuiSlideviewButtonTap<Dataset, unknown>) {
+    const id = Number(e.currentTarget.dataset.id)
 
-    // this.data.intervalIdentity = 0
+    switch (e.detail.index) {
+      case 0:
+        // 备注
+        await this.edit(id)
+        break
+      case 1:
+        // 删除
+        await this.delete(id)
+        break
+    }
+  },
+  timing() {
+    this.data.items = this.data.items.map(item => {
+      item.intervalIdentity = setInterval(async () => {
+        item.period = item.period ?? 30
+
+        item.remainSeconds = item.period - new Date().getSeconds()
+        if (item.remainSeconds < 0) {
+          item.remainSeconds += item.period
+        }
+
+        item.remainSeconds -= 1
+        if (item.remainSeconds <= 0) {
+          item.remainSeconds = item.period
+        }
+
+        if (item.remainSeconds == item.period) {
+          await this.all()
+        }
+      }, 1000)
+
+      return item
+    });
+  },
+  clearInterval() {
+    this.data.items = this.data.items.map(item => {
+      if (item.intervalIdentity) {
+        clearInterval(item.intervalIdentity)
+      }
+
+      item.intervalIdentity = 0
+
+      return item
+    })
   }
 })
 
