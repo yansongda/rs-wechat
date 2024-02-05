@@ -3,6 +3,7 @@
 ### added
 
 - feat(backend): totp 支持独立更新时间(#41)
+- feat(frontend): totp 支持独立更新时间(#42)
 
 ## v1.1.7
 

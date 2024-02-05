@@ -12,13 +12,12 @@ Page({
   data: {
     toptipError: '',
     slideViewButtons: [{ text: '备注' }, { type: 'warn', text: '删除' }],
-    remainSeconds: 30,
+    isScanQrCode: false,
+    interval: {},
     items: [] as Item[],
-    intervalIdentity: 0,
-    isScanQrCode: false
   },
   async onShow() {
-    this.timing()
+    // this.timing()
 
     if (this.data.isScanQrCode) {
       this.data.isScanQrCode = false
@@ -35,29 +34,29 @@ Page({
     this.clearInterval()
   },
   timing() {
-    let remainSeconds = 30 - new Date().getSeconds()
-    if (remainSeconds < 0) {
-      remainSeconds += 30
-    }
+    // let remainSeconds = 30 - new Date().getSeconds()
+    // if (remainSeconds < 0) {
+    //   remainSeconds += 30
+    // }
 
-    this.setData({ remainSeconds })
+    // this.setData({ remainSeconds })
 
-    this.data.intervalIdentity =
-      this.data.intervalIdentity ||
-      setInterval(async () => {
-        let remainSeconds = this.data.remainSeconds
+    // this.data.intervalIdentity =
+    //   this.data.intervalIdentity ||
+    //   setInterval(async () => {
+    //     let remainSeconds = this.data.remainSeconds
 
-        remainSeconds -= 1
-        if (remainSeconds <= 0) {
-          remainSeconds = 30
-        }
+    //     remainSeconds -= 1
+    //     if (remainSeconds <= 0) {
+    //       remainSeconds = 30
+    //     }
 
-        this.setData({ remainSeconds })
+    //     this.setData({ remainSeconds })
 
-        if (remainSeconds == 30) {
-          await this.all()
-        }
-      }, 1000)
+    //     if (remainSeconds == 30) {
+    //       await this.all()
+    //     }
+    //   }, 1000)
   },
   async all() {
     await wx.showLoading({ title: '加载中' })
@@ -128,9 +127,9 @@ Page({
       })
   },
   clearInterval() {
-    clearInterval(this.data.intervalIdentity)
+    // clearInterval(this.data.intervalIdentity)
 
-    this.data.intervalIdentity = 0
+    // this.data.intervalIdentity = 0
   }
 })
 

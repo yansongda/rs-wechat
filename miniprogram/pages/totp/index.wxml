@@ -1,19 +1,20 @@
 <mp-toptips msg="{{toptipError}}" type="error" show="{{toptipError}}"></mp-toptips>
 
-<progress percent="{{ remainSeconds / 30 * 100 }}" stroke-width="2" class="progress"></progress>
-
 <view class="{{ items.length > 0 ? 'has-data' : 'no-data' }}">暂无数据</view>
 
 <view class="items">
-  <mp-slideview class="item" wx:for="{{items}}" wx:for-index="index" wx:key="id" buttons="{{slideViewButtons}}" bindbuttontap="slideviewButtonTap" data-id="{{ item.id }}">
-    <view class="item-body">
+  <view class="item" wx:for="{{items}}" wx:key="id" wx:for-index="index" wx:for-item="item" >
+    <mp-slideview buttons="{{slideViewButtons}}" bindbuttontap="slideviewButtonTap" data-id="{{ item.id }}">
+      <view class="item-body">
         <view class="item-body-info">
           <view class="item-body-info-issuer">{{item.issuer}}</view>
           <view class="item-body-info-username">{{item.username}}</view>
         </view>
         <view class="item-body-code">{{item.code}}</view>
       </view>
-  </mp-slideview>
+    </mp-slideview>
+    <progress class="item-progress" percent="50" stroke-width="2" ></progress>
+  </view>
 </view>
 
 <view class="footer">

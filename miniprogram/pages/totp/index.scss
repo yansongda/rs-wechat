@@ -1,9 +1,3 @@
-.progress {
-  width: 100%;
-  top: 0;
-  position: fixed;
-}
-
 .no-data {
   display: block;
   color: #aaa;
@@ -16,38 +10,26 @@
 }
 
 .items {
-  width: 100%;
   padding-bottom: 80px;
 
   .item {
-    height: 80px;
-    display: flex;
-    flex-flow: row nowrap;
-    overflow: hidden;
-    justify-content: space-between;
-    padding: 10px;
-    border-bottom: 1px #f6f6f6 solid;
-
-    &:last-child {
-      border-bottom: none;
-    }
+    height: 100px;
+    padding: 0 10px;
 
     .item-body {
+      height: 98px;
       display: flex;
-      flex-flow: row wrap;
+      flex-flow: row nowrap;
       align-items: center;
       justify-content: center;
-      
+
       .item-body-info {
         flex: 2;
         display: flex;
         flex-flow: column nowrap;
-        overflow: hidden;
-        height: 100%;
 
         .item-body-info-issuer {
           flex: 2;
-          overflow: hidden;
           text-overflow: ellipsis;
           font-size: 30px;
           text-align: center;
@@ -57,7 +39,6 @@
         .item-body-info-username {
           color: gray;
           flex: 1;
-          overflow: hidden;
           text-overflow: ellipsis;
           font-size: 12px;
           text-align: center;
@@ -82,7 +63,7 @@
   bottom: 0;
   border: 1px solid black;
   border-radius: 20px;
-  margin-bottom: 10px;
+  margin-bottom: 2px;
   box-sizing:border-box;
 
   .add {
