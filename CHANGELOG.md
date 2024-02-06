@@ -1,3 +1,9 @@
+## v1.1.10 - TBD
+
+### optimized
+
+- optimize(frontend): 优化 totp 定时器更新机制(#46)
+
 ## v1.1.9
 
 ### fixed
