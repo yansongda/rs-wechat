@@ -16,12 +16,13 @@ Page({
   async submit(e: FormSubmit<FormData>) {
     await wx.showLoading({ title: '生成中', mask: true })
 
-    api.create(e.detail.value.link)
+    api
+      .create(e.detail.value.link)
       .then((response: CreateResponse) => {
         this.setData({ short: response.short })
       })
       .catch((e: HttpError) => {
-      this.setData({ toptipError: e.message })
+        this.setData({ toptipError: e.message })
       })
       .finally(async () => {
         await wx.hideLoading()

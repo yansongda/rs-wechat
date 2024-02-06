@@ -12,7 +12,7 @@ Page({
   data: {
     toptipError: '',
     slideViewButtons: [{ text: '备注' }, { type: 'warn', text: '删除' }],
-    items: [] as Item[],
+    items: [] as Item[]
   },
   async onShow() {
     await this.all()
@@ -117,8 +117,8 @@ Page({
         }
       }, 1000)
 
-      this.setData({[`items[${index}].intervalIdentity`]: intervalIdentity})
-    });
+      this.setData({ [`items[${index}].intervalIdentity`]: intervalIdentity })
+    })
   },
   clearRefreshInterval() {
     this.data.items.forEach((item, index) => {
