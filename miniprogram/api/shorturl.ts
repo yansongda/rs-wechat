@@ -3,6 +3,7 @@ import { URL } from '@constant/shortlink'
 import { CODE } from '@constant/error'
 import { HttpError } from '@models/error'
 import logger from '@utils/logger'
+import error from '@utils/error'
 import type { CreateRequest, CreateResponse } from 'miniprogram/types/shortlink'
 
 const create = async (link: string) => {
@@ -13,7 +14,7 @@ const create = async (link: string) => {
   } catch (e: unknown) {
     logger.error('创建短链接失败', e)
 
-    throw new HttpError(CODE.HTTP_API_SHORTLINK_CREATE, e instanceof Error ? e.message : '未知错误')
+    throw new HttpError(CODE.HTTP_API_SHORTLINK_CREATE, error.getErrorMessage(e))
   }
 }
 

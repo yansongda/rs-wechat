@@ -5,6 +5,9 @@ export interface Item {
   issuer: string
   username: string
   code: string
+  period: number
+  remainSeconds?: number
+  intervalIdentity?: number
 }
 
 export interface DetailRequest extends RequestData {

@@ -2,6 +2,7 @@ import http from '@utils/http'
 import { URL } from '@constant/user'
 import { CODE } from '@constant/error'
 import logger from '@utils/logger'
+import error from '@utils/error'
 import { HttpError } from '@models/error'
 import type {
   DetailResponse,
@@ -17,7 +18,7 @@ const login = async (code: string) => {
   } catch (e: unknown) {
     logger.error('登录接口请求失败', e)
 
-    throw new HttpError(CODE.HTTP_API_USER_LOGIN, e instanceof Error ? e.message : '未知错误')
+    throw new HttpError(CODE.HTTP_API_USER_LOGIN, error.getErrorMessage(e))
   }
 }
 
@@ -27,7 +28,7 @@ const detail = async () => {
   } catch (e: unknown) {
     logger.error('查询用户详情失败', e)
 
-    throw new HttpError(CODE.HTTP_API_USER_DETAIL, e instanceof Error ? e.message : '未知错误')
+    throw new HttpError(CODE.HTTP_API_USER_DETAIL, error.getErrorMessage(e))
   }
 }
 
@@ -37,7 +38,7 @@ const update = async (updated: UpdateRequest) => {
   } catch (e: unknown) {
     logger.error('更新用户信息失败', e)
 
-    throw new HttpError(CODE.HTTP_API_USER_UPDATE, e instanceof Error ? e.message : '未知错误')
+    throw new HttpError(CODE.HTTP_API_USER_UPDATE, error.getErrorMessage(e))
   }
 }
 

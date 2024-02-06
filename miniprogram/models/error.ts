@@ -1,13 +1,11 @@
 import { CODE, MESSAGE } from '@constant/error'
 import type { RequestData, RequestHeaders, RequestQuery } from 'miniprogram/types/http'
 
-export class EE extends Error {
+export class EE {
   code: number
   message: string
 
   constructor(code?: number, message?: string) {
-    super()
-
     this.code = code || CODE.UNKNOWN
     this.message = message || MESSAGE[this.code] || MESSAGE[CODE.UNKNOWN]
   }

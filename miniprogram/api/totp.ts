@@ -3,6 +3,7 @@ import { URL } from '@constant/totp'
 import { CODE } from '@constant/error'
 import { HttpError } from '@models/error'
 import logger from '@utils/logger'
+import error from '@utils/error'
 import type {
   CreateRequest,
   DeleteRequest,
@@ -18,7 +19,7 @@ const all = async () => {
   } catch (e: unknown) {
     logger.error('查询 TOTP 列表失败', e)
 
-    throw new HttpError(CODE.HTTP_API_TOTP_ALL, e instanceof Error ? e.message : '未知错误')
+    throw new HttpError(CODE.HTTP_API_TOTP_ALL, error.getErrorMessage(e))
   }
 }
 
@@ -28,7 +29,7 @@ const detail = async (id: number) => {
   } catch (e: unknown) {
     logger.error('查询 TOTP 详情失败', e)
 
-    throw new HttpError(CODE.HTTP_API_TOTP_DETAIL, e instanceof Error ? e.message : '未知错误')
+    throw new HttpError(CODE.HTTP_API_TOTP_DETAIL, error.getErrorMessage(e))
   }
 }
 
@@ -38,7 +39,7 @@ const create = async (uri: string) => {
   } catch (e: unknown) {
     logger.error('创建 TOTP 失败', e)
 
-    throw new HttpError(CODE.HTTP_API_TOTP_CREATE, e instanceof Error ? e.message : '未知错误')
+    throw new HttpError(CODE.HTTP_API_TOTP_CREATE, error.getErrorMessage(e))
   }
 }
 
@@ -48,7 +49,7 @@ const update = async (data: UpdateRequest) => {
   } catch (e: unknown) {
     logger.error('更新 TOTP 信息失败', e)
 
-    throw new HttpError(CODE.HTTP_API_TOTP_UPDATE, e instanceof Error ? e.message : '未知错误')
+    throw new HttpError(CODE.HTTP_API_TOTP_UPDATE, error.getErrorMessage(e))
   }
 }
 
@@ -58,7 +59,7 @@ const deleteTotp = async (id: number) => {
   } catch (e: unknown) {
     logger.error('删除 TOTP 失败', e)
 
-    throw new HttpError(CODE.HTTP_API_TOTP_ALL, e instanceof Error ? e.message : '未知错误')
+    throw new HttpError(CODE.HTTP_API_TOTP_ALL, error.getErrorMessage(e))
   }
 }
 
