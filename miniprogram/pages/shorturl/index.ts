@@ -1,4 +1,6 @@
 import api from '@api/shorturl'
+import { HttpError } from '@models/error'
+import { CreateResponse } from 'miniprogram/types/shortlink'
 import type { FormSubmit } from 'miniprogram/types/wechat'
 
 interface FormData {
@@ -14,15 +16,16 @@ Page({
   async submit(e: FormSubmit<FormData>) {
     await wx.showLoading({ title: '生成中', mask: true })
 
-    try {
-      const { short } = await api.create(e.detail.value.link)
-
-      this.setData({ short })
-    } catch (e: unknown) {
-      this.setData({ toptipError: e instanceof Error ? e.message : '未知异常' })
-    }
-
-    await wx.hideLoading()
+    api.create(e.detail.value.link)
+      .then((response: CreateResponse) => {
+        this.setData({ short: response.short })
+      })
+      .catch((e: HttpError) => {
+      this.setData({ toptipError: e.message })
+      })
+      .finally(async () => {
+        await wx.hideLoading()
+      })
   },
   async copy() {
     if (this.data.short == '') {

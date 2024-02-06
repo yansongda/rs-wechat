@@ -1,6 +1,6 @@
 import api from '@api/totp'
 import { CODE } from '@constant/error'
-import { WeixinError } from '@models/error'
+import { HttpError, WeixinError } from '@models/error'
 import type { Item } from 'miniprogram/types/totp'
 import type { WeuiSlideviewButtonTap } from 'miniprogram/types/wechat'
 
@@ -12,34 +12,29 @@ Page({
   data: {
     toptipError: '',
     slideViewButtons: [{ text: '备注' }, { type: 'warn', text: '删除' }],
-    isScanQrCode: false,
     items: [] as Item[],
   },
   async onShow() {
-    if (this.data.isScanQrCode) {
-      this.data.isScanQrCode = false
-
-      return
-    }
-
     await this.all()
   },
   onHide() {
-    this.clearInterval()
+    this.clearRefreshInterval()
   },
   onUnload() {
-    this.clearInterval()
+    this.clearRefreshInterval()
   },
   async all() {
     await wx.showLoading({ title: '加载中' })
+
+    this.clearRefreshInterval()
 
     api
       .all()
       .then((response) => {
         this.setData({ items: response })
-        this.timing()
+        this.refreshInterval()
       })
-      .catch((e) => {
+      .catch((e: HttpError) => {
         this.setData({ toptipError: e.message })
       })
       .finally(() => {
@@ -47,17 +42,13 @@ Page({
       })
   },
   async create() {
-    this.data.isScanQrCode = true
-
     const scan = await wx.scanCode({ scanType: ['qrCode'] }).catch(() => {
       throw new WeixinError(CODE.WEIXIN_QR_CODE)
     })
 
-    this.data.isScanQrCode = false
-
     api
       .create(scan.result)
-      .catch(async (e) => {
+      .catch((e: HttpError) => {
         this.setData({ toptipError: e.message })
       })
       .finally(async () => {
@@ -65,7 +56,7 @@ Page({
       })
   },
   async edit(id: number) {
-    this.clearInterval()
+    this.clearRefreshInterval()
 
     await wx.navigateTo({ url: '/pages/totp/edit?id=' + id })
   },
@@ -78,11 +69,21 @@ Page({
 
     api
       .deleteTotp(id)
-      .catch((e: unknown) => {
-        this.setData({ toptipError: e instanceof Error ? e.message : '未知异常' })
+      .catch((e: HttpError) => {
+        this.setData({ toptipError: e.message })
       })
       .finally(async () => {
         await this.all()
+      })
+  },
+  async refreshCode(id: number, index: number) {
+    api
+      .detail(id)
+      .then((response) => {
+        this.setData({ [`items[${index}].code`]: response.code })
+      })
+      .catch((e: HttpError) => {
+        this.setData({ toptipError: e.message })
       })
   },
   async slideviewButtonTap(e: WeuiSlideviewButtonTap<Dataset, unknown>) {
@@ -99,38 +100,33 @@ Page({
         break
     }
   },
-  timing() {
-    this.data.items = this.data.items.map(item => {
-      item.intervalIdentity = setInterval(async () => {
-        item.period = item.period ?? 30
+  refreshInterval() {
+    this.data.items.forEach((item, index) => {
+      const intervalIdentity = setInterval(async () => {
+        const period = item.period ?? 30
 
-        item.remainSeconds = item.period - new Date().getSeconds()
-        if (item.remainSeconds < 0) {
-          item.remainSeconds += item.period
+        let remainSeconds = period - new Date().getSeconds()
+        if (remainSeconds <= 0) {
+          remainSeconds += period
         }
 
-        item.remainSeconds -= 1
-        if (item.remainSeconds <= 0) {
-          item.remainSeconds = item.period
-        }
+        this.setData({ [`items[${index}].remainSeconds`]: remainSeconds })
 
-        if (item.remainSeconds == item.period) {
-          await this.all()
+        if (remainSeconds == period) {
+          await this.refreshCode(item.id, index)
         }
       }, 1000)
 
-      return item
+      this.setData({[`items[${index}].intervalIdentity`]: intervalIdentity})
     });
   },
-  clearInterval() {
-    this.data.items = this.data.items.map(item => {
-      if (item.intervalIdentity) {
+  clearRefreshInterval() {
+    this.data.items.forEach((item, index) => {
+      if (item.intervalIdentity && item.intervalIdentity > 0) {
         clearInterval(item.intervalIdentity)
       }
 
-      item.intervalIdentity = 0
-
-      return item
+      this.setData({ [`items[${index}].intervalIdentity`]: -1 })
     })
   }
 })

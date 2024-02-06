@@ -1,5 +1,6 @@
 import api from '@api/user'
-import utils from '@utils/user'
+import user from '@utils/user'
+import error from '@utils/error'
 import type { GlobalData } from 'miniprogram/types/app'
 import type { UpdateRequest } from 'miniprogram/types/user'
 import type {
@@ -52,7 +53,7 @@ Page({
       await api.update(e.detail.value as UpdateRequest)
 
       // 同步完成之后更新下全局的用户信息状态
-      await utils.sync()
+      await user.sync()
 
       await wx.showToast({ title: '修改成功', icon: 'success', mask: true })
 
@@ -60,7 +61,7 @@ Page({
     } catch (e: unknown) {
       await wx.hideToast()
 
-      this.setData({ toptipError: e instanceof Error ? e.message : '未知异常' })
+      this.setData({ toptipError: error.getErrorMessage(e) })
     }
   },
   async cancel() {

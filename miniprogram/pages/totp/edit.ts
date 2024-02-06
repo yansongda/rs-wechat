@@ -1,4 +1,5 @@
 import api from '@api/totp'
+import error from '@utils/error'
 import type { UpdateRequest } from 'miniprogram/types/totp'
 import type { FormSubmit, WeuiDialogTap } from 'miniprogram/types/wechat'
 
@@ -48,7 +49,7 @@ Page({
     } catch (e: unknown) {
       await wx.hideToast()
 
-      this.setData({ toptipError: e instanceof Error ? e.message : '未知异常' })
+      this.setData({ toptipError: error.getErrorMessage(e) })
     }
   },
   async cancel() {
