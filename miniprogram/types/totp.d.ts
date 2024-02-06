@@ -7,7 +7,6 @@ export interface Item {
   code: string
   period: number
   remainSeconds?: number
-  intervalIdentity?: number
 }
 
 export interface DetailRequest extends RequestData {

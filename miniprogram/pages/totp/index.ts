@@ -12,9 +12,12 @@ Page({
   data: {
     toptipError: '',
     slideViewButtons: [{ text: '备注' }, { type: 'warn', text: '删除' }],
+    intervalIdentity: -1,
     items: [] as Item[]
   },
   async onShow() {
+    this.setupRefreshInterval()
+
     await this.all()
   },
   onHide() {
@@ -26,13 +29,10 @@ Page({
   async all() {
     await wx.showLoading({ title: '加载中' })
 
-    this.clearRefreshInterval()
-
     api
       .all()
       .then((response) => {
         this.setData({ items: response })
-        this.refreshInterval()
       })
       .catch((e: HttpError) => {
         this.setData({ toptipError: e.message })
@@ -100,9 +100,10 @@ Page({
         break
     }
   },
-  refreshInterval() {
-    this.data.items.forEach((item, index) => {
-      const intervalIdentity = setInterval(async () => {
+  setupRefreshInterval() {
+    const intervalIdentity = setInterval(async () => {
+      for (const item of this.data.items) {
+        const index = this.data.items.indexOf(item)
         const period = item.period ?? 30
 
         let remainSeconds = period - new Date().getSeconds()
@@ -115,19 +116,17 @@ Page({
         if (remainSeconds == period) {
           await this.refreshCode(item.id, index)
         }
-      }, 1000)
+      }
+    }, 1000)
 
-      this.setData({ [`items[${index}].intervalIdentity`]: intervalIdentity })
-    })
+    this.setData({ intervalIdentity })
   },
   clearRefreshInterval() {
-    this.data.items.forEach((item, index) => {
-      if (item.intervalIdentity && item.intervalIdentity > 0) {
-        clearInterval(item.intervalIdentity)
-      }
+    if (this.data.intervalIdentity > 0) {
+      clearInterval(this.data.intervalIdentity)
+    }
 
-      this.setData({ [`items[${index}].intervalIdentity`]: -1 })
-    })
+    this.setData({ intervalIdentity: -1 })
   }
 })
 
