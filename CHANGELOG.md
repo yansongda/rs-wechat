@@ -1,3 +1,9 @@
+## v1.1.9 - TBD
+
+### fixed
+
+- fix(backend): totp 独立更新周期不生效(#44)
+
 ## v1.1.8
 
 ### added

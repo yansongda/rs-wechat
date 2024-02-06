@@ -70,7 +70,7 @@ pub fn generate_code(totp: Totp) -> String {
         Algorithm::SHA1,
         6,
         1,
-        30,
+        totp.period as u64,
         Secret::Encoded(totp.secret).to_bytes().unwrap(),
         totp.issuer,
         totp.username,
