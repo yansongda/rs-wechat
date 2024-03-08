@@ -15,29 +15,27 @@
     "navigationBarTextStyle": "black"
   },
   "tabBar": {
+    "custom": true,
+    "color": "#000000",
+    "selectedColor": "#000000",
+    "backgroundColor": "#000000",
     "list": [
       {
         "pagePath": "pages/home/index",
-        "text": "首页",
-        "iconPath": "/images/icon/app.png",
-        "selectedIconPath": "/images/icon/app-selected.png"
+        "text": "首页"
       },
       {
         "pagePath": "pages/user/index",
-        "text": "我",
-        "iconPath": "/images/icon/user.png",
-        "selectedIconPath": "/images/icon/user-selected.png"
+        "text": "我"
       }
     ]
   },
   "networkTimeout": {
-    "request": 3000
+    "request": 5000
   },
-  "style": "v2",
   "useExtendedLib": {
     "weui": true
   },
-  "lazyCodeLoading": "requiredComponents",
   "sitemapLocation": "sitemap.json",
   "resolveAlias": {
     "@api/*": "/api/*",

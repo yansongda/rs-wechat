@@ -1,6 +1,6 @@
 {
   "name": "yansongda",
-  "version": "1.1.10",
+  "version": "1.2.0",
   "description": "",
   "scripts": {
     "lint": "eslint --ext js,cjs,mjs,ts,tsx miniprogram",
@@ -10,13 +10,16 @@
   "author": "",
   "license": "",
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "^6.20.0",
-    "@typescript-eslint/parser": "^6.20.0",
-    "eslint": "^8.56.0",
+    "@typescript-eslint/eslint-plugin": "^7.1.1",
+    "@typescript-eslint/parser": "^7.1.1",
+    "eslint": "^8.57.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-prettier": "^5.1.3",
     "miniprogram-api-typings": "^3.12.2",
     "prettier": "^3.2.5",
-    "typescript": "^5.3.3"
+    "typescript": "^5.4.2"
+  },
+  "dependencies": {
+    "tdesign-miniprogram": "^1.2.9"
   }
 }

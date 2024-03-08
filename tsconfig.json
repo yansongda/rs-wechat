@@ -22,6 +22,7 @@
     ],
     "baseUrl": ".",
     "paths": {
+      "tdesign-miniprogram/*":["miniprogram/miniprogram_npm/tdesign-miniprogram/*"],
       "@api/*": ["miniprogram/api/*"],
       "@utils/*": ["miniprogram/utils/*"],
       "@constant/*": ["miniprogram/constant/*"],
