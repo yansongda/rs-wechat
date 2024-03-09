@@ -1,6 +1,8 @@
+import Message from 'tdesign-miniprogram/message/index';
+import Toast from 'tdesign-miniprogram/toast/index';
 import api from '@api/shorturl'
 import { HttpError } from '@models/error'
-import { CreateResponse } from 'miniprogram/types/shortlink'
+import type { CreateResponse } from 'miniprogram/types/shortlink'
 import type { FormSubmit } from 'miniprogram/types/wechat'
 
 interface FormData {
@@ -9,12 +11,17 @@ interface FormData {
 
 Page({
   data: {
-    toptipError: '',
     link: '',
     short: ''
   },
   async submit(e: FormSubmit<FormData>) {
-    await wx.showLoading({ title: '生成中', mask: true })
+    Toast({
+      message: '生成中...',
+      theme: 'loading',
+      direction: 'column',
+      preventScrollThrough: true,
+      duration: 5000
+    })
 
     api
       .create(e.detail.value.link)
@@ -22,10 +29,20 @@ Page({
         this.setData({ short: response.short })
       })
       .catch((e: HttpError) => {
-        this.setData({ toptipError: e.message })
+        Message.error({
+          context: this,
+          offset: [20, 32],
+          duration: 5000,
+          content: e.message,
+        })
       })
       .finally(async () => {
-        await wx.hideLoading()
+        Toast({
+          message: '生成成功',
+          theme: 'success',
+          direction: 'column',
+          duration: 100
+        })
       })
   },
   async copy() {

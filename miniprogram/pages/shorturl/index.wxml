@@ -1,33 +1,14 @@
-<mp-toptips msg="{{toptipError}}" type="error" show="{{toptipError}}"></mp-toptips>
+<t-message id="t-message" />
+<t-toast id="t-toast" />
 
 <form bindsubmit="submit">
-  <view class="weui-form">
-    <view class="weui-form__bd">
-      <view class="weui-form__control-area">
-        <view class="weui-cells__group weui-cells__group_form">
-          <view class="weui-cells weui-cells_form">
-            <view for="link" class="weui-cell weui-cell_active weui-cell_vertical">
-              <view class="weui-cell__bd">
-                <textarea id="link" class="weui-textarea" placeholder="请输入长链接地址" name="link" auto-focus="true" confirm-type="done" />
-              </view>
-            </view>
-          </view>
-        </view>
-      </view>
-    </view>
-    <view class="weui-form__ft">
-      <view class="weui-form__opr-area">
-        <button class="weui-btn weui-btn_primary" aria-role="button" form-type="submit">生成</button>
-      </view>
-    </view>
+  <t-textarea name="link" label="长链接" placeholder="请输入长链接地址" confirm-type="done" disableDefaultPadding autofocus />
+
+  <view class="generate">
+    <t-button theme="primary" size="large" type="submit" lang="zh_CN" block>生成</t-button>
   </view>
 </form>
-<view class="weui-cells__group weui-cells__group_form" bind:tap="copy">
-  <view class="weui-cells weui-cells_form">
-    <view for="shortlink" class="weui-cell weui-cell_active weui-cell_vertical">
-      <view class="weui-cell__bd">
-        <textarea id="shortlink" class="weui-textarea" placeholder="等待生成短链接地址，生成后点击复制" disabled="true" value="{{ short }}" />
-      </view>
-    </view>
-  </view>
+
+<view bind:tap="copy">
+  <t-textarea id="shortlink" label="短链接" placeholder="等待生成短链接地址，生成后点击复制" value="{{ short }}" disabled />
 </view>

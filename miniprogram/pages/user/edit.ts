@@ -54,7 +54,7 @@ Page({
       direction: 'column',
       preventScrollThrough: true,
       duration: 5000
-    });
+    })
 
     try {
       await api.update(e.detail.value as UpdateRequest)
@@ -68,7 +68,7 @@ Page({
         direction: 'column',
         preventScrollThrough: true,
         duration: 1500
-      });
+      })
 
       setTimeout(() => wx.navigateBack(), 1500)
     } catch (e: unknown) {
@@ -77,7 +77,7 @@ Page({
         offset: [20, 32],
         duration: 5000,
         content: error.getErrorMessage(e),
-      });
+      })
     }
   },
   async cancel() {
