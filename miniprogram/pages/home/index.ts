@@ -1,20 +1,14 @@
-import type { Tap } from 'miniprogram/types/wechat'
-
-interface CurrentTargetDataset {
-  url: string
-}
-
 Page({
   data: {
     tools: [
       {
         name: 'TOTP身份验证器',
-        icon: 'lock',
+        icon: 'rotate-locked',
         url: '/pages/totp/index'
       },
       {
         name: '短链生成服务',
-        icon: 'link',
+        icon: 'link-1',
         url: '/pages/shorturl/index'
       },
       {
@@ -24,9 +18,4 @@ Page({
       }
     ]
   },
-  async navigate(e: Tap<CurrentTargetDataset, unknown>) {
-    const { url } = e.currentTarget.dataset
-
-    await wx.navigateTo({ url })
-  }
 })

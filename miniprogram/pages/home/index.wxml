@@ -1,14 +1,7 @@
-<view class="header">
-  <view class="title">首页</view>
-  <view class="desc">这里有你想要的一切</view>
-</view>
-<view class="body">
-  <view class="tools-list">
-    <view wx:for="{{ tools }}" wx:for-index="idx" wx:for-item="tool" wx:key="idx" class="tools-list__item">
-      <view class="weui-flex tools-list__item-hd" data-url="{{ tool.url }}" bind:tap="navigate">
-        <text class="tools-list__item-hd-text">{{ tool.name }}</text>
-        <view class="tools-list__item-hd-icon"><mp-icon icon="{{ tool.icon }}" color="black"></mp-icon></view>
-      </view>
-    </view>
-  </view>
+<view class="home">
+  <t-cell-group theme="card">
+    <block wx:for="{{ tools }}" wx:for-index="idx" wx:for-item="tool" wx:key="idx">
+      <t-cell title="{{ tool.name }}" leftIcon="{{ tool.icon }}" url="{{ tool.url }}" hover arrow />
+    </block>
+  </t-cell-group>
 </view>
