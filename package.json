@@ -1,21 +1,20 @@
 {
   "name": "yansongda",
   "version": "1.2.0",
-  "description": "",
+  "description": "miniprogram for yansongda",
+  "type": "module",
   "scripts": {
-    "lint": "eslint --ext js,cjs,mjs,ts,tsx miniprogram",
-    "lint:fix": "pnpm lint miniprogram --fix"
+    "lint": "eslint",
+    "lint:fix": "pnpm lint --fix"
   },
-  "keywords": [],
-  "author": "",
-  "license": "",
+  "keywords": ["miniprogram", "yansongda"],
+  "author": "me@yansongda.cn",
+  "license": "MIT",
   "devDependencies": {
     "miniprogram-api-typings": "^3.12.2",
     "typescript": "^5.4.2",
-    "eslint": "^8.57.0",
-    "eslint-config-prettier": "^9.1.0",
-    "eslint-plugin-prettier": "^5.1.3",
     "typescript-eslint": "^7.1.1",
+    "eslint-config-prettier": "^9.1.0",
     "prettier": "^3.2.5"
   },
   "dependencies": {
