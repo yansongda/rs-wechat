@@ -1,3 +1,5 @@
+import Message from 'tdesign-miniprogram/message/index';
+import Toast from 'tdesign-miniprogram/toast/index';
 import api from '@api/user'
 import user from '@utils/user'
 import error from '@utils/error'
@@ -19,7 +21,6 @@ const app = getApp<GlobalData>()
 
 Page({
   data: {
-    toptipError: '',
     avatar: app.globalData.user.avatar,
     nickname: app.globalData.user.nickname,
     slogan: app.globalData.user.slogan
@@ -34,7 +35,7 @@ Page({
   async onChooseAvatar(e: ChooseAvatarButtonTap<unknown, unknown>) {
     await wx.showLoading({ title: '上传中', icon: 'loading', mask: true })
 
-    const res = await wx.compressImage({ src: e.detail.avatarUrl, quality: 50 })
+    const res = await wx.compressImage({ src: e.detail.avatarUrl.toString(), quality: 50 })
 
     wx.getFileSystemManager().readFile({
       filePath: res.tempFilePath,
@@ -47,7 +48,13 @@ Page({
     })
   },
   async submit(e: FormSubmit<FormData>) {
-    await wx.showToast({ title: '更新中', icon: 'loading', mask: true })
+    Toast({
+      message: '更新中...',
+      theme: 'loading',
+      direction: 'column',
+      preventScrollThrough: true,
+      duration: 5000
+    });
 
     try {
       await api.update(e.detail.value as UpdateRequest)
@@ -55,13 +62,22 @@ Page({
       // 同步完成之后更新下全局的用户信息状态
       await user.sync()
 
-      await wx.showToast({ title: '修改成功', icon: 'success', mask: true })
+      Toast({
+        message: '修改成功',
+        theme: 'success',
+        direction: 'column',
+        preventScrollThrough: true,
+        duration: 1500
+      });
 
       setTimeout(() => wx.navigateBack(), 1500)
     } catch (e: unknown) {
-      await wx.hideToast()
-
-      this.setData({ toptipError: error.getErrorMessage(e) })
+      Message.error({
+        context: this,
+        offset: [20, 32],
+        duration: 5000,
+        content: error.getErrorMessage(e),
+      });
     }
   },
   async cancel() {
