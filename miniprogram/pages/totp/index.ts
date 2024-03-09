@@ -1,8 +1,15 @@
+import Message from 'tdesign-miniprogram/message/index';
+import Toast from 'tdesign-miniprogram/toast/index';
 import api from '@api/totp'
 import { CODE } from '@constant/error'
 import { HttpError, WeixinError } from '@models/error'
 import type { Item } from 'miniprogram/types/totp'
-import type { WeuiSlideviewButtonTap } from 'miniprogram/types/wechat'
+import { SwipeTap } from 'miniprogram/types/tdesign';
+
+interface SwipeButton {
+  text: string,
+  className: string,
+}
 
 interface Dataset {
   id: string
@@ -10,8 +17,13 @@ interface Dataset {
 
 Page({
   data: {
-    toptipError: '',
-    slideViewButtons: [{ text: '备注' }, { type: 'warn', text: '删除' }],
+    swipeButtons: [
+      { text: '备注', className: 'btn edit-btn'},
+      { text: '删除', className: 'btn delete-btn' }
+    ] as SwipeButton[],
+    dialogVisible: false,
+    dialogConfirmBtn: { content: '确定', variant: 'base' },
+    dialogDataId: 0,
     intervalIdentity: -1,
     items: [] as Item[]
   },
@@ -27,7 +39,13 @@ Page({
     this.clearRefreshInterval()
   },
   async all() {
-    await wx.showLoading({ title: '加载中' })
+    Toast({
+      message: '加载中...',
+      theme: 'loading',
+      direction: 'column',
+      preventScrollThrough: true,
+      duration: 5000
+    })
 
     api
       .all()
@@ -35,10 +53,21 @@ Page({
         this.setData({ items: response })
       })
       .catch((e: HttpError) => {
-        this.setData({ toptipError: e.message })
+        Message.error({
+          context: this,
+          offset: [20, 32],
+          duration: 5000,
+          content: e.message,
+        })
       })
       .finally(() => {
-        wx.hideLoading().catch()
+        Toast({
+          message: '加载成功',
+          theme: 'success',
+          direction: 'column',
+          preventScrollThrough: true,
+          duration: 100
+        })
       })
   },
   async create() {
@@ -49,7 +78,12 @@ Page({
     api
       .create(scan.result)
       .catch((e: HttpError) => {
-        this.setData({ toptipError: e.message })
+        Message.error({
+          context: this,
+          offset: [20, 32],
+          duration: 5000,
+          content: e.message,
+        })
       })
       .finally(async () => {
         await this.all()
@@ -60,22 +94,6 @@ Page({
 
     await wx.navigateTo({ url: '/pages/totp/edit?id=' + id })
   },
-  async delete(id: number) {
-    const result = await wx.showModal({ title: '是否确定删除？', content: '删除后数据不可恢复' })
-
-    if (result.cancel) {
-      return
-    }
-
-    api
-      .deleteTotp(id)
-      .catch((e: HttpError) => {
-        this.setData({ toptipError: e.message })
-      })
-      .finally(async () => {
-        await this.all()
-      })
-  },
   async refreshCode(id: number, index: number) {
     api
       .detail(id)
@@ -83,22 +101,45 @@ Page({
         this.setData({ [`items[${index}].code`]: response.code })
       })
       .catch((e: HttpError) => {
-        this.setData({ toptipError: e.message })
+        Message.error({
+          context: this,
+          offset: [20, 32],
+          duration: 5000,
+          content: e.message,
+        })
       })
   },
-  async slideviewButtonTap(e: WeuiSlideviewButtonTap<Dataset, unknown>) {
+  async swipeClick(e: SwipeTap<SwipeButton, Dataset, Dataset>) {
     const id = Number(e.currentTarget.dataset.id)
 
-    switch (e.detail.index) {
-      case 0:
-        // 备注
+    switch (e.detail.text) {
+      case '备注':
         await this.edit(id)
         break
-      case 1:
-        // 删除
-        await this.delete(id)
+      case '删除':
+        this.setData({ dialogVisible: true, dialogDataId: id })
         break
     }
+  },
+  async dialogConfirm(e: SwipeTap<SwipeButton, Dataset, Dataset>) {
+    const id = Number(e.currentTarget.dataset.id)
+
+    api
+      .deleteTotp(id)
+      .catch((e: HttpError) => {
+        Message.error({
+          context: this,
+          offset: [20, 32],
+          duration: 5000,
+          content: e.message,
+        })
+      })
+      .finally(async () => {
+        await this.all()
+      })
+  },
+  dialogCancel() {
+    this.setData({ dialogVisible: false, dialogDataId: 0 })
   },
   setupRefreshInterval() {
     const intervalIdentity = setInterval(async () => {

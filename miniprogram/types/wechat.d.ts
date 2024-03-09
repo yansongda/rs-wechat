@@ -2,13 +2,13 @@ import { Response } from './http'
 
 export interface WxRequestSuccess<T> {
   data: Response<T>
-  statusCode: Number
-  header: Object
+  statusCode: number
+  header: object
 }
 
 export interface WxRequestFail {
-  errno: Number
-  errMsg: String
+  errno: number
+  errMsg: string
 }
 
 export interface AppOnUnhandledRejection {
@@ -16,38 +16,38 @@ export interface AppOnUnhandledRejection {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   promise: Promise<any>
   /** 拒绝原因，一般是一个 Error 对象 */
-  reason: Error | String
+  reason: Error | string
 }
 
 export interface Tap<T, D> {
-  type: String
+  type: string
   currentTarget: {
-    id: String
+    id: string
     dataset: T
   }
   target: {
-    id: String
+    id: string
     dataset: D
   }
 }
 
 export interface FormSubmit<T> {
   detail: {
-    formId: String
+    formId: string
     value: T
   }
 }
 
 export interface ChooseAvatarButtonTap<T, D> extends Tap<T, D> {
   detail: {
-    avatarUrl: String
+    avatarUrl: string
   }
 }
 
 export interface WxGetFileSystemManagerReadFileSuccess {
-  data: String | ArrayBuffer
+  data: string | ArrayBuffer
 }
 
 export interface WxGetUpdateManagerOnCheckForUpdateResult {
-  hasUpdate: Boolean
+  hasUpdate: boolean
 }

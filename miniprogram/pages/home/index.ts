@@ -11,11 +11,6 @@ Page({
         icon: 'link-1',
         url: '/pages/shorturl/index'
       },
-      {
-        name: '时间工具',
-        icon: 'time',
-        url: '/pages/time/index'
-      }
     ]
   },
 })
