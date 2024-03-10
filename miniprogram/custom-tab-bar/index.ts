@@ -1,4 +1,4 @@
-import { TabbarTap } from "miniprogram/types/tdesign"
+import { TabbarTap } from 'miniprogram/types/tdesign'
 
 Component({
   data: {
@@ -17,7 +17,7 @@ Component({
     }
   },
   methods: {
-    onChange(e: TabbarTap<Object, Object>) {
+    onChange(e: TabbarTap<unknown, unknown>) {
       const path = e.detail.value
 
       wx.switchTab({ url: '/' + path })

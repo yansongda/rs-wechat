@@ -4,18 +4,22 @@
   "description": "miniprogram for yansongda",
   "type": "module",
   "scripts": {
-    "lint": "eslint -c eslint.config.js miniprogram",
+    "lint": "eslint -c eslint.config.js .",
     "lint:fix": "pnpm lint --fix"
   },
-  "keywords": ["miniprogram", "yansongda"],
+  "keywords": [
+    "miniprogram",
+    "yansongda"
+  ],
   "author": "me@yansongda.cn",
   "license": "MIT",
   "devDependencies": {
-    "miniprogram-api-typings": "^3.12.2",
-    "typescript": "^5.4.2",
-    "typescript-eslint": "^7.1.1",
     "eslint-config-prettier": "^9.1.0",
-    "prettier": "^3.2.5"
+    "eslint-plugin-prettier": "^5.1.3",
+    "miniprogram-api-typings": "^3.12.2",
+    "prettier": "^3.2.5",
+    "typescript": "^5.4.2",
+    "typescript-eslint": "^7.1.1"
   },
   "dependencies": {
     "tdesign-miniprogram": "^1.2.9"

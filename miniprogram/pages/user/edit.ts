@@ -1,5 +1,5 @@
-import Message from 'tdesign-miniprogram/message/index';
-import Toast from 'tdesign-miniprogram/toast/index';
+import Message from 'tdesign-miniprogram/message/index'
+import Toast from 'tdesign-miniprogram/toast/index'
 import api from '@api/user'
 import user from '@utils/user'
 import error from '@utils/error'
@@ -49,8 +49,11 @@ Page({
   },
   async submit(e: FormSubmit<FormData>) {
     Toast({
-      message: '更新中...', theme: 'loading', duration: 5000,
-      direction: 'column', preventScrollThrough: true,
+      message: '更新中...',
+      theme: 'loading',
+      duration: 5000,
+      direction: 'column',
+      preventScrollThrough: true
     })
 
     try {
@@ -60,20 +63,27 @@ Page({
       await user.sync()
 
       Toast({
-        message: '修改成功', theme: 'success', duration: 1500,
-        direction: 'column', preventScrollThrough: true,
+        message: '修改成功',
+        theme: 'success',
+        duration: 1500,
+        direction: 'column',
+        preventScrollThrough: true
       })
 
       setTimeout(() => wx.navigateBack(), 1500)
     } catch (e: unknown) {
       Toast({
-        message: '更新失败', theme: 'error', duration: 100,
-        direction: 'column',
+        message: '更新失败',
+        theme: 'error',
+        duration: 100,
+        direction: 'column'
       })
 
       Message.error({
-        content: error.getErrorMessage(e), duration: 5000,
-        context: this, offset: [20, 32],
+        content: error.getErrorMessage(e),
+        duration: 5000,
+        context: this,
+        offset: [20, 32]
       })
     }
   },

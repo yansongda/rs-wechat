@@ -1,14 +1,14 @@
-import Message from 'tdesign-miniprogram/message/index';
-import Toast from 'tdesign-miniprogram/toast/index';
+import Message from 'tdesign-miniprogram/message/index'
+import Toast from 'tdesign-miniprogram/toast/index'
 import api from '@api/totp'
 import { CODE } from '@constant/error'
 import { HttpError, WeixinError } from '@models/error'
 import type { Item } from 'miniprogram/types/totp'
-import { SwipeTap } from 'miniprogram/types/tdesign';
+import { SwipeTap } from 'miniprogram/types/tdesign'
 
 interface SwipeButton {
-  text: string,
-  className: string,
+  text: string
+  className: string
 }
 
 interface Dataset {
@@ -18,7 +18,7 @@ interface Dataset {
 Page({
   data: {
     swipeButtons: [
-      { text: '备注', className: 'btn edit-btn'},
+      { text: '备注', className: 'btn edit-btn' },
       { text: '删除', className: 'btn delete-btn' }
     ] as SwipeButton[],
     dialogVisible: false,
@@ -40,8 +40,11 @@ Page({
   },
   all() {
     Toast({
-      message: '加载中...', theme: 'loading', duration: 5000,
-      direction: 'column', preventScrollThrough: true,
+      message: '加载中...',
+      theme: 'loading',
+      duration: 5000,
+      direction: 'column',
+      preventScrollThrough: true
     })
 
     api
@@ -50,14 +53,20 @@ Page({
         this.setData({ items: response })
 
         Toast({
-          message: '加载成功', theme: 'success', duration: 100,
-          direction: 'column',
+          message: '加载成功',
+          theme: 'success',
+          duration: 100,
+          direction: 'column'
         })
       })
-      .catch((e: HttpError) => Message.error({
-        content: e.message, duration: 5000,
-        offset: [20, 32], context: this,
-      }))
+      .catch((e: HttpError) =>
+        Message.error({
+          content: e.message,
+          duration: 5000,
+          offset: [20, 32],
+          context: this
+        })
+      )
   },
   async create() {
     const scan = await wx.scanCode({ scanType: ['qrCode'] }).catch(() => {
@@ -66,10 +75,14 @@ Page({
 
     api
       .create(scan.result)
-      .catch((e: HttpError) => Message.error({
-        content: e.message, duration: 5000,
-        offset: [20, 32], context: this,
-      }))
+      .catch((e: HttpError) =>
+        Message.error({
+          content: e.message,
+          duration: 5000,
+          offset: [20, 32],
+          context: this
+        })
+      )
       .finally(() => this.all())
   },
   async edit(id: number) {
@@ -81,10 +94,14 @@ Page({
     api
       .detail(id)
       .then((response) => this.setData({ [`items[${index}].code`]: response.code }))
-      .catch((e: HttpError) => Message.error({
-        content: e.message, duration: 5000,
-        offset: [20, 32], context: this,
-      }))
+      .catch((e: HttpError) =>
+        Message.error({
+          content: e.message,
+          duration: 5000,
+          offset: [20, 32],
+          context: this
+        })
+      )
   },
   async swipeClick(e: SwipeTap<SwipeButton, Dataset, Dataset>) {
     const id = Number(e.currentTarget.dataset.id)
@@ -101,11 +118,16 @@ Page({
   dialogConfirm(e: SwipeTap<SwipeButton, Dataset, Dataset>) {
     const id = Number(e.currentTarget.dataset.id)
 
-    api.deleteTotp(id)
-      .catch((e: HttpError) => Message.error({
-        content: e.message, duration: 5000,
-        offset: [20, 32], context: this,
-      }))
+    api
+      .deleteTotp(id)
+      .catch((e: HttpError) =>
+        Message.error({
+          content: e.message,
+          duration: 5000,
+          offset: [20, 32],
+          context: this
+        })
+      )
       .finally(() => this.all())
   },
   dialogCancel() {
