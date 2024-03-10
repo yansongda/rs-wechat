@@ -32,9 +32,6 @@
   "networkTimeout": {
     "request": 5000
   },
-  "useExtendedLib": {
-    "weui": true
-  },
   "sitemapLocation": "sitemap.json",
   "resolveAlias": {
     "@api/*": "/api/*",

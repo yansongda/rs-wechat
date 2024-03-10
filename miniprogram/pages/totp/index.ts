@@ -22,15 +22,15 @@ Page({
       { text: '删除', className: 'btn delete-btn' }
     ] as SwipeButton[],
     dialogVisible: false,
-    dialogConfirmBtn: { content: '确定', variant: 'base' },
+    dialogConfirmBtn: { content: '删除', variant: 'base' },
     dialogDataId: 0,
     intervalIdentity: -1,
     items: [] as Item[]
   },
-  async onShow() {
+  onShow() {
     this.setupRefreshInterval()
 
-    await this.all()
+    this.all()
   },
   onHide() {
     this.clearRefreshInterval()
@@ -38,37 +38,26 @@ Page({
   onUnload() {
     this.clearRefreshInterval()
   },
-  async all() {
+  all() {
     Toast({
-      message: '加载中...',
-      theme: 'loading',
-      direction: 'column',
-      preventScrollThrough: true,
-      duration: 5000
+      message: '加载中...', theme: 'loading', duration: 5000,
+      direction: 'column', preventScrollThrough: true,
     })
 
     api
       .all()
       .then((response) => {
         this.setData({ items: response })
-      })
-      .catch((e: HttpError) => {
-        Message.error({
-          context: this,
-          offset: [20, 32],
-          duration: 5000,
-          content: e.message,
-        })
-      })
-      .finally(() => {
+
         Toast({
-          message: '加载成功',
-          theme: 'success',
+          message: '加载成功', theme: 'success', duration: 100,
           direction: 'column',
-          preventScrollThrough: true,
-          duration: 100
         })
       })
+      .catch((e: HttpError) => Message.error({
+        content: e.message, duration: 5000,
+        offset: [20, 32], context: this,
+      }))
   },
   async create() {
     const scan = await wx.scanCode({ scanType: ['qrCode'] }).catch(() => {
@@ -77,37 +66,25 @@ Page({
 
     api
       .create(scan.result)
-      .catch((e: HttpError) => {
-        Message.error({
-          context: this,
-          offset: [20, 32],
-          duration: 5000,
-          content: e.message,
-        })
-      })
-      .finally(async () => {
-        await this.all()
-      })
+      .catch((e: HttpError) => Message.error({
+        content: e.message, duration: 5000,
+        offset: [20, 32], context: this,
+      }))
+      .finally(() => this.all())
   },
   async edit(id: number) {
     this.clearRefreshInterval()
 
     await wx.navigateTo({ url: '/pages/totp/edit?id=' + id })
   },
-  async refreshCode(id: number, index: number) {
+  refreshCode(id: number, index: number) {
     api
       .detail(id)
-      .then((response) => {
-        this.setData({ [`items[${index}].code`]: response.code })
-      })
-      .catch((e: HttpError) => {
-        Message.error({
-          context: this,
-          offset: [20, 32],
-          duration: 5000,
-          content: e.message,
-        })
-      })
+      .then((response) => this.setData({ [`items[${index}].code`]: response.code }))
+      .catch((e: HttpError) => Message.error({
+        content: e.message, duration: 5000,
+        offset: [20, 32], context: this,
+      }))
   },
   async swipeClick(e: SwipeTap<SwipeButton, Dataset, Dataset>) {
     const id = Number(e.currentTarget.dataset.id)
@@ -121,22 +98,15 @@ Page({
         break
     }
   },
-  async dialogConfirm(e: SwipeTap<SwipeButton, Dataset, Dataset>) {
+  dialogConfirm(e: SwipeTap<SwipeButton, Dataset, Dataset>) {
     const id = Number(e.currentTarget.dataset.id)
 
-    api
-      .deleteTotp(id)
-      .catch((e: HttpError) => {
-        Message.error({
-          context: this,
-          offset: [20, 32],
-          duration: 5000,
-          content: e.message,
-        })
-      })
-      .finally(async () => {
-        await this.all()
-      })
+    api.deleteTotp(id)
+      .catch((e: HttpError) => Message.error({
+        content: e.message, duration: 5000,
+        offset: [20, 32], context: this,
+      }))
+      .finally(() => this.all())
   },
   dialogCancel() {
     this.setData({ dialogVisible: false, dialogDataId: 0 })
@@ -155,7 +125,7 @@ Page({
         this.setData({ [`items[${index}].remainSeconds`]: remainSeconds })
 
         if (remainSeconds == period) {
-          await this.refreshCode(item.id, index)
+          this.refreshCode(item.id, index)
         }
       }
     }, 1000)

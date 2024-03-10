@@ -49,11 +49,8 @@ Page({
   },
   async submit(e: FormSubmit<FormData>) {
     Toast({
-      message: '更新中...',
-      theme: 'loading',
-      direction: 'column',
-      preventScrollThrough: true,
-      duration: 5000
+      message: '更新中...', theme: 'loading', duration: 5000,
+      direction: 'column', preventScrollThrough: true,
     })
 
     try {
@@ -63,20 +60,20 @@ Page({
       await user.sync()
 
       Toast({
-        message: '修改成功',
-        theme: 'success',
-        direction: 'column',
-        preventScrollThrough: true,
-        duration: 1500
+        message: '修改成功', theme: 'success', duration: 1500,
+        direction: 'column', preventScrollThrough: true,
       })
 
       setTimeout(() => wx.navigateBack(), 1500)
     } catch (e: unknown) {
+      Toast({
+        message: '更新失败', theme: 'error', duration: 100,
+        direction: 'column',
+      })
+
       Message.error({
-        context: this,
-        offset: [20, 32],
-        duration: 5000,
-        content: error.getErrorMessage(e),
+        content: error.getErrorMessage(e), duration: 5000,
+        context: this, offset: [20, 32],
       })
     }
   },

@@ -14,34 +14,31 @@ Page({
     link: '',
     short: ''
   },
-  async submit(e: FormSubmit<FormData>) {
+  submit(e: FormSubmit<FormData>) {
     Toast({
-      message: '生成中...',
-      theme: 'loading',
-      direction: 'column',
-      preventScrollThrough: true,
-      duration: 5000
+      message: '生成中...', theme: 'loading', duration: 5000, 
+      direction: 'column', preventScrollThrough: true
     })
 
     api
       .create(e.detail.value.link)
       .then((response: CreateResponse) => {
         this.setData({ short: response.short })
-      })
-      .catch((e: HttpError) => {
-        Message.error({
-          context: this,
-          offset: [20, 32],
-          duration: 5000,
-          content: e.message,
+
+        Toast({
+          message: '生成成功', theme: 'success', duration: 100,
+          direction: 'column',
         })
       })
-      .finally(async () => {
+      .catch((e: HttpError) => {
         Toast({
-          message: '生成成功',
-          theme: 'success',
-          direction: 'column',
-          duration: 100
+          message: '生成失败', theme: 'error', duration: 100,
+          direction: 'column'
+        })
+
+        Message.error({
+          content: e.message, duration: 5000,
+          offset: [20, 32], context: this,
         })
       })
   },

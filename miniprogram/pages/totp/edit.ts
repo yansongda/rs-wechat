@@ -27,11 +27,8 @@ Page({
   },
   onShow() {
     Toast({
-      message: '加载中...',
-      theme: 'loading',
-      direction: 'column',
-      preventScrollThrough: true,
-      duration: 5000
+      message: '加载中...', theme: 'loading', duration: 5000,
+      direction: 'column', preventScrollThrough: true,
     })
 
     api.detail(this.data.id)
@@ -39,20 +36,14 @@ Page({
         this.setData({ id, issuer: issuer ?? '', username: username ?? '' })
 
         Toast({
-          message: '加载成功',
-          theme: 'success',
+          message: '加载成功', theme: 'success', duration: 100,
           direction: 'column',
-          preventScrollThrough: true,
-          duration: 100
         })
       })
       .catch(() => {
         Toast({
-          message: '加载失败',
-          theme: 'error',
-          direction: 'column',
-          preventScrollThrough: true,
-          duration: 100
+          message: '加载失败', theme: 'error', duration: 100,
+          direction: 'column', preventScrollThrough: true,
         })
 
         this.setData({ dialogVisible: true })
@@ -60,30 +51,22 @@ Page({
   },
   submit(e: FormSubmit<FormData>) {
     Toast({
-      message: '更新中...',
-      theme: 'loading',
-      direction: 'column',
-      preventScrollThrough: true,
-      duration: 5000
+      message: '更新中...', theme: 'loading', duration: 5000,
+      direction: 'column',preventScrollThrough: true,
     })
 
     api.update({ id: this.data.id, ...e.detail.value } as UpdateRequest)
       .then(() => {
         Toast({
-          message: '更新成功',
-          theme: 'success',
-          direction: 'column',
-          preventScrollThrough: true,
-          duration: 1500
+          message: '更新成功', theme: 'success', duration: 1500,
+          direction: 'column', preventScrollThrough: true,
         })
   
         setTimeout(() => wx.navigateBack(), 1500)
       })
       .catch((e: HttpError) => Message.error({
-        context: this,
-        offset: [20, 32],
-        duration: 5000,
-        content: e.message,
+        duration: 5000, content: e.message,
+        context: this, offset: [20, 32],
       }))
   },
   async cancel() {
