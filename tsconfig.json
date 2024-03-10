@@ -21,6 +21,7 @@
       "miniprogram-api-typings",
     ],
     "baseUrl": ".",
+    "outDir": "build",
     "paths": {
       "tdesign-miniprogram/*":["miniprogram/miniprogram_npm/tdesign-miniprogram/*"],
       "@api/*": ["miniprogram/api/*"],
@@ -30,6 +31,7 @@
     }
   },
   "exclude": [
-    "node_modules"
+    "node_modules",
+    "build/**/*"
   ]
 }

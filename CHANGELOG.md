@@ -3,6 +3,7 @@
 ### fixed
 
 - fix(backend): 中文长度计算错误的问题(#54)
+- fix(frontend): 修复构建报 warning 的问题(#55)
 
 ### chore
 
