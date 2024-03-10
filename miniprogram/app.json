@@ -32,6 +32,7 @@
   "networkTimeout": {
     "request": 5000
   },
+  "lazyCodeLoading": "requiredComponents",
   "sitemapLocation": "sitemap.json",
   "resolveAlias": {
     "@api/*": "/api/*",
