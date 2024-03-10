@@ -57,7 +57,7 @@ const wxRequest = <T>(request: Request) => {
       url: request.url,
       data: request.data || {},
       header: request.headers ?? {},
-      timeout: request.timeout || 3000,
+      timeout: request.timeout || 5000,
       method: request.method || 'GET',
       success: (res: WxRequestSuccess<T>) => {
         logger.info('接口请求成功', request.url.indexOf('users/detail') === -1 ? res : '用户详情')
@@ -104,7 +104,7 @@ const wxUpload = <T>(request: Request) => {
       name,
       formData,
       header: request.headers ?? {},
-      timeout: request.timeout || 10000,
+      timeout: request.timeout || 30000,
       success: (res) => {
         logger.info('接口请求成功', res)
 
