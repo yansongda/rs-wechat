@@ -80,7 +80,7 @@ Page({
       })
 
       Message.error({
-        content: error.getErrorMessage(e),
+        content: '更新失败：' + error.getErrorMessage(e),
         duration: 5000,
         context: this,
         offset: [20, 32]

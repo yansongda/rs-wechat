@@ -50,23 +50,30 @@ Page({
     api
       .all()
       .then((response) => {
-        this.setData({ items: response })
-
         Toast({
           message: '加载成功',
           theme: 'success',
           duration: 100,
           direction: 'column'
         })
+
+        this.setData({ items: response })
       })
-      .catch((e: HttpError) =>
+      .catch((e: HttpError) => {
+        Toast({
+          message: '加载失败',
+          theme: 'error',
+          duration: 100,
+          direction: 'column'
+        })
+
         Message.error({
-          content: e.message,
+          content: '加载失败：' + e.message,
           duration: 5000,
           offset: [20, 32],
           context: this
         })
-      )
+      })
   },
   async create() {
     const scan = await wx.scanCode({ scanType: ['qrCode'] }).catch(() => {
@@ -96,7 +103,7 @@ Page({
       .then((response) => this.setData({ [`items[${index}].code`]: response.code }))
       .catch((e: HttpError) =>
         Message.error({
-          content: e.message,
+          content: '更新验证码失败：' + e.message,
           duration: 5000,
           offset: [20, 32],
           context: this
@@ -122,7 +129,7 @@ Page({
       .deleteTotp(id)
       .catch((e: HttpError) =>
         Message.error({
-          content: e.message,
+          content: '删除失败：' + e.message,
           duration: 5000,
           offset: [20, 32],
           context: this

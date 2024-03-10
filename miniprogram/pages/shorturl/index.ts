@@ -26,14 +26,14 @@ Page({
     api
       .create(e.detail.value.link)
       .then((response: CreateResponse) => {
-        this.setData({ short: response.short })
-
         Toast({
           message: '生成成功',
           theme: 'success',
           duration: 100,
           direction: 'column'
         })
+
+        this.setData({ short: response.short })
       })
       .catch((e: HttpError) => {
         Toast({
@@ -44,7 +44,7 @@ Page({
         })
 
         Message.error({
-          content: e.message,
+          content: '生成失败：' + e.message,
           duration: 5000,
           offset: [20, 32],
           context: this

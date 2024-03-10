@@ -37,22 +37,21 @@ Page({
     api
       .detail(this.data.id)
       .then(({ id, issuer, username }) => {
-        this.setData({ id, issuer: issuer ?? '', username: username ?? '' })
-
         Toast({
           message: '加载成功',
           theme: 'success',
           duration: 100,
           direction: 'column'
         })
+
+        this.setData({ id, issuer: issuer ?? '', username: username ?? '' })
       })
       .catch(() => {
         Toast({
           message: '加载失败',
           theme: 'error',
           duration: 100,
-          direction: 'column',
-          preventScrollThrough: true
+          direction: 'column'
         })
 
         this.setData({ dialogVisible: true })
@@ -80,14 +79,21 @@ Page({
 
         setTimeout(() => wx.navigateBack(), 1500)
       })
-      .catch((e: HttpError) =>
+      .catch((e: HttpError) => {
+        Toast({
+          message: '更新失败',
+          theme: 'error',
+          duration: 100,
+          direction: 'column'
+        })
+
         Message.error({
+          content: '更新失败：' + e.message,
           duration: 5000,
-          content: e.message,
           context: this,
           offset: [20, 32]
         })
-      )
+      })
   },
   async cancel() {
     await wx.navigateBack()
