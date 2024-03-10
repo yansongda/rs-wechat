@@ -16,7 +16,7 @@ impl Validator for LoginRequest {
             return Err(Error::Params(Some("小程序错误：登录秘钥不能为空")));
         }
 
-        if self.code.to_owned().unwrap().len() < 8 {
+        if self.code.to_owned().unwrap().chars().count() < 8 {
             return Err(Error::Params(Some("小程序错误：登录秘钥必须大于 8 位")));
         }
 
@@ -42,7 +42,7 @@ impl Validator for UpdateRequest {
         if self.nickname.is_some() {
             let nickname = self.nickname.to_owned().unwrap();
 
-            if nickname.is_empty() || nickname.len() > 10 {
+            if nickname.is_empty() || nickname.chars().count() > 10 {
                 return Err(Error::Params(Some("昵称长度应为 1~10 之间，请正确填写")));
             }
         }
@@ -50,7 +50,7 @@ impl Validator for UpdateRequest {
         if self.slogan.is_some() {
             let slogan = self.slogan.to_owned().unwrap();
 
-            if slogan.is_empty() || slogan.len() > 50 {
+            if slogan.is_empty() || slogan.chars().count() > 50 {
                 return Err(Error::Params(Some("slogan 长度应为 1~50 之间，请正确填写")));
             }
         }

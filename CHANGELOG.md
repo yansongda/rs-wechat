@@ -1,8 +1,12 @@
 ## v1.2.0
 
+### fixed
+
+- fix(backend): 中文长度计算错误的问题(#54)
+
 ### chore
 
-- chore(frontend): 由 `weui` 更换为 `tdesign-miniprogram`
+- chore(frontend): 由 `weui` 更换为 `tdesign-miniprogram`(#52)
 
 ## v1.1.10
 
