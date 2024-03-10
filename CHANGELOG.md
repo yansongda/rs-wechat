@@ -6,7 +6,7 @@
 
 ### chore
 
-- chore(frontend): 由 `weui` 更换为 `tdesign-miniprogram`(#53)
+- chore(frontend): 由 `weui` 更换为 `tdesign-miniprogram`(#52)
 
 ## v1.1.10
 
