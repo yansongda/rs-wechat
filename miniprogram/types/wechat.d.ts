@@ -38,22 +38,6 @@ export interface FormSubmit<T> {
   }
 }
 
-export interface WeuiDialogTap {
-  detail: {
-    index: number
-    item: {
-      text?: string
-      extClass?: string
-    }
-  }
-}
-
-export interface WeuiSlideviewButtonTap<T, D> extends Tap<T, D> {
-  detail: {
-    index: number
-  }
-}
-
 export interface ChooseAvatarButtonTap<T, D> extends Tap<T, D> {
   detail: {
     avatarUrl: string

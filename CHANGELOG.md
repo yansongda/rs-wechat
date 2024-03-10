@@ -1,3 +1,9 @@
+## v1.2.0
+
+### chore
+
+- chore(frontend): 由 `weui` 更换为 `tdesign-miniprogram`
+
 ## v1.1.10
 
 ### optimized

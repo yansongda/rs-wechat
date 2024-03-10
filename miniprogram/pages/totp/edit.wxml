@@ -1,39 +1,24 @@
-<mp-toptips msg="{{toptipError}}" type="error" show="{{toptipError}}"></mp-toptips>
-<mp-dialog title="查询最新信息失败" buttons="{{dialogButtons}}" show="{{dialogShow}}" bindbuttontap="dialogTap" bindclose="dialogClose">
-  <view>请问是否重试？</view>
-</mp-dialog>
+<t-message id="t-message" />
+<t-toast id="t-toast" />
+
+<t-dialog
+  visible="{{dialogVisible}}"
+  title="查询最新信息失败"
+  content="请问是否重试？"
+  confirm-btn="{{ dialogConfirmBtn }}"
+  cancel-btn="取消"
+  bind:confirm="dialogConfirm"
+  bind:cancel="dialogCancel"
+/>
 
 <form bindsubmit="submit">
-  <view class="weui-form">
-    <view class="weui-form__bd">
-      <view class="weui-form__control-area">
-        <view class="weui-cells__group weui-cells__group_form">
-          <view class="weui-cells weui-cells_form">
-            <view for="issuer" class="weui-cell weui-cell_active">
-              <view class="weui-cell__hd">
-                <view class="weui-label">提供商</view>
-              </view>
-              <view class="weui-cell__bd">
-                  <input id="issuer" class="weui-input" placeholder="请输入提供商" name="issuer" value="{{issuer}}" />
-              </view>
-            </view>
-            <view for="username" class="weui-cell weui-cell_active">
-              <view class="weui-cell__hd">
-                <view class="weui-label">账号</view>
-              </view>
-              <view class="weui-cell__bd">
-                  <input id="username" class="weui-input" placeholder="请填写您的账号" name="username" value="{{username}}" />
-              </view>
-            </view>
-          </view>
-        </view>
-      </view>
-    </view>
-    <view class="weui-form__ft">
-      <view class="weui-form__opr-area">
-        <button class="weui-btn weui-btn_primary" aria-role="button" form-type="submit">修改</button>
-        <view class="weui-btn weui-btn_default" aria-role="button" bind:tap="cancel">取消</view>
-      </view>
-    </view>
+  <view class="input">
+    <t-input type="text" name="issuer" label="提供商" placeholder="请输入提供商" value="{{issuer}}" align="right"/>
+    <t-input type="text" name="username" label="账号" placeholder="请填写您的账号" value="{{username}}" align="right"/>
+  </view>
+  
+  <view class="operation">
+    <t-button theme="primary" size="large" type="submit" block>修改</t-button>
+    <t-button size="large" bind:tap="cancel" block>取消</t-button>
   </view>
 </form>

@@ -1,5 +1,9 @@
 {
   "usingComponents": {
-    "mp-toptips": "weui-miniprogram/toptips/toptips"
+    "t-message": "tdesign-miniprogram/message/message",
+    "t-avatar": "tdesign-miniprogram/avatar/avatar",
+    "t-input": "tdesign-miniprogram/input/input",
+    "t-button": "tdesign-miniprogram/button/button",
+    "t-toast": "tdesign-miniprogram/toast/toast"
   }
 }

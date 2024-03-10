@@ -1,12 +1,16 @@
-.avatar-wrapper {
-  padding: 0;
-  width: 56px !important;
-  border-radius: 8px;
-  margin-bottom: 40px;
+.avatar {
+  --td-button-large-height: 64px;
+  margin-top: 50px;
+  text-align: center;
+}
 
-  .avatar {
-    display: block;
-    width: 56px;
-    height: 56px;
-  }
+.input {
+  margin: 50px 0;
+}
+
+.operation {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  gap: 15px;
+  padding: 0 10px;
 }

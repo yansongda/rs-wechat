@@ -1,7 +1,9 @@
+import Message from 'tdesign-miniprogram/message/index'
+import Toast from 'tdesign-miniprogram/toast/index'
 import api from '@api/totp'
-import error from '@utils/error'
+import { HttpError } from '@models/error'
 import type { UpdateRequest } from 'miniprogram/types/totp'
-import type { FormSubmit, WeuiDialogTap } from 'miniprogram/types/wechat'
+import type { FormSubmit } from 'miniprogram/types/wechat'
 
 interface Query {
   id?: string
@@ -14,9 +16,8 @@ interface FormData {
 
 Page({
   data: {
-    toptipError: '',
-    dialogShow: false,
-    dialogButtons: [{ text: '取消' }, { text: '重试' }],
+    dialogVisible: false,
+    dialogConfirmBtn: { content: '重试', variant: 'base' },
     id: 0,
     issuer: '',
     username: ''
@@ -24,47 +25,85 @@ Page({
   onLoad(query: Query) {
     this.data.id = Number(query.id || 0)
   },
-  async onShow() {
-    await wx.showLoading({ title: '加载中' })
+  onShow() {
+    Toast({
+      message: '加载中...',
+      theme: 'loading',
+      duration: 5000,
+      direction: 'column',
+      preventScrollThrough: true
+    })
 
-    try {
-      const { id, issuer, username } = await api.detail(this.data.id)
+    api
+      .detail(this.data.id)
+      .then(({ id, issuer, username }) => {
+        Toast({
+          message: '加载成功',
+          theme: 'success',
+          duration: 100,
+          direction: 'column'
+        })
 
-      this.setData({ id, issuer: issuer ?? '', username: username ?? '' })
-    } catch (e: unknown) {
-      this.setData({ dialogShow: true })
-    }
+        this.setData({ id, issuer: issuer ?? '', username: username ?? '' })
+      })
+      .catch(() => {
+        Toast({
+          message: '加载失败',
+          theme: 'error',
+          duration: 100,
+          direction: 'column'
+        })
 
-    await wx.hideLoading()
+        this.setData({ dialogVisible: true })
+      })
   },
-  async submit(e: FormSubmit<FormData>) {
-    await wx.showToast({ title: '更新中', icon: 'loading', mask: true })
+  submit(e: FormSubmit<FormData>) {
+    Toast({
+      message: '更新中...',
+      theme: 'loading',
+      duration: 5000,
+      direction: 'column',
+      preventScrollThrough: true
+    })
 
-    try {
-      await api.update({ id: this.data.id, ...e.detail.value } as UpdateRequest)
+    api
+      .update({ id: this.data.id, ...e.detail.value } as UpdateRequest)
+      .then(() => {
+        Toast({
+          message: '更新成功',
+          theme: 'success',
+          duration: 1500,
+          direction: 'column',
+          preventScrollThrough: true
+        })
 
-      await wx.showToast({ title: '修改成功', icon: 'success', mask: true })
+        setTimeout(() => wx.navigateBack(), 1500)
+      })
+      .catch((e: HttpError) => {
+        Toast({
+          message: '更新失败',
+          theme: 'error',
+          duration: 100,
+          direction: 'column'
+        })
 
-      setTimeout(() => wx.navigateBack(), 1500)
-    } catch (e: unknown) {
-      await wx.hideToast()
-
-      this.setData({ toptipError: error.getErrorMessage(e) })
-    }
+        Message.error({
+          content: '更新失败：' + e.message,
+          duration: 5000,
+          context: this,
+          offset: [20, 32]
+        })
+      })
   },
   async cancel() {
     await wx.navigateBack()
   },
-  async dialogTap(e: WeuiDialogTap) {
-    this.setData({ dialogShow: false })
+  dialogConfirm() {
+    this.setData({ dialogVisible: false })
 
-    const { index } = e.detail
-
-    if (index === 1) {
-      await this.onShow()
-    }
+    this.onShow()
   },
-  dialogClose() {
-    this.setData({ dialogShow: false })
+  dialogCancel() {
+    this.setData({ dialogVisible: false })
   }
 })

@@ -4,9 +4,8 @@
     "pages/user/index",
     "pages/user/edit",
     "pages/totp/index",
-    "pages/shorturl/index",
     "pages/totp/edit",
-    "pages/time/index"
+    "pages/shorturl/index"
   ],
   "window": {
     "backgroundTextStyle": "light",
@@ -15,27 +14,23 @@
     "navigationBarTextStyle": "black"
   },
   "tabBar": {
+    "custom": true,
+    "color": "#000000",
+    "selectedColor": "#000000",
+    "backgroundColor": "#000000",
     "list": [
       {
         "pagePath": "pages/home/index",
-        "text": "首页",
-        "iconPath": "/images/icon/app.png",
-        "selectedIconPath": "/images/icon/app-selected.png"
+        "text": "首页"
       },
       {
         "pagePath": "pages/user/index",
-        "text": "我",
-        "iconPath": "/images/icon/user.png",
-        "selectedIconPath": "/images/icon/user-selected.png"
+        "text": "我"
       }
     ]
   },
   "networkTimeout": {
-    "request": 3000
-  },
-  "style": "v2",
-  "useExtendedLib": {
-    "weui": true
+    "request": 5000
   },
   "lazyCodeLoading": "requiredComponents",
   "sitemapLocation": "sitemap.json",
