@@ -1,0 +1,14 @@
+{
+  "navigationBarTitleText": "计算详情",
+  "usingComponents": {
+    "t-cell": "tdesign-miniprogram/cell/cell",
+    "t-tabs": "tdesign-miniprogram/tabs/tabs",
+    "t-tab-panel": "tdesign-miniprogram/tab-panel/tab-panel",
+    "t-collapse": "tdesign-miniprogram/collapse/collapse",
+    "t-collapse-panel": "tdesign-miniprogram/collapse-panel/collapse-panel",
+    "t-fab": "tdesign-miniprogram/fab/fab",
+    "t-cascader": "tdesign-miniprogram/cascader/cascader",
+    "t-calendar": "tdesign-miniprogram/calendar/calendar",
+    "t-badge": "tdesign-miniprogram/badge/badge"
+  }
+}

@@ -10,6 +10,11 @@ Page({
         name: '短链生成服务',
         icon: 'link-1',
         url: '/pages/shorturl/index'
+      },
+      {
+        name: '特殊计算器',
+        icon: 'calculator-1',
+        url: '/pages/calculator/index'
       }
     ]
   }

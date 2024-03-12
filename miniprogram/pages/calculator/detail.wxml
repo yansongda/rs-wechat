@@ -1,0 +1,58 @@
+<t-cell title="日期" note="{{date || ''}}" data-mode="date" hover arrow/>
+
+<view class="title">变量</view>
+
+<t-cell title="生肖" description="猪/狗/羊/猪/狗/羊" leftIcon="cat" hover arrow>
+  <t-badge count="鸡" slot="note" size="large"/>
+</t-cell>
+<t-cell title="数字" description="10/20/30/40/50/60" leftIcon="numbers-9" hover arrow>
+  <t-badge count="70" slot="note" size="large"/>
+</t-cell>
+<t-cell title="颜色" leftIcon="color-invert" hover arrow>
+  <t-badge count="绿" slot="note" size="large" color="green"/>
+</t-cell>
+
+<view class="title">详情</view>
+
+<t-collapse value="{{collapseActive}}" bind:change="collapseChange">
+  <t-collapse-panel header="张三" value="{{0}}" header-right-content="+100">
+    <t-tabs defaultValue="cat">
+      <t-tab-panel icon="cat" label="生肖" value="cat">
+        <t-cell title="特肖" note="鸡" hover arrow/>
+        <t-cell title="碰子" description="鸡/猪/狗/羊/猪/狗/羊/猪/狗/羊/猪/狗/羊" hover arrow/>
+        <t-cell title="多特" description="鸡/猪/狗" hover arrow/>
+      </t-tab-panel>
+      <t-tab-panel icon="numbers-9" label="数字" value="number">
+        <t-cell title="特号" note="22" hover arrow/>
+        <t-cell title="平号" description="11/12/13/14/15/16/17/18" hover arrow/>
+        <t-cell title="碰尾" description="1/2/3/4/5/6/7/8" hover arrow/>
+      </t-tab-panel>
+      <t-tab-panel icon="fill-color" label="其它" value="others">
+        <t-cell title="大小" note="大" hover arrow/>
+        <t-cell title="单双" note="单" hover arrow/>
+        <t-cell title="颜色" note="黄" hover arrow/>
+      </t-tab-panel>
+    </t-tabs>
+  </t-collapse-panel>
+  <t-collapse-panel header="李四" value="{{1}}" header-right-content="-100">
+    <t-tabs defaultValue="cat">
+      <t-tab-panel icon="cat" label="生肖" value="cat">
+        <t-cell title="特肖" note="鸡" hover arrow/>
+        <t-cell title="碰子" description="鸡/猪/狗/羊/猪/狗/羊/猪/狗/羊/猪/狗/羊" hover arrow/>
+        <t-cell title="多特" description="鸡/猪/狗" hover arrow/>
+      </t-tab-panel>
+      <t-tab-panel icon="numbers-9" label="数字" value="number">
+        <t-cell title="特号" note="22" hover arrow/>
+        <t-cell title="平号" description="11/12/13/14/15/16/17/18" hover arrow/>
+        <t-cell title="碰尾" description="1/2/3/4/5/6/7/8" hover arrow/>
+      </t-tab-panel>
+      <t-tab-panel icon="fill-color" label="其它" value="others">
+        <t-cell title="大小" note="大" hover arrow/>
+        <t-cell title="单双" note="单" hover arrow/>
+        <t-cell title="颜色" note="黄" hover arrow/>
+      </t-tab-panel>
+    </t-tabs>
+  </t-collapse-panel>
+</t-collapse>
+
+<t-fab icon="calculator-1" bind:click="calculate" aria-label="计算" text="重新计算" style="right: 35%;bottom: 32px;"></t-fab>

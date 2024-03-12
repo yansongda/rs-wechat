@@ -5,7 +5,10 @@
     "pages/user/edit",
     "pages/totp/index",
     "pages/totp/edit",
-    "pages/shorturl/index"
+    "pages/shorturl/index",
+    "pages/calculator/index",
+    "pages/calculator/detail",
+    "pages/calculator/create"
   ],
   "window": {
     "backgroundTextStyle": "light",

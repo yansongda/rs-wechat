@@ -1,0 +1,10 @@
+{
+  "navigationBarTitleText": "计算记录",
+  "usingComponents": {
+    "t-message": "tdesign-miniprogram/message/message",
+    "t-toast": "tdesign-miniprogram/toast/toast",
+    "t-empty": "tdesign-miniprogram/empty/empty",
+    "t-fab": "tdesign-miniprogram/fab/fab",
+    "t-cell": "tdesign-miniprogram/cell/cell"
+  }
+}
