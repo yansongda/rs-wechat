@@ -1,4 +1,4 @@
-import { CollapseChange } from "miniprogram/types/tdesign"
+import { CollapseChange, DateTimePickerConfirm } from "miniprogram/types/tdesign"
 
 interface Query {
   id?: string
@@ -6,17 +6,29 @@ interface Query {
 
 Page({
   data: {
-    date: '2024-03-11',
+    dateVisible: false,
     collapseActive: [] as number[],
-    id: 0,
+    data: {
+      id: 0,
+      date: '2024-03-11',
+    },
   },
   onLoad(query: Query) {
-    this.data.id = Number(query.id || 0)
+    this.data.data.id = Number(query.id || 0)
   },
   onShow() {
-
+    // todo：查询
   },
-  collapseChange(e: CollapseChange<unknown, unknown>) {
+  dateCellClick() {
+    this.setData({dateVisible: true})
+  },
+  dateConfirm(e: DateTimePickerConfirm) {
+    this.setData({['data.date']: e.detail.value})
+  },
+  dateCancel() {
+    this.setData({dateVisible: false})
+  },
+  collapseChange(e: CollapseChange) {
     this.setData({collapseActive: e.detail.value})
   }
 })

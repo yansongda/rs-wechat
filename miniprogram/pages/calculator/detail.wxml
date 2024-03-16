@@ -1,4 +1,13 @@
-<t-cell title="日期" note="{{date || ''}}" data-mode="date" hover arrow/>
+<t-cell title="日期" note="{{data.date || ''}}" data-mode="date" bind:click="dateCellClick" hover arrow/>
+<t-date-time-picker
+  title="选择日期"
+  visible="{{dateVisible}}"
+  mode="date"
+  defaultValue="{{data.date}}"
+  format="YYYY-MM-DD"
+  bind:confirm="dateConfirm"
+  bind:cancel="dateCancel"
+/>
 
 <view class="title">变量</view>
 

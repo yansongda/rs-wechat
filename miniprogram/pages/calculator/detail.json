@@ -8,7 +8,7 @@
     "t-collapse-panel": "tdesign-miniprogram/collapse-panel/collapse-panel",
     "t-fab": "tdesign-miniprogram/fab/fab",
     "t-cascader": "tdesign-miniprogram/cascader/cascader",
-    "t-calendar": "tdesign-miniprogram/calendar/calendar",
+    "t-date-time-picker": "tdesign-miniprogram/date-time-picker/date-time-picker",
     "t-badge": "tdesign-miniprogram/badge/badge"
   }
 }
