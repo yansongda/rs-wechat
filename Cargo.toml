@@ -25,9 +25,9 @@ axum = { version = "~0.7.1", features = ["macros"] }
 tower = { version = "~0.4.12" }
 tower-http = { version = "~0.5.0", features = ["cors", "request-id", "trace"] }
 
-sea-orm = { version = "~0.12.0", features = ["runtime-tokio-native-tls", "sqlx-sqlite", "sqlx-mysql", "debug-print"] }
+sqlx = { version = "~0.7.4", features = [ "runtime-tokio", "tls-native-tls", "postgres", "chrono" ] }
 
-reqwest = { version = "~0.11.22" }
+reqwest = { version = "~0.12.2" }
 
 totp-rs = { version = "~5.5.0", features = ["otpauth"] }
 fasthash = { version = "~0.4.0" }

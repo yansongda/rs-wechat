@@ -15,7 +15,7 @@ impl Config {
             .unwrap()
             .set_default("bin.api.debug", false)
             .unwrap()
-            .set_default("databases.default.url", "sqlite://miniprogram.sqlite3")
+            .set_default("databases.default.url", "sqlite://miniprogram.postgresql")
             .unwrap()
             .set_default("databases.default.connection_timeout", 1)
             .unwrap()
