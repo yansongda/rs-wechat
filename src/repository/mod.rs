@@ -1,8 +1,7 @@
 use std::collections::HashMap;
 use std::sync::OnceLock;
 use std::time::Duration;
-
-use sea_orm::{ConnectOptions, Database, DatabaseConnection};
+use sqlx::{Database, Postgres};
 
 use crate::config::Config;
 
@@ -10,7 +9,7 @@ pub mod shortlink;
 pub mod totp;
 pub mod user;
 
-static G_POOL: OnceLock<HashMap<&str, DatabaseConnection>> = OnceLock::new();
+static G_POOL: OnceLock<HashMap<&str, sqlx::Pool<dyn Database>>> = OnceLock::new();
 
 pub struct Pool;
 
@@ -21,15 +20,14 @@ impl Pool {
         G_POOL.set(p).unwrap();
     }
 
-    pub fn get(pool: &str) -> &DatabaseConnection {
+    pub fn get(pool: &str) -> &sqlx::Pool<dyn Database> {
         G_POOL.get().unwrap().get(pool).unwrap()
     }
 
     async fn connect(pool: &str) -> DatabaseConnection {
-        let mut options = ConnectOptions::new(Config::get::<String>(
-            format!("databases.{}.url", pool).as_str(),
-        ));
+        let url = Config::get::<String>(format!("databases.{}.url", pool).as_str());
 
+        let pool = sqlx::Pool::<Postgres>::connect("postgres://").await?;
         options
             .sqlx_logging(false)
             .connect_timeout(Duration::from_secs(Config::get::<u64>(
