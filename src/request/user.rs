@@ -1,7 +1,7 @@
 use crate::model::result::Error;
-use crate::model::user::{LoginParams, UpdateParams};
+use crate::model::user::{LoginParams, UpdateParams, User};
 use crate::request::Validator;
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, Deserialize)]
 pub struct LoginRequest {
@@ -21,6 +21,20 @@ impl Validator for LoginRequest {
         }
 
         Ok(Self::Data::from(self))
+    }
+}
+
+
+#[derive(Debug, Serialize)]
+pub struct LoginResponse {
+    pub open_id: String,
+}
+
+impl From<User> for LoginResponse {
+    fn from(user: User) -> Self {
+        Self {
+            open_id: user.open_id,
+        }
     }
 }
 
@@ -56,5 +70,31 @@ impl Validator for UpdateRequest {
         }
 
         Ok(Self::Data::from(self))
+    }
+}
+
+
+#[derive(Debug, Serialize)]
+pub struct DetailResponse {
+    pub avatar: Option<String>,
+    pub nickname: Option<String>,
+    pub slogan: Option<String>,
+    pub created_at: Option<String>,
+    pub updated_at: Option<String>,
+}
+
+impl From<User> for DetailResponse {
+    fn from(user: User) -> Self {
+        Self {
+            avatar: user.avatar,
+            nickname: user.nickname,
+            slogan: user.slogan,
+            created_at: user
+                .created_at
+                .map(|t| t.format("%Y-%m-%d %H:%M:%S").to_string()),
+            updated_at: user
+                .updated_at
+                .map(|t| t.format("%Y-%m-%d %H:%M:%S").to_string()),
+        }
     }
 }

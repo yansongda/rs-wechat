@@ -38,10 +38,8 @@ pub struct App {
 }
 
 impl App {
-    pub async fn init() -> Self {
+    pub fn init() -> Self {
         Config::init();
-
-        Pool::init().await;
 
         App {
             _logger: App::logger(),

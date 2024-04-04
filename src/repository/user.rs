@@ -1,15 +1,15 @@
-use sea_orm::ActiveValue::Set;
-use sea_orm::{ActiveModelTrait, ColumnTrait, EntityTrait, IntoActiveModel, QueryFilter};
 use tracing::error;
 
 use crate::model::result::{Error, Result};
-use crate::model::user::{Column, CreateUser, Entity, Model as User, UpdateUser};
+use crate::model::user::{CreateUser, UpdateUser, User};
 use crate::repository::Pool;
 
-pub async fn find(open_id: &str) -> Result<User> {
-    let result: Option<User> = Entity::find()
-        .filter(Column::OpenId.eq(open_id))
-        .one(Pool::get("default"))
+pub async fn fetch_optional(open_id: &str) -> Result<User> {
+    let result: Option<User> = sqlx::query_as(
+        "select * from yansongda.user where open_id = $1 limit 1",
+    )
+        .bind(open_id)
+        .fetch_optional(Pool::default())
         .await
         .map_err(|e| {
             error!("查询用户失败: {:?}", e);

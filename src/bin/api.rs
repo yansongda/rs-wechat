@@ -3,7 +3,7 @@ use tracing::info;
 
 #[tokio::main]
 async fn main() {
-    let app = App::init().await;
+    let app = App::init();
 
     let listener = tokio::net::TcpListener::bind(app.get_listen())
         .await

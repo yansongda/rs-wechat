@@ -1,5 +1,5 @@
 -- auto-generated definition
-create table "user"
+create table yansongda.user
 (
     id         bigserial
         constraint pk_user_id
@@ -12,14 +12,14 @@ create table "user"
     updated_at timestamp with time zone default now() not null
 );
 
-alter table "user"
+alter table yansongda.user
     owner to miniprogram;
 
 create unique index uk_user_open_id
-    on "user" (open_id);
+    on yansongda.user (open_id);
 
 -- auto-generated definition
-create table totp
+create table yansongda.totp
 (
     id         bigserial
         constraint pk_totp_id
@@ -27,20 +27,20 @@ create table totp
     user_id    bigint                                 not null,
     username   varchar(128)                           not null,
     issuer     varchar(128),
-    period     smallint                 default 30    not null,
     secret     varchar(256)                           not null,
+    config      jsonb                                          ,
     created_at timestamp with time zone default now() not null,
     updated_at timestamp with time zone default now() not null
 );
 
-alter table totp
+alter table yansongda.totp
     owner to miniprogram;
 
 create index idx_totp_user
-    on totp (user_id);
+    on yansongda.totp (user_id);
 
 -- auto-generated definition
-create table shortlink
+create table yansongda.shortlink
 (
     id         bigserial
         constraint pk_shorlink_id
@@ -55,10 +55,10 @@ create table shortlink
     updated_at timestamp with time zone default now() not null
 );
 
-alter table shortlink
+alter table yansongda.shortlink
     owner to miniprogram;
 
 create index idx_shortlink_user
-    on shortlink (user_id);
+    on yansongda.shortlink (user_id);
 
 
