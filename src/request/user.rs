@@ -1,5 +1,5 @@
 use crate::model::result::Error;
-use crate::model::user::{LoginParams, UpdateParams, User};
+use crate::model::user::User;
 use crate::request::Validator;
 use serde::{Deserialize, Serialize};
 
@@ -9,7 +9,7 @@ pub struct LoginRequest {
 }
 
 impl Validator for LoginRequest {
-    type Data = LoginParams;
+    type Data = ();
 
     fn validate(&self) -> crate::model::result::Result<Self::Data> {
         if self.code.is_none() {
@@ -20,7 +20,7 @@ impl Validator for LoginRequest {
             return Err(Error::Params(Some("小程序错误：登录秘钥必须大于 8 位")));
         }
 
-        Ok(Self::Data::from(self))
+        Ok(())
     }
 }
 
@@ -46,7 +46,7 @@ pub struct UpdateRequest {
 }
 
 impl Validator for UpdateRequest {
-    type Data = UpdateParams;
+    type Data = ();
 
     fn validate(&self) -> crate::model::result::Result<Self::Data> {
         if self.avatar.is_some() && self.avatar.to_owned().unwrap().len() < 8 {
@@ -69,7 +69,7 @@ impl Validator for UpdateRequest {
             }
         }
 
-        Ok(Self::Data::from(self))
+        Ok(())
     }
 }
 
@@ -79,8 +79,8 @@ pub struct DetailResponse {
     pub avatar: Option<String>,
     pub nickname: Option<String>,
     pub slogan: Option<String>,
-    pub created_at: Option<String>,
-    pub updated_at: Option<String>,
+    pub created_at: String,
+    pub updated_at: String,
 }
 
 impl From<User> for DetailResponse {

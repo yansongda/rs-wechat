@@ -9,9 +9,9 @@ use crate::request::Validator;
 use crate::service;
 
 pub async fn login(Json(request): Json<LoginRequest>) -> Resp<LoginResponse> {
-    let params = request.validate()?;
+    request.validate()?;
 
-    let user: User = service::user::login(params.code.as_str()).await?;
+    let user: User = service::user::login(request.code.unwrap_or_else(|| String::new()).as_str()).await?;
 
     Ok(Response::success(user.into()))
 }
@@ -24,9 +24,9 @@ pub async fn update(
     Extension(current_user): Extension<User>,
     Json(request): Json<UpdateRequest>,
 ) -> Resp<()> {
-    let params = request.validate()?;
+    request.validate()?;
 
-    service::user::update(current_user, params).await?;
+    service::user::update(current_user, request).await?;
 
     Ok(Response::success(()))
 }

@@ -1,6 +1,7 @@
 use crate::model::result::Result;
-use crate::model::user::{CreateUser, User, UpdateParams};
+use crate::model::user::User;
 use crate::repository;
+use crate::request::user::UpdateRequest;
 use crate::service::wechat;
 
 pub async fn login(code: &str) -> Result<User> {
@@ -12,13 +13,13 @@ pub async fn login(code: &str) -> Result<User> {
         return user;
     }
 
-    repository::user::insert(CreateUser { open_id }).await
+    repository::user::insert(&open_id).await
 }
 
 pub async fn detail(open_id: &str) -> Result<User> {
     repository::user::fetch_optional(open_id).await
 }
 
-pub async fn update(current_user: User, update_params: UpdateParams) -> Result<User> {
-    repository::user::update(current_user.into(), update_params.into()).await
+pub async fn update(current_user: User, update_request: UpdateRequest) -> Result<User> {
+    repository::user::update(current_user, update_request).await
 }
