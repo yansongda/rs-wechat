@@ -1,15 +1,16 @@
-use sea_orm::ActiveValue::Set;
-use sea_orm::{ActiveModelTrait, EntityTrait, IntoActiveModel, ModelTrait};
 use tracing::error;
 
 use crate::model::result::{Error, Result};
-use crate::model::totp::{CreateTotp, Entity, Model as Totp, UpdateTotp};
-use crate::model::user::Model as User;
+use crate::model::totp::{CreateTotp, Totp, UpdateTotp};
+use crate::model::user::User;
 use crate::repository::Pool;
 
-pub async fn all(user: User) -> Result<Vec<Totp>> {
-    user.find_related(Entity)
-        .all(Pool::get("default"))
+pub async fn all(current_user: User) -> Result<Vec<Totp>> {
+    sqlx::query_as(
+        "select * from yansongda.totp where user_id = $1",
+    )
+        .bind(current_user.id)
+        .fetch_all(Pool::default())
         .await
         .map_err(|e| {
             error!("查询用户所有的 Totp 失败: {:?}", e);
@@ -18,9 +19,12 @@ pub async fn all(user: User) -> Result<Vec<Totp>> {
         })
 }
 
-pub async fn find(id: i64) -> Result<Totp> {
-    let result = Entity::find_by_id(id)
-        .one(Pool::get("default"))
+pub async fn fetch(id: i64) -> Result<Totp> {
+    let result: Option<Totp> = sqlx::query_as(
+        "select * from yansongda.totp where id = $1 limit 1",
+    )
+        .bind(id)
+        .fetch_optional(Pool::default())
         .await
         .map_err(|e| {
             error!("查询 Totp 失败: {:?}", e);
@@ -28,25 +32,25 @@ pub async fn find(id: i64) -> Result<Totp> {
             Error::Database(None)
         })?;
 
-    if let Some(result) = result {
-        return Ok(result);
+    if let Some(user) = result {
+        return Ok(user);
     }
 
     Err(Error::TotpNotFound(None))
 }
 
 pub async fn insert(totp: CreateTotp) -> Result<Totp> {
-    let result = totp
-        .into_active_model()
-        .insert(Pool::get("default"))
+    sqlx::query_as(
+        "insert into yansongda.totp (user_id, username, issuer, secret) values ($1, $2, $3, $4) returning *",
+    )
+        .bind(open_id)
+        .fetch_one(Pool::default())
         .await
         .map_err(|e| {
             error!("插入 Totp 失败: {:?}", e);
 
             Error::DatabaseInsert(None)
-        })?;
-
-    Ok(result)
+        })
 }
 
 pub async fn update(model: Totp, updated: UpdateTotp) -> Result<()> {

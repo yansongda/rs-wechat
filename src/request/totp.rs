@@ -1,7 +1,8 @@
 use crate::model::result::Error;
-use crate::model::totp::UpdateTotp;
+use crate::model::totp::{Totp, UpdateTotp};
 use crate::request::Validator;
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
+use crate::service::totp;
 
 #[derive(Debug, Clone, Deserialize)]
 pub struct DetailRequest {
@@ -17,6 +18,27 @@ impl Validator for DetailRequest {
         }
 
         Ok(self.id.unwrap())
+    }
+}
+
+#[derive(Debug, Serialize)]
+pub struct DetailResponse {
+    pub id: i64,
+    pub issuer: String,
+    pub period: i64,
+    pub username: String,
+    pub code: String,
+}
+
+impl From<Totp> for DetailResponse {
+    fn from(totp: Totp) -> Self {
+        Self {
+            id: totp.id,
+            issuer: totp.issuer.clone().unwrap_or("未知发行方".to_string()),
+            period: totp.period,
+            username: totp.username.clone(),
+            code: totp::generate_code(totp.clone()),
+        }
     }
 }
 
@@ -60,7 +82,7 @@ impl Validator for UpdateRequest {
             return Err(Error::Params(Some("账号 不能为空")));
         }
 
-        Ok(Self::Data::from(self))
+        Ok(Self::Data::from(self.to_owned()))
     }
 }
 
