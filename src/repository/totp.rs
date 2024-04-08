@@ -1,7 +1,8 @@
+use sqlx::types::Json;
 use tracing::error;
 
 use crate::model::result::{Error, Result};
-use crate::model::totp::{CreateTotp, Totp, UpdateTotp};
+use crate::model::totp::{CreateTotp, Totp, TotpConfig, UpdateTotp};
 use crate::model::user::User;
 use crate::repository::Pool;
 
@@ -41,12 +42,15 @@ pub async fn fetch(id: i64) -> Result<Totp> {
 
 pub async fn insert(totp: CreateTotp) -> Result<Totp> {
     sqlx::query_as(
-        "insert into yansongda.totp (user_id, username, issuer, secret) values ($1, $2, $3, $4) returning *",
+        "insert into yansongda.totp (user_id, username, issuer, secret, config) values ($1, $2, $3, $4, $5) returning *",
     )
         .bind(totp.user_id)
         .bind(totp.username)
         .bind(totp.issuer)
         .bind(totp.secret)
+        .bind(Json(TotpConfig {
+            period: totp.period,
+        }))
         .fetch_one(Pool::default())
         .await
         .map_err(|e| {

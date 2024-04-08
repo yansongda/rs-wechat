@@ -67,11 +67,13 @@ pub async fn delete(current_user: User, id: i64) -> Result<()> {
 }
 
 pub fn generate_code(totp: Totp) -> String {
+    let config = totp.config.unwrap_or_default();
+
     let totp = TOTP::new_unchecked(
         Algorithm::SHA1,
         6,
         1,
-        totp.period as u64,
+        config.period as u64,
         Secret::Encoded(totp.secret).to_bytes().unwrap(),
         totp.issuer,
         totp.username,

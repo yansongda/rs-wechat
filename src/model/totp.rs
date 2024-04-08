@@ -1,6 +1,7 @@
-use chrono::{DateTime, Utc};
+use chrono::{DateTime, Local};
 use serde::{Deserialize, Serialize};
 use sqlx::FromRow;
+use sqlx::types::Json;
 
 use crate::request::totp::UpdateRequest;
 
@@ -11,15 +12,21 @@ pub struct Totp {
     pub user_id: i64,
     pub username: String,
     pub issuer: Option<String>,
-    pub period: i64,
     pub secret: String,
-    pub created_at: DateTime<Utc>,
-    pub updated_at: DateTime<Utc>,
+    pub config: Option<Json<TotpConfig>>,
+    pub created_at: DateTime<Local>,
+    pub updated_at: DateTime<Local>,
 }
 
 #[derive(Debug, Clone, Eq, PartialEq, Serialize, Deserialize)]
 pub struct TotpConfig {
     pub period: i64,
+}
+
+impl Default for TotpConfig {
+    fn default() -> Self {
+        Self { period: 30 }
+    }
 }
 
 
