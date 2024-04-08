@@ -49,7 +49,7 @@ pub async fn update(current_user: User, params: UpdateTotp) -> Result<()> {
         return Err(Error::TotpNotFound(None));
     }
 
-    repository::totp::update(model, params).await?;
+    repository::totp::update(params).await?;
 
     Ok(())
 }

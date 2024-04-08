@@ -43,7 +43,10 @@ pub async fn insert(totp: CreateTotp) -> Result<Totp> {
     sqlx::query_as(
         "insert into yansongda.totp (user_id, username, issuer, secret) values ($1, $2, $3, $4) returning *",
     )
-        .bind(open_id)
+        .bind(totp.user_id)
+        .bind(totp.username)
+        .bind(totp.issuer)
+        .bind(totp.secret)
         .fetch_one(Pool::default())
         .await
         .map_err(|e| {
@@ -53,7 +56,7 @@ pub async fn insert(totp: CreateTotp) -> Result<Totp> {
         })
 }
 
-pub async fn update(model: Totp, updated: UpdateTotp) -> Result<()> {
+pub async fn update(updated: UpdateTotp) -> Result<()> {
     let mut active_model = updated.into_active_model();
 
     active_model.id = Set(model.id);

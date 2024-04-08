@@ -17,6 +17,11 @@ pub struct Totp {
     pub updated_at: DateTime<Utc>,
 }
 
+#[derive(Debug, Clone, Eq, PartialEq, Serialize, Deserialize)]
+pub struct TotpConfig {
+    pub period: i64,
+}
+
 
 #[derive(Debug)]
 pub struct CreateTotp {
