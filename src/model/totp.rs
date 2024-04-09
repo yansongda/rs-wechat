@@ -6,7 +6,6 @@ use sqlx::types::Json;
 use crate::request::totp::UpdateRequest;
 
 #[derive(Debug, Clone, Eq, PartialEq, Serialize, Deserialize, FromRow)]
-#[sea_orm(table_name = "totp")]
 pub struct Totp {
     pub id: i64,
     pub user_id: i64,
@@ -28,7 +27,6 @@ impl Default for TotpConfig {
         Self { period: 30 }
     }
 }
-
 
 #[derive(Debug)]
 pub struct CreateTotp {

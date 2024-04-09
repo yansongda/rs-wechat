@@ -2,7 +2,7 @@ use sea_orm::{ActiveModelTrait, ColumnTrait, EntityTrait, IntoActiveModel, Query
 use tracing::error;
 
 use crate::model::result::{Error, Result};
-use crate::model::shortlink::{Column, CreateShortlink, Entity, Model as Shortlink};
+use crate::model::short_url::{Column, CreateShortlink, Entity, Model as Shortlink};
 use crate::repository::Pool;
 
 pub async fn find(short: &str) -> Result<Shortlink> {

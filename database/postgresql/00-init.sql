@@ -40,14 +40,14 @@ create index idx_totp_user
     on yansongda.totp (user_id);
 
 -- auto-generated definition
-create table yansongda.shortlink
+create table yansongda.short_url
 (
     id         bigserial
-        constraint pk_shorlink_id
+        constraint pk_short_url_id
             primary key,
     user_id    bigint                                 not null,
     short      varchar(64)                            not null
-        constraint uk_shortlink_short
+        constraint uk_short_url_short
             unique,
     link       text,
     visit      integer                  default 0     not null,
@@ -55,10 +55,10 @@ create table yansongda.shortlink
     updated_at timestamp with time zone default now() not null
 );
 
-alter table yansongda.shortlink
+alter table yansongda.short_url
     owner to miniprogram;
 
-create index idx_shortlink_user
-    on yansongda.shortlink (user_id);
+create index idx_short_url_user
+    on yansongda.short_url (user_id);
 
 

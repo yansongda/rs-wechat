@@ -8,7 +8,7 @@ use crate::api::v1;
 pub fn api_v1() -> Router {
     let unauthorized = Router::new()
         .route("/users/login", post(v1::users::login))
-        .route("/shortlink/redirect/:short", get(v1::shortlink::redirect));
+        .route("/short-url/redirect/:short", get(v1::short_url::redirect));
 
     let authorized = Router::new()
         .nest(
@@ -27,10 +27,10 @@ pub fn api_v1() -> Router {
                 .route("/delete", post(v1::totp::delete)),
         )
         .nest(
-            "/shortlink",
+            "/short-url",
             Router::new()
-                .route("/create", post(v1::shortlink::create))
-                .route("/detail", post(v1::shortlink::detail)),
+                .route("/create", post(v1::short_url::create))
+                .route("/detail", post(v1::short_url::detail)),
         )
         .layer(ServiceBuilder::new().layer(middleware::from_fn(authorization)));
 

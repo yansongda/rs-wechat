@@ -14,17 +14,17 @@ pub async fn all(current_user: User) -> Result<Vec<DetailResponse>> {
 }
 
 pub async fn detail(current_user: User, id: i64) -> Result<DetailResponse> {
-    let t = repository::totp::fetch(id).await?;
+    let totp = repository::totp::fetch(id).await?;
 
-    if current_user.id != t.user_id {
+    if current_user.id != totp.user_id {
         return Err(Error::TotpNotFound(None));
     }
 
-    Ok(t.into())
+    Ok(totp.into())
 }
 
 pub async fn create(current_user: User, uri: String) -> Result<()> {
-    let t = TOTP::from_url_unchecked(uri.as_str()).map_err(|e| {
+    let totp = TOTP::from_url_unchecked(uri.as_str()).map_err(|e| {
         error!("TOTP 链接解析失败: {}", e);
 
         Error::TotpParse(None)
@@ -32,10 +32,10 @@ pub async fn create(current_user: User, uri: String) -> Result<()> {
 
     repository::totp::insert(CreateTotp {
         user_id: current_user.id,
-        username: t.account_name,
-        issuer: t.issuer,
-        period: t.step as i64,
-        secret: Secret::Raw(t.secret).to_encoded().to_string(),
+        username: totp.account_name,
+        issuer: totp.issuer,
+        period: totp.step as i64,
+        secret: Secret::Raw(totp.secret).to_encoded().to_string(),
     })
     .await?;
 
@@ -43,9 +43,9 @@ pub async fn create(current_user: User, uri: String) -> Result<()> {
 }
 
 pub async fn update(current_user: User, params: UpdateTotp) -> Result<()> {
-    let model = repository::totp::fetch(params.id).await?;
+    let totp = repository::totp::fetch(params.id).await?;
 
-    if current_user.id != model.user_id {
+    if current_user.id != totp.user_id {
         return Err(Error::TotpNotFound(None));
     }
 
@@ -55,13 +55,13 @@ pub async fn update(current_user: User, params: UpdateTotp) -> Result<()> {
 }
 
 pub async fn delete(current_user: User, id: i64) -> Result<()> {
-    let model = repository::totp::fetch(id).await?;
+    let totp = repository::totp::fetch(id).await?;
 
-    if current_user.id != model.user_id {
+    if current_user.id != totp.user_id {
         return Err(Error::TotpNotFound(None));
     }
 
-    repository::totp::delete(model).await?;
+    repository::totp::delete(totp).await?;
 
     Ok(())
 }

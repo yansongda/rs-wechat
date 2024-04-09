@@ -1,3 +1,4 @@
+use sqlx::{Execute, Postgres, QueryBuilder};
 use sqlx::types::Json;
 use tracing::error;
 
@@ -61,28 +62,39 @@ pub async fn insert(totp: CreateTotp) -> Result<Totp> {
 }
 
 pub async fn update(updated: UpdateTotp) -> Result<()> {
-    let mut active_model = updated.into_active_model();
+    let mut builder = QueryBuilder::<Postgres>::new("update yansongda.totp set updated_at = now(), ");
 
-    active_model.id = Set(model.id);
+    let mut separated = builder.separated(", ");
+    if let Some(issuer) = updated.issuer {
+        separated.push("issuer = ").push_bind(issuer);
+    }
+    if let Some(username) = updated.username {
+        separated.push("username = ").push_bind(username);
+    }
+    separated.push_unseparated("where id = ").push_bind(updated.id);
 
-    active_model
-        .update(Pool::get("default"))
+    sqlx::query(builder.build().sql())
+        .execute(Pool::default())
         .await
         .map_err(|e| {
             error!("更新 Totp 失败: {:?}", e);
 
-            Error::DatabaseInsert(None)
+            Error::DatabaseUpdate(None)
         })?;
 
     Ok(())
 }
 
-pub async fn delete(model: Totp) -> Result<()> {
-    model.delete(Pool::get("default")).await.map_err(|e| {
-        error!("删除 Totp 失败: {:?}", e);
+pub async fn delete(totp: Totp) -> Result<()> {
+    sqlx::query("delete from yansongda.totp where id = $1")
+        .bind(totp.id)
+        .execute(Pool::default())
+        .await
+        .map_err(|e| {
+            error!("删除 Totp 失败: {:?}", e);
 
-        Error::DatabaseDelete(None)
-    })?;
+            Error::DatabaseDelete(None)
+        })?;
 
     Ok(())
 }
