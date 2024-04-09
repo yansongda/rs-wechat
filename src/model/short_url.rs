@@ -6,7 +6,6 @@ use crate::config::Config;
 #[derive(Debug, Clone, Eq, PartialEq, Serialize, Deserialize)]
 pub struct ShortUrl {
     pub id: i64,
-    pub user_id: i64,
     pub short: String,
     pub link: String,
     pub visit: i64,
@@ -35,7 +34,6 @@ impl From<ShortUrl> for CreateResponse {
 
 #[derive(Debug)]
 pub struct CreateShortlink {
-    pub user_id: i64,
     pub link: String,
     pub short: String,
 }

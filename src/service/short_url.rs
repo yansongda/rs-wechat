@@ -2,9 +2,8 @@ use crate::model::result::Result;
 use crate::model::short_url::{CreateShortlink, ShortUrl};
 use crate::repository;
 use fasthash::murmur3;
-use crate::model::user::User;
 
-pub async fn create(current_user: User, link: &str) -> Result<ShortUrl> {
+pub async fn create(link: &str) -> Result<ShortUrl> {
     let short = base62::encode(murmur3::hash32(link.as_bytes()));
 
     let result = repository::short_url::find(&short).await;
@@ -13,7 +12,6 @@ pub async fn create(current_user: User, link: &str) -> Result<ShortUrl> {
     }
 
     repository::short_url::insert(CreateShortlink {
-        user_id: current_user.id,
         link: link.to_string(),
         short,
     })

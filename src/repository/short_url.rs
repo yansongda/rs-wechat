@@ -1,11 +1,10 @@
-use sea_orm::{ActiveModelTrait, ColumnTrait, EntityTrait, IntoActiveModel, QueryFilter};
 use tracing::error;
 
 use crate::model::result::{Error, Result};
-use crate::model::short_url::{Column, CreateShortlink, Entity, Model as Shortlink};
+use crate::model::short_url::{CreateShortlink, ShortUrl};
 use crate::repository::Pool;
 
-pub async fn find(short: &str) -> Result<Shortlink> {
+pub async fn find(short: &str) -> Result<ShortUrl> {
     let result = Entity::find()
         .filter(Column::Short.eq(short))
         .one(Pool::get("default"))
@@ -23,7 +22,7 @@ pub async fn find(short: &str) -> Result<Shortlink> {
     Err(Error::ShortlinkNotFound(None))
 }
 
-pub async fn insert(link: CreateShortlink) -> Result<Shortlink> {
+pub async fn insert(link: CreateShortlink) -> Result<ShortUrl> {
     let result = link
         .into_active_model()
         .insert(Pool::get("default"))
@@ -37,7 +36,7 @@ pub async fn insert(link: CreateShortlink) -> Result<Shortlink> {
     Ok(result)
 }
 
-pub async fn update_count(link: Shortlink) {
+pub async fn update_count(link: ShortUrl) {
     let visit = link.visit;
     let mut active_model = link.into_active_model();
 

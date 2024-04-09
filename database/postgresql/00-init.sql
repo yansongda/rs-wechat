@@ -45,7 +45,6 @@ create table yansongda.short_url
     id         bigserial
         constraint pk_short_url_id
             primary key,
-    user_id    bigint                                 not null,
     short      varchar(64)                            not null
         constraint uk_short_url_short
             unique,
@@ -57,8 +56,3 @@ create table yansongda.short_url
 
 alter table yansongda.short_url
     owner to miniprogram;
-
-create index idx_short_url_user
-    on yansongda.short_url (user_id);
-
-

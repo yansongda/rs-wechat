@@ -11,13 +11,10 @@ use crate::request::shortlink::{CreateRequest, DetailRequest};
 use crate::request::Validator;
 use crate::service;
 
-pub async fn create(
-    Extension(current_user): Extension<User>,
-    Json(request): Json<CreateRequest>,
-) -> Resp<CreateResponse> {
+pub async fn create(Json(request): Json<CreateRequest>, ) -> Resp<CreateResponse> {
     let link = request.validate()?;
 
-    let shortlink = service::short_url::create(current_user, &link).await?;
+    let shortlink = service::short_url::create(&link).await?;
 
     Ok(Response::success(CreateResponse::from(shortlink)))
 }
