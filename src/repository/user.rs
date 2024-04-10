@@ -6,17 +6,16 @@ use crate::model::user::{UpdateUser, User};
 use crate::repository::Pool;
 
 pub async fn fetch(open_id: &str) -> Result<User> {
-    let result: Option<User> = sqlx::query_as(
-        "select * from yansongda.user where open_id = $1 limit 1",
-    )
-        .bind(open_id)
-        .fetch_optional(Pool::default())
-        .await
-        .map_err(|e| {
-            error!("查询用户失败: {:?}", e);
+    let result: Option<User> =
+        sqlx::query_as("select * from yansongda.user where open_id = $1 limit 1")
+            .bind(open_id)
+            .fetch_optional(Pool::default())
+            .await
+            .map_err(|e| {
+                error!("查询用户失败: {:?}", e);
 
-            Error::Database(None)
-        })?;
+                Error::Database(None)
+            })?;
 
     if let Some(user) = result {
         return Ok(user);
@@ -26,9 +25,7 @@ pub async fn fetch(open_id: &str) -> Result<User> {
 }
 
 pub async fn insert(open_id: &str) -> Result<User> {
-    sqlx::query_as(
-        "insert into yansongda.user (open_id) values ($1) returning *",
-    )
+    sqlx::query_as("insert into yansongda.user (open_id) values ($1) returning *")
         .bind(open_id)
         .fetch_one(Pool::default())
         .await
@@ -40,7 +37,8 @@ pub async fn insert(open_id: &str) -> Result<User> {
 }
 
 pub async fn update(current_user: User, update_user: UpdateUser) -> Result<User> {
-    let mut builder = QueryBuilder::<Postgres>::new("update yansongda.user set updated_at = now(), ");
+    let mut builder =
+        QueryBuilder::<Postgres>::new("update yansongda.user set updated_at = now(), ");
 
     let mut separated = builder.separated(", ");
     if let Some(nickname) = update_user.nickname {
@@ -52,7 +50,9 @@ pub async fn update(current_user: User, update_user: UpdateUser) -> Result<User>
     if let Some(slogan) = update_user.slogan {
         separated.push("slogan = ").push_bind(slogan);
     }
-    separated.push_unseparated("where id = ").push_bind(current_user.id);
+    separated
+        .push_unseparated("where id = ")
+        .push_bind(current_user.id);
 
     sqlx::query_as(builder.push(" returning *").build().sql())
         .fetch_one(Pool::default())

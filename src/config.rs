@@ -15,7 +15,10 @@ impl Config {
             .unwrap()
             .set_default("bin.api.debug", false)
             .unwrap()
-            .set_default("databases.default.url", "postgres://localhost:5432/miniprogram")
+            .set_default(
+                "databases.default.url",
+                "postgres://localhost:5432/miniprogram",
+            )
             .unwrap()
             .set_default("databases.default.max_connections", 30)
             .unwrap()

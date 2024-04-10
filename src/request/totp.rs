@@ -1,8 +1,8 @@
 use crate::model::result::Error;
 use crate::model::totp::{Totp, UpdateTotp};
 use crate::request::Validator;
-use serde::{Deserialize, Serialize};
 use crate::service::totp;
+use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, Deserialize)]
 pub struct DetailRequest {

@@ -4,14 +4,14 @@ use crate::api::extract::Json;
 use crate::api::response::Resp;
 use crate::model::result::Response;
 use crate::model::user::User;
-use crate::request::totp::{CreateRequest, DeleteRequest, DetailRequest, DetailResponse, UpdateRequest};
+use crate::request::totp::{
+    CreateRequest, DeleteRequest, DetailRequest, DetailResponse, UpdateRequest,
+};
 use crate::request::Validator;
 use crate::service;
 
 pub async fn all(Extension(current_user): Extension<User>) -> Resp<Vec<DetailResponse>> {
-    Ok(Response::success(
-        service::totp::all(current_user).await?,
-    ))
+    Ok(Response::success(service::totp::all(current_user).await?))
 }
 
 pub async fn detail(

@@ -24,9 +24,7 @@ pub async fn authorization(mut request: Request, next: Next) -> Response {
         return Error::AuthorizationNotFound(None).into_response();
     }
 
-    request
-        .extensions_mut()
-        .insert(user.unwrap());
+    request.extensions_mut().insert(user.unwrap());
 
     next.run(request).await
 }

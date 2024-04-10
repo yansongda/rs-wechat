@@ -29,8 +29,7 @@ pub fn api_v1() -> Router {
         )
         .nest(
             "/short-url",
-            Router::new()
-                .route("/create", post(v1::short_url::create)),
+            Router::new().route("/create", post(v1::short_url::create)),
         )
         .layer(ServiceBuilder::new().layer(middleware::from_fn(authorization)));
 

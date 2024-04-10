@@ -24,7 +24,6 @@ impl Validator for LoginRequest {
     }
 }
 
-
 #[derive(Debug, Serialize)]
 pub struct LoginResponse {
     pub open_id: String,
@@ -73,14 +72,11 @@ impl Validator for UpdateRequest {
     }
 }
 
-
 #[derive(Debug, Serialize)]
 pub struct DetailResponse {
     pub avatar: Option<String>,
     pub nickname: Option<String>,
     pub slogan: Option<String>,
-    pub created_at: String,
-    pub updated_at: String,
 }
 
 impl From<User> for DetailResponse {
@@ -89,12 +85,6 @@ impl From<User> for DetailResponse {
             avatar: user.avatar,
             nickname: user.nickname,
             slogan: user.slogan,
-            created_at: user
-                .created_at
-                .map(|t| t.format("%Y-%m-%d %H:%M:%S").to_string()),
-            updated_at: user
-                .updated_at
-                .map(|t| t.format("%Y-%m-%d %H:%M:%S").to_string()),
         }
     }
 }

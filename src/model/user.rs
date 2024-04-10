@@ -1,7 +1,7 @@
+use crate::request::user::UpdateRequest;
 use chrono::{DateTime, Local};
 use serde::{Deserialize, Serialize};
 use sqlx::FromRow;
-use crate::request::user::UpdateRequest;
 
 #[derive(Debug, Clone, Serialize, Eq, PartialEq, Deserialize, FromRow)]
 pub struct User {

@@ -9,23 +9,23 @@ use crate::request::Validator;
 use crate::service;
 
 pub async fn create(Json(request): Json<CreateRequest>) -> Resp<CreateResponse> {
-    let link = request.validate()?;
+    let url = request.validate()?;
 
-    let shortlink = service::short_url::create(&link).await?;
+    let short_url = service::short_url::create(&url).await?;
 
-    Ok(Response::success(CreateResponse::from(shortlink)))
+    Ok(Response::success(CreateResponse::from(short_url)))
 }
 
 pub async fn detail(Json(request): Json<DetailRequest>) -> Resp<DetailResponse> {
     let short = request.validate()?;
 
-    let shortlink = service::short_url::detail(&short).await?;
+    let short_url = service::short_url::detail(&short).await?;
 
-    Ok(Response::success(DetailResponse::from(shortlink)))
+    Ok(Response::success(DetailResponse::from(short_url)))
 }
 
 pub async fn redirect(Path(short): Path<String>) -> Result<Redirect> {
-    let shortlink = service::short_url::detail(short.as_str()).await?;
+    let short_url = service::short_url::detail(short.as_str()).await?;
 
-    Ok(Redirect::temporary(shortlink.link.as_str()))
+    Ok(Redirect::temporary(short_url.url.as_str()))
 }

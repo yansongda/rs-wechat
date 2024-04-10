@@ -48,7 +48,7 @@ create table yansongda.short_url
     short      varchar(64)                            not null
         constraint uk_short_url_short
             unique,
-    link       text,
+    url        text,
     visit      integer                  default 0     not null,
     created_at timestamp with time zone default now() not null,
     updated_at timestamp with time zone default now() not null

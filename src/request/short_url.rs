@@ -8,34 +8,34 @@ use crate::request::Validator;
 
 #[derive(Debug, Clone, Deserialize)]
 pub struct CreateRequest {
-    pub link: Option<String>,
+    pub url: Option<String>,
 }
 
 impl Validator for CreateRequest {
     type Data = String;
 
     fn validate(&self) -> crate::model::result::Result<Self::Data> {
-        if self.link.is_none() {
+        if self.url.is_none() {
             return Err(Error::Params(Some("URL 链接不能为空")));
         }
 
-        Url::parse(self.link.clone().unwrap().as_str())
+        Url::parse(self.url.clone().unwrap().as_str())
             .map_err(|_| Error::Params(Some("URL 链接格式不正确")))?;
 
-        Ok(self.link.clone().unwrap())
+        Ok(self.url.clone().unwrap())
     }
 }
 
 #[derive(Debug, Serialize)]
 pub struct CreateResponse {
-    pub link: String,
+    pub url: String,
     pub short: String,
 }
 
 impl From<ShortUrl> for CreateResponse {
     fn from(model: ShortUrl) -> Self {
         Self {
-            link: model.link,
+            url: model.url,
             short: format!(
                 "{}/{}",
                 Config::get::<String>("short_url.domain"),
@@ -64,14 +64,14 @@ impl Validator for DetailRequest {
 
 #[derive(Debug, Serialize)]
 pub struct DetailResponse {
-    pub link: String,
+    pub url: String,
     pub short: String,
 }
 
 impl From<ShortUrl> for DetailResponse {
     fn from(model: ShortUrl) -> Self {
         Self {
-            link: model.link,
+            url: model.url,
             short: format!(
                 "{}/{}",
                 Config::get::<String>("short_url.domain"),
