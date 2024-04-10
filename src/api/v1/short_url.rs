@@ -1,17 +1,14 @@
 use axum::extract::Path;
 use axum::response::Redirect;
-use axum::Extension;
 
 use crate::api::extract::Json;
 use crate::api::response::Resp;
 use crate::model::result::{Response, Result};
-use crate::model::short_url::{CreateResponse, DetailResponse};
-use crate::model::user::User;
-use crate::request::shortlink::{CreateRequest, DetailRequest};
+use crate::request::short_url::{CreateRequest, CreateResponse, DetailRequest, DetailResponse};
 use crate::request::Validator;
 use crate::service;
 
-pub async fn create(Json(request): Json<CreateRequest>, ) -> Resp<CreateResponse> {
+pub async fn create(Json(request): Json<CreateRequest>) -> Resp<CreateResponse> {
     let link = request.validate()?;
 
     let shortlink = service::short_url::create(&link).await?;

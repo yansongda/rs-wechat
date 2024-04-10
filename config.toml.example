@@ -9,7 +9,7 @@ min_connections=2
 max_connections=15
 acquire_timeout=3
 
-[shortlink]
+[short_url]
 domain="https://u.ysdor.cn"
 
 [wechat]

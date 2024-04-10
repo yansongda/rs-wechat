@@ -29,7 +29,7 @@ impl Config {
             .unwrap()
             .set_default("wechat.app_secret", "")
             .unwrap()
-            .set_default("shortlink.domain", "https://u.ysdor.cn")
+            .set_default("short_url.domain", "https://u.ysdor.cn")
             .unwrap()
             .add_source(File::with_name("./config.toml").required(false))
             .build()
