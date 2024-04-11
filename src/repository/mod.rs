@@ -1,6 +1,7 @@
 use std::collections::HashMap;
 use std::sync::OnceLock;
 use std::time::Duration;
+use serde::Deserialize;
 
 use sqlx::postgres::PgPoolOptions;
 use sqlx::PgPool;
@@ -15,25 +16,38 @@ pub struct Pool;
 
 static G_POOL_PG: OnceLock<HashMap<&str, PgPool>> = OnceLock::new();
 
+#[derive(Debug, Deserialize)]
+struct DatabaseConfig {
+    url: String,
+    max_connections: u32,
+    min_connections: u32,
+    acquire_timeout: u64,
+}
+
 impl Pool {
+    /// 注意只能在 APP 启动时调用一次
     pub async fn init() {
-        G_POOL_PG.set()
+        Self::init_databases().await;
     }
 
     pub fn postgres(pool: &str) -> &PgPool {
         G_POOL_PG.get().unwrap().get(pool).unwrap()
     }
 
+    async fn init_databases() {
+        let databases = Config::get::<HashMap<String, DatabaseConfig>>("databases");
 
+        for database in databases {
+            println!("{:?}", database);
+        }
+    }
 
-    async fn connect_postgres(pool: &str) -> PgPool {
+    async fn connect_postgres(config: DatabaseConfig) -> PgPool {
         PgPoolOptions::new()
-            .acquire_timeout(Duration::from_secs(Config::get::<u64>(
-                "databases.default.acquire_timeout",
-            )))
-            .min_connections(Config::get::<u32>("databases.default.min_connections"))
-            .max_connections(Config::get::<u32>("databases.default.max_connections"))
-            .connect(Config::get::<String>("databases.default.url").as_str())
+            .acquire_timeout(Duration::from_secs(config.acquire_timeout))
+            .min_connections(config.min_connections)
+            .max_connections(config.max_connections)
+            .connect(&config.url)
             .await.unwrap()
     }
 }
