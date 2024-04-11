@@ -10,7 +10,7 @@ use crate::repository::Pool;
 pub async fn all(current_user: User) -> Result<Vec<Totp>> {
     sqlx::query_as("select * from yansongda.totp where user_id = $1")
         .bind(current_user.id)
-        .fetch_all(Pool::default())
+        .fetch_all(Pool::postgres("default"))
         .await
         .map_err(|e| {
             error!("查询用户所有的 Totp 失败: {:?}", e);
@@ -22,7 +22,7 @@ pub async fn all(current_user: User) -> Result<Vec<Totp>> {
 pub async fn fetch(id: i64) -> Result<Totp> {
     let result: Option<Totp> = sqlx::query_as("select * from yansongda.totp where id = $1 limit 1")
         .bind(id)
-        .fetch_optional(Pool::default())
+        .fetch_optional(Pool::postgres("default"))
         .await
         .map_err(|e| {
             error!("查询 Totp 失败: {:?}", e);
@@ -48,7 +48,7 @@ pub async fn insert(totp: CreateTotp) -> Result<Totp> {
         .bind(Json(TotpConfig {
             period: totp.period,
         }))
-        .fetch_one(Pool::default())
+        .fetch_one(Pool::postgres("default"))
         .await
         .map_err(|e| {
             error!("插入 Totp 失败: {:?}", e);
@@ -73,7 +73,7 @@ pub async fn update(updated: UpdateTotp) -> Result<()> {
         .push_bind(updated.id);
 
     sqlx::query(builder.build().sql())
-        .execute(Pool::default())
+        .execute(Pool::postgres("default"))
         .await
         .map_err(|e| {
             error!("更新 Totp 失败: {:?}", e);
@@ -87,7 +87,7 @@ pub async fn update(updated: UpdateTotp) -> Result<()> {
 pub async fn delete(totp: Totp) -> Result<()> {
     sqlx::query("delete from yansongda.totp where id = $1")
         .bind(totp.id)
-        .execute(Pool::default())
+        .execute(Pool::postgres("default"))
         .await
         .map_err(|e| {
             error!("删除 Totp 失败: {:?}", e);

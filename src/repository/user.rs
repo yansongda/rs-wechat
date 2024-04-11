@@ -9,7 +9,7 @@ pub async fn fetch(open_id: &str) -> Result<User> {
     let result: Option<User> =
         sqlx::query_as("select * from yansongda.user where open_id = $1 limit 1")
             .bind(open_id)
-            .fetch_optional(Pool::default())
+            .fetch_optional(Pool::postgres("default"))
             .await
             .map_err(|e| {
                 error!("查询用户失败: {:?}", e);
@@ -27,7 +27,7 @@ pub async fn fetch(open_id: &str) -> Result<User> {
 pub async fn insert(open_id: &str) -> Result<User> {
     sqlx::query_as("insert into yansongda.user (open_id) values ($1) returning *")
         .bind(open_id)
-        .fetch_one(Pool::default())
+        .fetch_one(Pool::postgres("default"))
         .await
         .map_err(|e| {
             error!("插入用户失败: {:?}", e);
@@ -55,7 +55,7 @@ pub async fn update(current_user: User, update_user: UpdateUser) -> Result<User>
         .push_bind(current_user.id);
 
     sqlx::query_as(builder.push(" returning *").build().sql())
-        .fetch_one(Pool::default())
+        .fetch_one(Pool::postgres("default"))
         .await
         .map_err(|e| {
             error!("更新用户失败: {:?}", e);
