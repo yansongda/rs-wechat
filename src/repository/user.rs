@@ -40,6 +40,7 @@ pub async fn update(current_user: User, update_user: UpdateUser) -> Result<User>
     let mut builder =
         QueryBuilder::<Postgres>::new("update yansongda.user set updated_at = now(), ");
 
+    // update yansongda.user set updated_at = now(), nickname = , $1, avatar = , $2, slogan = , $3where id = , $4 returning *
     let mut separated = builder.separated(", ");
     if let Some(nickname) = update_user.nickname {
         separated.push("nickname = ").push_bind(nickname);

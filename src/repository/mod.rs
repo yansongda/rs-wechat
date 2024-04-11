@@ -1,10 +1,12 @@
 use serde::Deserialize;
 use std::collections::HashMap;
+use std::str::FromStr;
 use std::sync::OnceLock;
 use std::time::Duration;
 
-use sqlx::postgres::PgPoolOptions;
-use sqlx::PgPool;
+use sqlx::postgres::{PgConnectOptions, PgPoolOptions};
+use sqlx::{ConnectOptions, PgPool};
+use tracing::log::LevelFilter;
 
 use crate::config::Config;
 
@@ -49,11 +51,15 @@ impl Pool {
     }
 
     async fn connect_postgres(config: &DatabaseConfig) -> PgPool {
+        let connection_options = PgConnectOptions::from_str(config.url.as_str())
+            .unwrap()
+            .log_statements(LevelFilter::Trace);
+
         PgPoolOptions::new()
             .acquire_timeout(Duration::from_secs(config.acquire_timeout))
             .min_connections(config.min_connections)
             .max_connections(config.max_connections)
-            .connect(config.url.as_str())
+            .connect_with(connection_options)
             .await
             .unwrap()
     }
