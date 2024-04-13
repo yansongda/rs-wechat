@@ -1,4 +1,4 @@
-use sqlx::{Execute, Postgres, QueryBuilder};
+use sqlx::{Postgres, QueryBuilder};
 use tracing::error;
 
 use crate::model::result::{Error, Result};
@@ -37,25 +37,25 @@ pub async fn insert(open_id: &str) -> Result<User> {
 }
 
 pub async fn update(current_user: User, update_user: UpdateUser) -> Result<User> {
-    let mut builder =
-        QueryBuilder::<Postgres>::new("update yansongda.user set updated_at = now(), ");
+    let mut builder = QueryBuilder::<Postgres>::new("update yansongda.user set updated_at = now()");
 
-    // update yansongda.user set updated_at = now(), nickname = , $1, avatar = , $2, slogan = , $3where id = , $4 returning *
-    let mut separated = builder.separated(", ");
     if let Some(nickname) = update_user.nickname {
-        separated.push("nickname = ").push_bind(nickname);
+        builder.push(", nickname = ").push_bind(nickname);
     }
     if let Some(avatar) = update_user.avatar {
-        separated.push("avatar = ").push_bind(avatar);
+        builder.push(", avatar = ").push_bind(avatar);
     }
     if let Some(slogan) = update_user.slogan {
-        separated.push("slogan = ").push_bind(slogan);
+        builder.push(", slogan = ").push_bind(slogan);
     }
-    separated
-        .push_unseparated("where id = ")
-        .push_bind(current_user.id);
 
-    sqlx::query_as(builder.push(" returning *").build().sql())
+    builder
+        .push(" where id = ")
+        .push_bind(current_user.id)
+        .push(" returning *");
+
+    builder
+        .build_query_as()
         .fetch_one(Pool::postgres("default"))
         .await
         .map_err(|e| {

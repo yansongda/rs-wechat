@@ -64,7 +64,7 @@ impl App {
         tracing_subscriber::registry()
             .with(
                 filter::Targets::new()
-                    .with_target("sqlx", Level::TRACE)
+                    .with_target("sqlx", Level::INFO)
                     .with_default(
                         LevelFilter::from_str(if Config::get::<bool>("bin.api.debug") {
                             "debug"

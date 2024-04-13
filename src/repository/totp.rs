@@ -1,5 +1,5 @@
 use sqlx::types::Json;
-use sqlx::{Execute, Postgres, QueryBuilder};
+use sqlx::{Postgres, QueryBuilder};
 use tracing::error;
 
 use crate::model::result::{Error, Result};
@@ -58,21 +58,19 @@ pub async fn insert(totp: CreateTotp) -> Result<Totp> {
 }
 
 pub async fn update(updated: UpdateTotp) -> Result<()> {
-    let mut builder =
-        QueryBuilder::<Postgres>::new("update yansongda.totp set updated_at = now(), ");
+    let mut builder = QueryBuilder::<Postgres>::new("update yansongda.totp set updated_at = now()");
 
-    let mut separated = builder.separated(", ");
     if let Some(issuer) = updated.issuer {
-        separated.push("issuer = ").push_bind(issuer);
+        builder.push(", issuer = ").push_bind(issuer);
     }
     if let Some(username) = updated.username {
-        separated.push("username = ").push_bind(username);
+        builder.push(", username = ").push_bind(username);
     }
-    separated
-        .push_unseparated("where id = ")
-        .push_bind(updated.id);
 
-    sqlx::query(builder.build().sql())
+    builder.push(" where id = ").push_bind(updated.id);
+
+    builder
+        .build()
         .execute(Pool::postgres("default"))
         .await
         .map_err(|e| {

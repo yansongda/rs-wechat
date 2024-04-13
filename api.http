@@ -64,16 +64,16 @@ Authorization: Bearer {{open_id}}
 }
 
 ### 短链 - 创建
-POST {{domain}}/api/v1/shortlink/create
+POST {{domain}}/api/v1/short-url/create
 Content-Type: application/json
 Authorization: Bearer {{open_id}}
 
 {
-  "link": "https://yansongda.cn"
+  "url": "https://yansongda.cn"
 }
 
 ### 短链 - 详情
-POST {{domain}}/api/v1/shortlink/detail
+POST {{domain}}/api/v1/short-url/detail
 Content-Type: application/json
 Authorization: Bearer {{open_id}}
 
@@ -82,5 +82,5 @@ Authorization: Bearer {{open_id}}
 }
 
 ### 短链 - 访问
-GET {{domain}}/api/v1/shortlink/detail?short={{short}}
+GET {{domain}}/api/v1/short-url/redirect/{{short}}
 

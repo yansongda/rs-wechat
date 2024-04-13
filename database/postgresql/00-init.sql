@@ -49,7 +49,7 @@ create table yansongda.short_url
         constraint uk_short_url_short
             unique,
     url        text,
-    visit      integer                  default 0     not null,
+    visit      bigint                   default 0     not null,
     created_at timestamp with time zone default now() not null,
     updated_at timestamp with time zone default now() not null
 );
