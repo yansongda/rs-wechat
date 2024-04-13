@@ -30,8 +30,7 @@ Page({
       message: '加载中...',
       theme: 'loading',
       duration: 5000,
-      direction: 'column',
-      preventScrollThrough: true
+      direction: 'column'
     })
 
     api
