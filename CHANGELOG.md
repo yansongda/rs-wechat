@@ -2,7 +2,7 @@
 
 ### chore
 
-- chore: 从 sqlite 更改为 postgresql
+- chore: 从 sqlite 更改为 postgresql(#57)
 
 ## v1.2.0
 
