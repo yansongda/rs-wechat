@@ -1,15 +1,18 @@
 use sqlx::types::Json;
 use sqlx::{Postgres, QueryBuilder};
-use tracing::error;
+use tracing::{error, info};
 
 use crate::model::result::{Error, Result};
 use crate::model::totp::{CreateTotp, Totp, TotpConfig, UpdateTotp};
-use crate::model::user::User;
 use crate::repository::Pool;
 
-pub async fn all(current_user: User) -> Result<Vec<Totp>> {
+pub async fn all(user_id: i64) -> Result<Vec<Totp>> {
+    let sql = "select * from yansongda.totp where user_id = $1";
+
+    info!("{:?} --> {:?}", sql, user_id);
+
     sqlx::query_as("select * from yansongda.totp where user_id = $1")
-        .bind(current_user.id)
+        .bind(user_id)
         .fetch_all(Pool::postgres("default"))
         .await
         .map_err(|e| {
@@ -20,7 +23,11 @@ pub async fn all(current_user: User) -> Result<Vec<Totp>> {
 }
 
 pub async fn fetch(id: i64) -> Result<Totp> {
-    let result: Option<Totp> = sqlx::query_as("select * from yansongda.totp where id = $1 limit 1")
+    let sql = "select * from yansongda.totp where id = $1 limit 1";
+
+    info!("{:?} --> {:?}", sql, id);
+
+    let result: Option<Totp> = sqlx::query_as(sql)
         .bind(id)
         .fetch_optional(Pool::postgres("default"))
         .await
@@ -38,9 +45,11 @@ pub async fn fetch(id: i64) -> Result<Totp> {
 }
 
 pub async fn insert(totp: CreateTotp) -> Result<Totp> {
-    sqlx::query_as(
-        "insert into yansongda.totp (user_id, username, issuer, secret, config) values ($1, $2, $3, $4, $5) returning *",
-    )
+    let sql = "insert into yansongda.totp (user_id, username, issuer, secret, config) values ($1, $2, $3, $4, $5) returning *";
+
+    info!("{:?} --> {:?}", sql, totp);
+
+    sqlx::query_as(sql)
         .bind(totp.user_id)
         .bind(totp.username)
         .bind(totp.issuer)
@@ -60,14 +69,16 @@ pub async fn insert(totp: CreateTotp) -> Result<Totp> {
 pub async fn update(updated: UpdateTotp) -> Result<()> {
     let mut builder = QueryBuilder::<Postgres>::new("update yansongda.totp set updated_at = now()");
 
-    if let Some(issuer) = updated.issuer {
+    if let Some(ref issuer) = updated.issuer {
         builder.push(", issuer = ").push_bind(issuer);
     }
-    if let Some(username) = updated.username {
+    if let Some(ref username) = updated.username {
         builder.push(", username = ").push_bind(username);
     }
 
     builder.push(" where id = ").push_bind(updated.id);
+
+    info!("{:?} --> {:?}", builder.sql(), updated);
 
     builder
         .build()
@@ -82,9 +93,13 @@ pub async fn update(updated: UpdateTotp) -> Result<()> {
     Ok(())
 }
 
-pub async fn delete(totp: Totp) -> Result<()> {
-    sqlx::query("delete from yansongda.totp where id = $1")
-        .bind(totp.id)
+pub async fn delete(id: i64) -> Result<()> {
+    let sql = "delete from yansongda.totp where id = $1";
+
+    info!("{:?} --> {:?}", sql, id);
+
+    sqlx::query(sql)
+        .bind(id)
         .execute(Pool::postgres("default"))
         .await
         .map_err(|e| {

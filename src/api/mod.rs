@@ -13,7 +13,7 @@ use tower_http::request_id::{
 };
 use tower_http::trace::{MakeSpan, OnFailure, OnRequest, OnResponse, TraceLayer};
 use tracing::metadata::LevelFilter;
-use tracing::{error, info, info_span, Event, Level, Span, Subscriber};
+use tracing::{error, info, info_span, Event, Span, Subscriber};
 use tracing_appender::non_blocking::{NonBlockingBuilder, WorkerGuard};
 use tracing_subscriber::filter;
 use tracing_subscriber::fmt::{format, FmtContext, FormatEvent, FormatFields, FormattedFields};
@@ -63,16 +63,14 @@ impl App {
 
         tracing_subscriber::registry()
             .with(
-                filter::Targets::new()
-                    .with_target("sqlx", Level::DEBUG)
-                    .with_default(
-                        LevelFilter::from_str(if Config::get::<bool>("bin.api.debug") {
-                            "debug"
-                        } else {
-                            "info"
-                        })
-                        .unwrap(),
-                    ),
+                filter::Targets::new().with_default(
+                    LevelFilter::from_str(if Config::get::<bool>("bin.api.debug") {
+                        "debug"
+                    } else {
+                        "info"
+                    })
+                    .unwrap(),
+                ),
             )
             .with(
                 tracing_subscriber::fmt::layer()

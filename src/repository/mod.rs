@@ -5,8 +5,7 @@ use std::sync::OnceLock;
 use std::time::Duration;
 
 use sqlx::postgres::{PgConnectOptions, PgPoolOptions};
-use sqlx::{ConnectOptions, PgPool};
-use tracing::log::LevelFilter;
+use sqlx::PgPool;
 
 use crate::config::Config;
 
@@ -51,9 +50,7 @@ impl Pool {
     }
 
     async fn connect_postgres(config: &DatabaseConfig) -> PgPool {
-        let connection_options = PgConnectOptions::from_str(config.url.as_str())
-            .unwrap()
-            .log_statements(LevelFilter::Debug);
+        let connection_options = PgConnectOptions::from_str(config.url.as_str()).unwrap();
 
         PgPoolOptions::new()
             .acquire_timeout(Duration::from_secs(config.acquire_timeout))

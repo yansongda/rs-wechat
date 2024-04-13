@@ -20,5 +20,5 @@ pub async fn detail(open_id: &str) -> Result<User> {
 }
 
 pub async fn update(current_user: User, update_user: UpdateUser) -> Result<User> {
-    repository::user::update(current_user, update_user).await
+    repository::user::update(current_user.id, update_user).await
 }

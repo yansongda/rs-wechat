@@ -1,20 +1,23 @@
-use tracing::error;
+use tracing::{error, info};
 
 use crate::model::result::{Error, Result};
 use crate::model::short_url::{CreateShortUrl, ShortUrl};
 use crate::repository::Pool;
 
 pub async fn fetch(short: &str) -> Result<ShortUrl> {
-    let result: Option<ShortUrl> =
-        sqlx::query_as("select * from yansongda.short_url where short = $1 limit 1")
-            .bind(short)
-            .fetch_optional(Pool::postgres("default"))
-            .await
-            .map_err(|e| {
-                error!("查询短连接失败: {:?}", e);
+    let sql = "select * from yansongda.short_url where short = $1 limit 1";
 
-                Error::Database(None)
-            })?;
+    info!("{:?} --> {:?}", sql, short);
+
+    let result: Option<ShortUrl> = sqlx::query_as(sql)
+        .bind(short)
+        .fetch_optional(Pool::postgres("default"))
+        .await
+        .map_err(|e| {
+            error!("查询短连接失败: {:?}", e);
+
+            Error::Database(None)
+        })?;
 
     if let Some(short_url) = result {
         return Ok(short_url);
@@ -24,7 +27,11 @@ pub async fn fetch(short: &str) -> Result<ShortUrl> {
 }
 
 pub async fn insert(url: CreateShortUrl) -> Result<ShortUrl> {
-    sqlx::query_as("insert into yansongda.short_url (short, url) values ($1, $2) returning *")
+    let sql = "insert into yansongda.short_url (short, url) values ($1, $2) returning *";
+
+    info!("{:?} --> {:?}", sql, url);
+
+    sqlx::query_as(sql)
         .bind(url.short)
         .bind(url.url)
         .fetch_one(Pool::postgres("default"))
@@ -37,6 +44,10 @@ pub async fn insert(url: CreateShortUrl) -> Result<ShortUrl> {
 }
 
 pub async fn update_count(id: i64) {
+    let sql = "update yansongda.short_url set visit = visit + 1, updated_at = now() where id = $1";
+
+    info!("{:?} --> {:?}", sql, id);
+
     let _ = sqlx::query(
         "update yansongda.short_url set visit = visit + 1, updated_at = now() where id = $1",
     )

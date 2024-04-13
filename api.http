@@ -16,7 +16,7 @@ Content-Type: application/json
 Authorization: Bearer {{open_id}}
 
 {
-  "avatar": "12345678",
+  "avatar": "123456789",
   "nickname": "yansongdaa",
   "slogan": "Coding My Life...😄"
 }

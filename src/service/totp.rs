@@ -8,7 +8,7 @@ use crate::repository;
 use crate::request::totp::DetailResponse;
 
 pub async fn all(current_user: User) -> Result<Vec<DetailResponse>> {
-    let totp = repository::totp::all(current_user).await?;
+    let totp = repository::totp::all(current_user.id).await?;
 
     Ok(totp.into_iter().map(|t| t.into()).collect())
 }
@@ -61,7 +61,7 @@ pub async fn delete(current_user: User, id: i64) -> Result<()> {
         return Err(Error::TotpNotFound(None));
     }
 
-    repository::totp::delete(totp).await?;
+    repository::totp::delete(id).await?;
 
     Ok(())
 }
