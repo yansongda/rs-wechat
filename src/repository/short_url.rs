@@ -36,11 +36,11 @@ pub async fn insert(url: CreateShortUrl) -> Result<ShortUrl> {
         })
 }
 
-pub async fn update_count(short_url: ShortUrl) {
+pub async fn update_count(id: i64) {
     let _ = sqlx::query(
         "update yansongda.short_url set visit = visit + 1, updated_at = now() where id = $1",
     )
-    .bind(short_url.id)
+    .bind(id)
     .execute(Pool::postgres("default"))
     .await
     .map_err(|e| {

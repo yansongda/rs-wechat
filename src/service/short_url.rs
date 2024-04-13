@@ -22,7 +22,7 @@ pub async fn detail(url: &str) -> Result<ShortUrl> {
     let result = repository::short_url::fetch(url).await;
 
     if result.is_ok() {
-        repository::short_url::update_count(result.clone().unwrap()).await;
+        repository::short_url::update_count(result.clone().unwrap().id).await;
     }
 
     result

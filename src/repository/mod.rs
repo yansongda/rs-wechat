@@ -53,7 +53,7 @@ impl Pool {
     async fn connect_postgres(config: &DatabaseConfig) -> PgPool {
         let connection_options = PgConnectOptions::from_str(config.url.as_str())
             .unwrap()
-            .log_statements(LevelFilter::Info);
+            .log_statements(LevelFilter::Debug);
 
         PgPoolOptions::new()
             .acquire_timeout(Duration::from_secs(config.acquire_timeout))
