@@ -6,8 +6,8 @@ debug=true
 [databases.default]
 url="postgres://localhost:5432/miniprogram"
 min_connections=2
-max_connections=15
-acquire_timeout=3
+max_connections=20
+acquire_timeout=1
 
 [short_url]
 domain="https://u.ysdor.cn"

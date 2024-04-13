@@ -1,4 +1,5 @@
 use sqlx::{Execute, Postgres, QueryBuilder};
+use std::time::Instant;
 use tracing::{error, info};
 
 use crate::model::result::{Error, Result};
@@ -7,8 +8,7 @@ use crate::repository::Pool;
 
 pub async fn fetch(open_id: &str) -> Result<User> {
     let sql = "select * from yansongda.user where open_id = $1 limit 1";
-
-    info!("{:?} --> {:?}", sql, open_id);
+    let started_at = Instant::now();
 
     let result: Option<User> = sqlx::query_as(sql)
         .bind(open_id)
@@ -20,6 +20,13 @@ pub async fn fetch(open_id: &str) -> Result<User> {
             Error::Database(None)
         })?;
 
+    info!(
+        "{:?}, {:?} --> {:?}",
+        started_at.elapsed().as_secs_f32(),
+        sql,
+        open_id
+    );
+
     if let Some(user) = result {
         return Ok(user);
     }
@@ -29,10 +36,9 @@ pub async fn fetch(open_id: &str) -> Result<User> {
 
 pub async fn insert(open_id: &str) -> Result<User> {
     let sql = "insert into yansongda.user (open_id) values ($1) returning *";
+    let started_at = Instant::now();
 
-    info!("{:?} --> {:?}", sql, open_id);
-
-    sqlx::query_as(sql)
+    let result = sqlx::query_as(sql)
         .bind(open_id)
         .fetch_one(Pool::postgres("default"))
         .await
@@ -40,7 +46,16 @@ pub async fn insert(open_id: &str) -> Result<User> {
             error!("插入用户失败: {:?}", e);
 
             Error::DatabaseInsert(None)
-        })
+        });
+
+    info!(
+        "{:?}, {:?} --> {:?}",
+        started_at.elapsed().as_secs_f32(),
+        sql,
+        open_id
+    );
+
+    result
 }
 
 pub async fn update(id: i64, update_user: UpdateUser) -> Result<User> {
@@ -62,15 +77,25 @@ pub async fn update(id: i64, update_user: UpdateUser) -> Result<User> {
         .push(" returning *");
 
     let query = builder.build_query_as();
+    let sql = query.sql();
+    let started_at = Instant::now();
 
-    info!("{:?} --> {:?}, {:?}", query.sql(), id, update_user);
-
-    query
+    let result = query
         .fetch_one(Pool::postgres("default"))
         .await
         .map_err(|e| {
             error!("更新用户失败: {:?}", e);
 
             Error::DatabaseUpdate(None)
-        })
+        });
+
+    info!(
+        "{:?}, {:?} --> {:?}, {:?}",
+        started_at.elapsed().as_secs_f32(),
+        sql,
+        id,
+        update_user
+    );
+
+    result
 }

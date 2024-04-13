@@ -2,7 +2,7 @@
 <t-toast id="t-toast" />
 
 <form bindsubmit="submit">
-  <t-textarea name="link" label="长链接" placeholder="请输入长链接地址" confirm-type="done" disableDefaultPadding autofocus />
+  <t-textarea name="url" label="长链接" placeholder="请输入长链接地址" confirm-type="done" disableDefaultPadding autofocus />
 
   <view class="generate">
     <t-button theme="primary" size="large" type="submit" lang="zh_CN" block>生成</t-button>
@@ -10,5 +10,5 @@
 </form>
 
 <view bind:tap="copy">
-  <t-textarea id="shortlink" label="短链接" placeholder="等待生成短链接地址，生成后点击复制" value="{{ short }}" disabled />
+  <t-textarea label="短链接" placeholder="等待生成短链接地址，生成后点击复制" value="{{ short }}" disabled />
 </view>

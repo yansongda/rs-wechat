@@ -5,7 +5,7 @@ use sqlx::FromRow;
 
 use crate::request::totp::UpdateRequest;
 
-#[derive(Debug, Clone, Eq, PartialEq, Serialize, Deserialize, FromRow)]
+#[derive(Debug, Clone, Serialize, Deserialize, FromRow)]
 pub struct Totp {
     pub id: i64,
     pub user_id: i64,
@@ -28,7 +28,7 @@ impl Default for TotpConfig {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct CreateTotp {
     pub user_id: i64,
     pub username: String,
@@ -37,7 +37,7 @@ pub struct CreateTotp {
     pub secret: String,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct UpdateTotp {
     pub id: i64,
     pub issuer: Option<String>,

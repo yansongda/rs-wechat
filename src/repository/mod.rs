@@ -26,7 +26,6 @@ struct DatabaseConfig {
 }
 
 impl Pool {
-    /// 注意只能在 APP 启动时调用一次
     pub async fn init() {
         Self::init_databases().await;
     }
@@ -41,7 +40,7 @@ impl Pool {
         let mut pg: HashMap<String, PgPool> = HashMap::new();
 
         for database in databases {
-            if database.1.url.starts_with("postgres://") {
+            if database.1.url.starts_with("postgres://") && G_POOL_PG.get().is_none() {
                 pg.insert(database.0, Self::connect_postgres(&database.1).await);
             }
         }

@@ -147,7 +147,9 @@ struct OnResponseBehaviour;
 
 impl<B: Debug> OnResponse<B> for OnResponseBehaviour {
     fn on_response(self, _: &http::Response<B>, latency: Duration, _: &Span) {
-        info!(?latency, "<-- 请求处理完成");
+        let elapsed = latency.as_secs_f32();
+
+        info!(elapsed, "<-- 请求处理完成");
     }
 }
 

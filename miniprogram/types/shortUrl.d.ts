@@ -1,10 +1,10 @@
 import { RequestData } from './http'
 
 export interface CreateRequest extends RequestData {
-  link: string
+  url: string
 }
 
 export interface CreateResponse {
-  link: string
+  url: string
   short: string
 }

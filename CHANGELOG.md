@@ -1,3 +1,9 @@
+## v1.3.0
+
+### chore
+
+- chore: 从 sqlite 更改为 postgresql
+
 ## v1.2.0
 
 ### fixed

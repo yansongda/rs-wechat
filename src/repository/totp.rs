@@ -1,5 +1,6 @@
 use sqlx::types::Json;
-use sqlx::{Postgres, QueryBuilder};
+use sqlx::{Execute, Postgres, QueryBuilder};
+use std::time::Instant;
 use tracing::{error, info};
 
 use crate::model::result::{Error, Result};
@@ -8,10 +9,9 @@ use crate::repository::Pool;
 
 pub async fn all(user_id: i64) -> Result<Vec<Totp>> {
     let sql = "select * from yansongda.totp where user_id = $1";
+    let started_at = Instant::now();
 
-    info!("{:?} --> {:?}", sql, user_id);
-
-    sqlx::query_as("select * from yansongda.totp where user_id = $1")
+    let result = sqlx::query_as("select * from yansongda.totp where user_id = $1")
         .bind(user_id)
         .fetch_all(Pool::postgres("default"))
         .await
@@ -19,13 +19,21 @@ pub async fn all(user_id: i64) -> Result<Vec<Totp>> {
             error!("查询用户所有的 Totp 失败: {:?}", e);
 
             Error::Database(None)
-        })
+        });
+
+    info!(
+        "{:?}, {:?} --> {:?}",
+        started_at.elapsed().as_secs_f32(),
+        sql,
+        user_id
+    );
+
+    result
 }
 
 pub async fn fetch(id: i64) -> Result<Totp> {
     let sql = "select * from yansongda.totp where id = $1 limit 1";
-
-    info!("{:?} --> {:?}", sql, id);
+    let started_at = Instant::now();
 
     let result: Option<Totp> = sqlx::query_as(sql)
         .bind(id)
@@ -37,6 +45,13 @@ pub async fn fetch(id: i64) -> Result<Totp> {
             Error::Database(None)
         })?;
 
+    info!(
+        "{:?}, {:?} --> {:?}",
+        started_at.elapsed().as_secs_f32(),
+        sql,
+        id
+    );
+
     if let Some(user) = result {
         return Ok(user);
     }
@@ -46,14 +61,13 @@ pub async fn fetch(id: i64) -> Result<Totp> {
 
 pub async fn insert(totp: CreateTotp) -> Result<Totp> {
     let sql = "insert into yansongda.totp (user_id, username, issuer, secret, config) values ($1, $2, $3, $4, $5) returning *";
+    let started_at = Instant::now();
 
-    info!("{:?} --> {:?}", sql, totp);
-
-    sqlx::query_as(sql)
+    let result = sqlx::query_as(sql)
         .bind(totp.user_id)
-        .bind(totp.username)
-        .bind(totp.issuer)
-        .bind(totp.secret)
+        .bind(&totp.username)
+        .bind(&totp.issuer)
+        .bind(&totp.secret)
         .bind(Json(TotpConfig {
             period: totp.period,
         }))
@@ -63,7 +77,16 @@ pub async fn insert(totp: CreateTotp) -> Result<Totp> {
             error!("插入 Totp 失败: {:?}", e);
 
             Error::DatabaseInsert(None)
-        })
+        });
+
+    info!(
+        "{:?}, {:?} --> {:?}",
+        started_at.elapsed().as_secs_f32(),
+        sql,
+        totp
+    );
+
+    result
 }
 
 pub async fn update(updated: UpdateTotp) -> Result<()> {
@@ -78,10 +101,11 @@ pub async fn update(updated: UpdateTotp) -> Result<()> {
 
     builder.push(" where id = ").push_bind(updated.id);
 
-    info!("{:?} --> {:?}", builder.sql(), updated);
+    let query = builder.build();
+    let sql = query.sql();
+    let started_at = Instant::now();
 
-    builder
-        .build()
+    query
         .execute(Pool::postgres("default"))
         .await
         .map_err(|e| {
@@ -90,13 +114,19 @@ pub async fn update(updated: UpdateTotp) -> Result<()> {
             Error::DatabaseUpdate(None)
         })?;
 
+    info!(
+        "{:?}, {:?} --> {:?}",
+        started_at.elapsed().as_secs_f32(),
+        sql,
+        updated
+    );
+
     Ok(())
 }
 
 pub async fn delete(id: i64) -> Result<()> {
     let sql = "delete from yansongda.totp where id = $1";
-
-    info!("{:?} --> {:?}", sql, id);
+    let started_at = Instant::now();
 
     sqlx::query(sql)
         .bind(id)
@@ -107,6 +137,13 @@ pub async fn delete(id: i64) -> Result<()> {
 
             Error::DatabaseDelete(None)
         })?;
+
+    info!(
+        "{:?}, {:?} --> {:?}",
+        started_at.elapsed().as_secs_f32(),
+        sql,
+        id
+    );
 
     Ok(())
 }

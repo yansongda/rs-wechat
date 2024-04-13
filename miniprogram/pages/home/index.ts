@@ -9,7 +9,7 @@ Page({
       {
         name: '短链生成服务',
         icon: 'link-1',
-        url: '/pages/shorturl/index'
+        url: '/pages/shortUrl/index'
       }
     ]
   }

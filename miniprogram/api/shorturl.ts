@@ -1,20 +1,20 @@
 import http from '@utils/http'
-import { URL } from '@constant/shortlink'
+import { URL } from '@constant/shortUrl'
 import { CODE } from '@constant/error'
 import { HttpError } from '@models/error'
 import logger from '@utils/logger'
 import error from '@utils/error'
-import type { CreateRequest, CreateResponse } from 'miniprogram/types/shortlink'
+import type { CreateRequest, CreateResponse } from 'miniprogram/types/shortUrl'
 
-const create = async (link: string) => {
+const create = async (url: string) => {
   try {
     return await http.post<CreateResponse>(URL.CREATE, {
-      link
+      url
     } as CreateRequest)
   } catch (e: unknown) {
     logger.error('创建短链接失败', e)
 
-    throw new HttpError(CODE.HTTP_API_SHORTLINK_CREATE, error.getErrorMessage(e))
+    throw new HttpError(CODE.HTTP_API_SHORT_URL_CREATE, error.getErrorMessage(e))
   }
 }
 
