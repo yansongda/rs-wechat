@@ -64,7 +64,7 @@ impl App {
         tracing_subscriber::registry()
             .with(
                 filter::Targets::new().with_default(
-                    LevelFilter::from_str(if Config::get::<bool>("bin.api.debug") {
+                    LevelFilter::from_str(if Config::get_bin("api").debug {
                         "debug"
                     } else {
                         "info"
@@ -83,10 +83,10 @@ impl App {
     }
 
     fn listen() -> SocketAddr {
-        let listen = Config::get::<String>("bin.api.listen");
-        let port = Config::get::<u16>("bin.api.port");
+        let listen = Config::get_bin("api").listen.as_str();
+        let port = Config::get_bin("api").port;
 
-        SocketAddr::from((IpAddr::from_str(listen.as_str()).unwrap(), port))
+        SocketAddr::from((IpAddr::from_str(listen).unwrap(), port))
     }
 
     fn router() -> Router {

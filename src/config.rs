@@ -1,51 +1,84 @@
-use config::{Config as C, File};
+use config::{Config as C, Environment, File};
 use serde::Deserialize;
+use std::collections::HashMap;
 use std::sync::OnceLock;
 
-static G_CONFIG: OnceLock<C> = OnceLock::new();
+static G_CONFIG: OnceLock<Config> = OnceLock::new();
 
-pub struct Config;
+#[derive(Debug, Clone, Deserialize)]
+pub struct Config {
+    pub name: String,
+    pub bin: HashMap<String, Bin>,
+    pub databases: HashMap<String, Database>,
+    pub wechat: Wechat,
+    pub short_url: ShortUrl,
+}
+
+#[derive(Debug, Clone, Deserialize)]
+pub struct Bin {
+    pub listen: String,
+    pub port: u16,
+    pub debug: bool,
+}
+
+#[derive(Debug, Clone, Deserialize)]
+pub struct Database {
+    pub url: String,
+    pub max_connections: u32,
+    pub min_connections: u32,
+    pub acquire_timeout: u64,
+}
+
+#[derive(Debug, Clone, Deserialize)]
+pub struct Wechat {
+    pub url: String,
+    pub app_id: String,
+    pub app_secret: String,
+}
+
+#[derive(Debug, Clone, Deserialize)]
+pub struct ShortUrl {
+    pub domain: String,
+}
 
 impl Config {
     pub fn init() {
-        let config = C::builder()
-            .set_default("bin.api.listen", "0.0.0.0")
-            .unwrap()
-            .set_default("bin.api.port", 8080)
-            .unwrap()
-            .set_default("bin.api.debug", false)
-            .unwrap()
-            .set_default(
-                "databases.default.url",
-                "postgres://localhost:5432/miniprogram",
-            )
-            .unwrap()
-            .set_default("databases.default.max_connections", 30)
-            .unwrap()
-            .set_default("databases.default.min_connections", 1)
-            .unwrap()
-            .set_default("databases.default.acquire_timeout", 3)
-            .unwrap()
-            .set_default("wechat.url", "https://api.weixin.qq.com")
-            .unwrap()
-            .set_default("wechat.app_id", "")
-            .unwrap()
-            .set_default("wechat.app_secret", "")
-            .unwrap()
-            .set_default("short_url.domain", "https://u.ysdor.cn")
-            .unwrap()
-            .add_source(File::with_name("./config.toml").required(false))
-            .build()
-            .expect("初始化配置失败");
+        if G_CONFIG.get().is_some() {
+            return;
+        }
 
-        G_CONFIG.set(config).expect("系统配置初始化失败");
+        let config = C::builder()
+            .add_source(File::with_name("./config.toml").required(false))
+            .add_source(
+                Environment::with_prefix("APP")
+                    .try_parsing(true)
+                    .separator("_"),
+            )
+            .build()
+            .expect("加载配置失败");
+
+        let instance = config.try_deserialize::<Config>().expect("解析配置失败");
+
+        G_CONFIG.set(instance).expect("系统配置初始化失败");
     }
 
-    pub fn get<'de, T: Deserialize<'de>>(key: &str) -> T {
-        G_CONFIG
-            .get()
-            .expect("获取系统配置失败，请检查是否已成功初始化")
-            .get(key)
-            .unwrap()
+    pub fn get_name() -> &'static str {
+        G_CONFIG.get().unwrap().name.as_str()
+    }
+
+    pub fn get_bin(name: &str) -> &Bin {
+        G_CONFIG.get().unwrap().bin.get(name).unwrap()
+    }
+
+    pub fn get_databases() -> &'static HashMap<String, Database> {
+        &G_CONFIG.get().unwrap().databases
+    }
+
+    pub fn get_wechat() -> &'static Wechat {
+        &G_CONFIG.get().unwrap().wechat
+    }
+
+    pub fn get_short_url() -> &'static ShortUrl {
+        &G_CONFIG.get().unwrap().short_url
     }
 }

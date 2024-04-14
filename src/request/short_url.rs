@@ -38,7 +38,7 @@ impl From<ShortUrl> for CreateResponse {
             url: model.url,
             short: format!(
                 "{}/{}",
-                Config::get::<String>("short_url.domain"),
+                Config::get_short_url().domain.as_str(),
                 model.short
             ),
         }
@@ -74,7 +74,7 @@ impl From<ShortUrl> for DetailResponse {
             url: model.url,
             short: format!(
                 "{}/{}",
-                Config::get::<String>("short_url.domain"),
+                Config::get_short_url().domain.as_str(),
                 model.short
             ),
         }
