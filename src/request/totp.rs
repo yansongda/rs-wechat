@@ -1,7 +1,8 @@
 use crate::model::result::Error;
-use crate::model::totp::UpdateTotp;
+use crate::model::totp::{Totp, UpdateTotp};
 use crate::request::Validator;
-use serde::Deserialize;
+use crate::service::totp;
+use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, Deserialize)]
 pub struct DetailRequest {
@@ -13,10 +14,33 @@ impl Validator for DetailRequest {
 
     fn validate(&self) -> crate::model::result::Result<Self::Data> {
         if self.id.is_none() {
-            return Err(Error::Params(Some("id 不能为空")));
+            return Err(Error::Params(Some("详情 id 不能为空")));
         }
 
         Ok(self.id.unwrap())
+    }
+}
+
+#[derive(Debug, Serialize)]
+pub struct DetailResponse {
+    pub id: i64,
+    pub issuer: String,
+    pub period: i64,
+    pub username: String,
+    pub code: String,
+}
+
+impl From<Totp> for DetailResponse {
+    fn from(totp: Totp) -> Self {
+        let config = totp.clone().config.unwrap_or_default();
+
+        Self {
+            id: totp.id,
+            issuer: totp.issuer.clone().unwrap_or("未知发行方".to_string()),
+            period: config.period,
+            username: totp.username.clone(),
+            code: totp::generate_code(totp.clone()),
+        }
     }
 }
 
@@ -60,7 +84,7 @@ impl Validator for UpdateRequest {
             return Err(Error::Params(Some("账号 不能为空")));
         }
 
-        Ok(Self::Data::from(self))
+        Ok(Self::Data::from(self.to_owned()))
     }
 }
 
@@ -74,7 +98,7 @@ impl Validator for DeleteRequest {
 
     fn validate(&self) -> crate::model::result::Result<Self::Data> {
         if self.id.is_none() {
-            return Err(Error::Params(Some("id 不能为空")));
+            return Err(Error::Params(Some("删除 id 不能为空")));
         }
 
         Ok(self.id.unwrap())

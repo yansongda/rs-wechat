@@ -4,15 +4,12 @@ port=8080
 debug=true
 
 [databases.default]
-url="sqlite://miniprogram.sqlite3"
-connection_timeout=1
-idle_timeout=600
-max_lifetime=1800
-max_connections=30
+url="postgres://localhost:5432/miniprogram"
 min_connections=2
-acquire_timeout=3
+max_connections=20
+acquire_timeout=1
 
-[shortlink]
+[short_url]
 domain="https://u.ysdor.cn"
 
 [wechat]

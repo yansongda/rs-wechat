@@ -20,30 +20,30 @@ pub async fn request(request: Request) -> Result<HttpResponse> {
             .unwrap()
     });
 
-    info!("请求参数: {:?}", request);
+    info!("发送 http 请求 {:?}", request);
 
+    let started_at = std::time::Instant::now();
     let response = client.execute(request).await.map_err(|e| {
-        warn!("请求失败: {:?}", e);
+        warn!("发送 http 请求失败 {:?}", e);
 
         Error::Http(None)
     })?;
 
-    let status = response.status().as_u16();
-    let headers = response
-        .headers()
-        .iter()
-        .map(|(k, v)| (k.to_string(), v.to_str().unwrap().to_string()))
-        .collect::<HashMap<String, String>>();
-    let body = response
-        .text()
-        .await
-        .map_err(|_| Error::HttpResponse(None))?;
+    let result = HttpResponse {
+        status: response.status().as_u16(),
+        headers: response
+            .headers()
+            .iter()
+            .map(|(k, v)| (k.to_string(), v.to_str().unwrap().to_string()))
+            .collect::<HashMap<String, String>>(),
+        body: response
+            .text()
+            .await
+            .map_err(|_| Error::HttpResponse(None))?,
+        duration: started_at.elapsed().as_secs_f32(),
+    };
 
-    info!("请求结果: {:?}", body);
+    info!("发送 http 请求结果 {:?}", result);
 
-    Ok(HttpResponse {
-        status,
-        headers,
-        body,
-    })
+    Ok(result)
 }

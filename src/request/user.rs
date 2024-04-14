@@ -1,7 +1,7 @@
 use crate::model::result::Error;
-use crate::model::user::{LoginParams, UpdateParams};
+use crate::model::user::{UpdateUser, User};
 use crate::request::Validator;
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, Deserialize)]
 pub struct LoginRequest {
@@ -9,7 +9,7 @@ pub struct LoginRequest {
 }
 
 impl Validator for LoginRequest {
-    type Data = LoginParams;
+    type Data = String;
 
     fn validate(&self) -> crate::model::result::Result<Self::Data> {
         if self.code.is_none() {
@@ -20,7 +20,20 @@ impl Validator for LoginRequest {
             return Err(Error::Params(Some("小程序错误：登录秘钥必须大于 8 位")));
         }
 
-        Ok(Self::Data::from(self))
+        Ok(self.code.to_owned().unwrap())
+    }
+}
+
+#[derive(Debug, Serialize)]
+pub struct LoginResponse {
+    pub open_id: String,
+}
+
+impl From<User> for LoginResponse {
+    fn from(user: User) -> Self {
+        Self {
+            open_id: user.open_id,
+        }
     }
 }
 
@@ -32,7 +45,7 @@ pub struct UpdateRequest {
 }
 
 impl Validator for UpdateRequest {
-    type Data = UpdateParams;
+    type Data = UpdateUser;
 
     fn validate(&self) -> crate::model::result::Result<Self::Data> {
         if self.avatar.is_some() && self.avatar.to_owned().unwrap().len() < 8 {
@@ -55,6 +68,23 @@ impl Validator for UpdateRequest {
             }
         }
 
-        Ok(Self::Data::from(self))
+        Ok(Self::Data::from(self.to_owned()))
+    }
+}
+
+#[derive(Debug, Serialize)]
+pub struct DetailResponse {
+    pub avatar: Option<String>,
+    pub nickname: Option<String>,
+    pub slogan: Option<String>,
+}
+
+impl From<User> for DetailResponse {
+    fn from(user: User) -> Self {
+        Self {
+            avatar: user.avatar,
+            nickname: user.nickname,
+            slogan: user.slogan,
+        }
     }
 }

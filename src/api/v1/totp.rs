@@ -3,20 +3,19 @@ use axum::Extension;
 use crate::api::extract::Json;
 use crate::api::response::Resp;
 use crate::model::result::Response;
-use crate::model::totp::DetailResponse;
-use crate::model::user::CurrentUser;
-use crate::request::totp::{CreateRequest, DeleteRequest, DetailRequest, UpdateRequest};
+use crate::model::user::User;
+use crate::request::totp::{
+    CreateRequest, DeleteRequest, DetailRequest, DetailResponse, UpdateRequest,
+};
 use crate::request::Validator;
 use crate::service;
 
-pub async fn all(Extension(current_user): Extension<CurrentUser>) -> Resp<Vec<DetailResponse>> {
-    Ok(Response::success(
-        service::totp::all(current_user.into()).await?,
-    ))
+pub async fn all(Extension(current_user): Extension<User>) -> Resp<Vec<DetailResponse>> {
+    Ok(Response::success(service::totp::all(current_user).await?))
 }
 
 pub async fn detail(
-    Extension(current_user): Extension<CurrentUser>,
+    Extension(current_user): Extension<User>,
     Json(request): Json<DetailRequest>,
 ) -> Resp<DetailResponse> {
     let id = request.validate()?;
@@ -27,7 +26,7 @@ pub async fn detail(
 }
 
 pub async fn create(
-    Extension(current_user): Extension<CurrentUser>,
+    Extension(current_user): Extension<User>,
     Json(request): Json<CreateRequest>,
 ) -> Resp<()> {
     let uri = request.validate()?;
@@ -38,7 +37,7 @@ pub async fn create(
 }
 
 pub async fn update(
-    Extension(current_user): Extension<CurrentUser>,
+    Extension(current_user): Extension<User>,
     Json(request): Json<UpdateRequest>,
 ) -> Resp<()> {
     let params = request.validate()?;
@@ -49,7 +48,7 @@ pub async fn update(
 }
 
 pub async fn delete(
-    Extension(current_user): Extension<CurrentUser>,
+    Extension(current_user): Extension<User>,
     Json(request): Json<DeleteRequest>,
 ) -> Resp<()> {
     let id = request.validate()?;

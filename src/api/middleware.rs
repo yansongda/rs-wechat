@@ -3,7 +3,7 @@ use axum::middleware::Next;
 use axum::response::{IntoResponse, Response};
 
 use crate::model::result::{Error, Result};
-use crate::model::user::{CurrentUser, Model as User};
+use crate::model::user::User;
 
 pub async fn authorization(mut request: Request, next: Next) -> Response {
     let authorization = request.headers().get("Authorization");
@@ -24,9 +24,7 @@ pub async fn authorization(mut request: Request, next: Next) -> Response {
         return Error::AuthorizationNotFound(None).into_response();
     }
 
-    request
-        .extensions_mut()
-        .insert(CurrentUser::from(user.unwrap()));
+    request.extensions_mut().insert(user.unwrap());
 
     next.run(request).await
 }

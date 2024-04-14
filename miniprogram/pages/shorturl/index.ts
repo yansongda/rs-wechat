@@ -1,17 +1,17 @@
 import Message from 'tdesign-miniprogram/message/index'
 import Toast from 'tdesign-miniprogram/toast/index'
-import api from '@api/shorturl'
+import api from '@api/shortUrl'
 import { HttpError } from '@models/error'
-import type { CreateResponse } from 'miniprogram/types/shortlink'
+import type { CreateResponse } from 'miniprogram/types/shortUrl'
 import type { FormSubmit } from 'miniprogram/types/wechat'
 
 interface FormData {
-  link: string
+  url: string
 }
 
 Page({
   data: {
-    link: '',
+    url: '',
     short: ''
   },
   submit(e: FormSubmit<FormData>) {
@@ -24,7 +24,7 @@ Page({
     })
 
     api
-      .create(e.detail.value.link)
+      .create(e.detail.value.url)
       .then((response: CreateResponse) => {
         Toast({
           message: '生成成功',

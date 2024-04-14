@@ -5,7 +5,7 @@
     "pages/user/edit",
     "pages/totp/index",
     "pages/totp/edit",
-    "pages/shorturl/index"
+    "pages/shortUrl/index"
   ],
   "window": {
     "backgroundTextStyle": "light",
