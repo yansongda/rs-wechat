@@ -7,13 +7,13 @@ use crate::model::wechat::LoginResponse;
 use crate::util::http;
 
 pub async fn login(code: &str) -> Result<LoginResponse> {
-    let url = format!("{}/sns/jscode2session", Config::get::<String>("wechat.url"));
+    let url = format!("{}/sns/jscode2session", Config::get_wechat().url.as_str());
 
     let query = [
-        ("appid", Config::get::<String>("wechat.app_id")),
-        ("secret", Config::get::<String>("wechat.app_secret")),
-        ("js_code", code.to_string()),
-        ("grant_type", "authorization_code".to_string()),
+        ("appid", Config::get_wechat().app_id.as_str()),
+        ("secret", Config::get_wechat().app_secret.as_str()),
+        ("js_code", code),
+        ("grant_type", "authorization_code"),
     ];
 
     let response = http::request(Request::new(

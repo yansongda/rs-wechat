@@ -1,3 +1,9 @@
+## v1.3.1
+
+### optimzed
+
+- optimized(backend): 优化 `Config` 实现(#58)
+
 ## v1.3.0
 
 ### chore
