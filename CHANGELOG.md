@@ -1,3 +1,9 @@
+## TBD - v1.4.0
+
+### optimized
+
+- style(frontend): 重命名 shorturl 为 shortUrl(#60)
+
 ## v1.3.1
 
 ### optimzed
