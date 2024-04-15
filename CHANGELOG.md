@@ -1,12 +1,18 @@
+## TBD - v1.4.0
+
+### optimized
+
+- style(frontend): 重命名 shorturl 为 shortUrl(#60)
+
 ## v1.3.1
 
-### optimzed
+### optimized
 
 - optimized(backend): 优化 `Config` 实现(#58)
 
 ## v1.3.0
 
-### chore
+### changed
 
 - chore: 从 sqlite 更改为 postgresql(#57)
 
@@ -17,7 +23,7 @@
 - fix(backend): 中文长度计算错误的问题(#54)
 - fix(frontend): 修复构建报 warning 的问题(#55)
 
-### chore
+### changed
 
 - chore(frontend): 由 `weui` 更换为 `tdesign-miniprogram`(#52)
 
@@ -80,9 +86,6 @@
 
 - fixed(frontend:totp): totp 创建后未自动刷新列表(#15)
 - fixed(frontend:totp): totp 列表多时，创建按钮会被覆盖(#18)
-
-### chore
-
 - chore: 请求报错：unable to get local issuer certificate(#20)
 
 ## v1.1.2
