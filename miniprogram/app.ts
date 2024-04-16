@@ -18,7 +18,6 @@ App<GlobalData>({
       avatar: DEFAULT.avatar,
       nickname: DEFAULT.nickname,
       slogan: DEFAULT.slogan,
-      openId: ''
     }
   },
   async onLaunch() {
