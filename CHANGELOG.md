@@ -1,5 +1,9 @@
 ## TBD - v1.4.0
 
+### changed
+
+- changed(backend): 认证方式改为 `open_id` + `session_key` 的 hash 值以增强安全性(#62)
+
 ### optimized
 
 - style(frontend): 重命名 shorturl 为 shortUrl(#60)

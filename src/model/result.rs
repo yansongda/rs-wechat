@@ -13,6 +13,7 @@ pub enum Error {
     TotpNotFound(Option<&'static str>),
     TotpParse(Option<&'static str>),
     ShortlinkNotFound(Option<&'static str>),
+    AccessTokenNotFound(Option<&'static str>),
     Database(Option<&'static str>),
     DatabaseInsert(Option<&'static str>),
     DatabaseUpdate(Option<&'static str>),
@@ -48,6 +49,9 @@ impl Error {
             Error::TotpNotFound(message) => (2002, message.unwrap_or_else(|| "TOTP 信息未找到")),
             Error::TotpParse(message) => (2003, message.unwrap_or_else(|| "TOTP 链接解析失败")),
             Error::ShortlinkNotFound(message) => (2004, message.unwrap_or_else(|| "短连接未找到")),
+            Error::AccessTokenNotFound(message) => {
+                (2005, message.unwrap_or_else(|| "Access Token 未找到"))
+            }
             Error::Database(message) => (
                 5000,
                 message.unwrap_or_else(|| "发生了一些问题，请联系管理员"),

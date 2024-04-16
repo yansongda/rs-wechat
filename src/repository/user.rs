@@ -20,12 +20,9 @@ pub async fn fetch(open_id: &str) -> Result<User> {
             Error::Database(None)
         })?;
 
-    info!(
-        "{:?}, {:?} --> {:?}",
-        started_at.elapsed().as_secs_f32(),
-        sql,
-        open_id
-    );
+    let elapsed = started_at.elapsed().as_secs_f32();
+
+    info!(elapsed, sql, open_id);
 
     if let Some(user) = result {
         return Ok(user);
@@ -48,12 +45,9 @@ pub async fn insert(open_id: &str) -> Result<User> {
             Error::DatabaseInsert(None)
         });
 
-    info!(
-        "{:?}, {:?} --> {:?}",
-        started_at.elapsed().as_secs_f32(),
-        sql,
-        open_id
-    );
+    let elapsed = started_at.elapsed().as_secs_f32();
+
+    info!(elapsed, sql, open_id);
 
     result
 }
@@ -89,13 +83,9 @@ pub async fn update(id: i64, update_user: UpdateUser) -> Result<User> {
             Error::DatabaseUpdate(None)
         });
 
-    info!(
-        "{:?}, {:?} --> {:?}, {:?}",
-        started_at.elapsed().as_secs_f32(),
-        sql,
-        id,
-        update_user
-    );
+    let elapsed = started_at.elapsed().as_secs_f32();
+
+    info!(elapsed, sql, id, ?update_user);
 
     result
 }

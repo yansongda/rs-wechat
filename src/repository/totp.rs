@@ -21,12 +21,9 @@ pub async fn all(user_id: i64) -> Result<Vec<Totp>> {
             Error::Database(None)
         });
 
-    info!(
-        "{:?}, {:?} --> {:?}",
-        started_at.elapsed().as_secs_f32(),
-        sql,
-        user_id
-    );
+    let elapsed = started_at.elapsed().as_secs_f32();
+
+    info!(elapsed, sql, user_id);
 
     result
 }
@@ -45,12 +42,9 @@ pub async fn fetch(id: i64) -> Result<Totp> {
             Error::Database(None)
         })?;
 
-    info!(
-        "{:?}, {:?} --> {:?}",
-        started_at.elapsed().as_secs_f32(),
-        sql,
-        id
-    );
+    let elapsed = started_at.elapsed().as_secs_f32();
+
+    info!(elapsed, sql, id);
 
     if let Some(user) = result {
         return Ok(user);
@@ -79,12 +73,9 @@ pub async fn insert(totp: CreateTotp) -> Result<Totp> {
             Error::DatabaseInsert(None)
         });
 
-    info!(
-        "{:?}, {:?} --> {:?}",
-        started_at.elapsed().as_secs_f32(),
-        sql,
-        totp
-    );
+    let elapsed = started_at.elapsed().as_secs_f32();
+
+    info!(elapsed, sql, ?totp);
 
     result
 }
@@ -114,12 +105,9 @@ pub async fn update(updated: UpdateTotp) -> Result<()> {
             Error::DatabaseUpdate(None)
         })?;
 
-    info!(
-        "{:?}, {:?} --> {:?}",
-        started_at.elapsed().as_secs_f32(),
-        sql,
-        updated
-    );
+    let elapsed = started_at.elapsed().as_secs_f32();
+
+    info!(elapsed, sql, ?updated);
 
     Ok(())
 }
@@ -138,12 +126,9 @@ pub async fn delete(id: i64) -> Result<()> {
             Error::DatabaseDelete(None)
         })?;
 
-    info!(
-        "{:?}, {:?} --> {:?}",
-        started_at.elapsed().as_secs_f32(),
-        sql,
-        id
-    );
+    let elapsed = started_at.elapsed().as_secs_f32();
+
+    info!(elapsed, sql, id);
 
     Ok(())
 }

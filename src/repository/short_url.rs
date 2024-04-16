@@ -19,12 +19,9 @@ pub async fn fetch(short: &str) -> Result<ShortUrl> {
             Error::Database(None)
         })?;
 
-    info!(
-        "{:?}, {:?} --> {:?}",
-        started_at.elapsed().as_secs_f32(),
-        sql,
-        short
-    );
+    let elapsed = started_at.elapsed().as_secs_f32();
+
+    info!(elapsed, sql, short);
 
     if let Some(short_url) = result {
         return Ok(short_url);
@@ -48,12 +45,9 @@ pub async fn insert(url: CreateShortUrl) -> Result<ShortUrl> {
             Error::DatabaseInsert(None)
         });
 
-    info!(
-        "{:?}, {:?} --> {:?}",
-        started_at.elapsed().as_secs_f32(),
-        sql,
-        url
-    );
+    let elapsed = started_at.elapsed().as_secs_f32();
+
+    info!(elapsed, sql, ?url);
 
     result
 }
@@ -74,10 +68,7 @@ pub async fn update_count(id: i64) {
         Error::DatabaseUpdate(None)
     });
 
-    info!(
-        "{:?}, {:?} --> {:?}",
-        started_at.elapsed().as_secs_f32(),
-        sql,
-        id
-    );
+    let elapsed = started_at.elapsed().as_secs_f32();
+
+    info!(elapsed, sql, id);
 }
