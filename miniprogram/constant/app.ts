@@ -1,5 +1,5 @@
 const STORAGE = {
-  OPEN_ID: 'open_id',
+  ACCESS_TOKEN: 'access_token',
   USER: 'user'
 }
 

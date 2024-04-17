@@ -2,8 +2,8 @@ import Message from 'tdesign-miniprogram/message/index'
 import Toast from 'tdesign-miniprogram/toast/index'
 import api from '@api/shortUrl'
 import { HttpError } from '@models/error'
-import type { CreateResponse } from 'miniprogram/types/shortUrl'
-import type { FormSubmit } from 'miniprogram/types/wechat'
+import type { CreateResponse } from 'types/shortUrl'
+import type { FormSubmit } from 'types/wechat'
 
 interface FormData {
   url: string

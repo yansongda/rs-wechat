@@ -1,12 +1,12 @@
-import { URL } from '@constant/app'
+import { STORAGE, URL } from '@constant/app'
 import { CODE, WECHAT_MESSAGE } from '@constant/error'
-import { HttpError, LoginError } from '@models/error'
-import userUtils from '@utils/user'
+import { HttpError } from '@models/error'
 import logger from '@utils/logger'
-import type { Request, RequestData, RequestQuery, Response } from 'miniprogram/types/http'
-import type { WxRequestFail, WxRequestSuccess } from 'miniprogram/types/wechat'
+import type { Request, RequestData, RequestQuery, Response } from 'types/http'
+import type { WxRequestFail, WxRequestSuccess } from 'types/wechat'
 
 const formatUrl = (request: Request): void => {
+  // 处理 url 的 query
   if (typeof request.query != 'undefined') {
     const query = request.query
 
@@ -19,28 +19,23 @@ const formatUrl = (request: Request): void => {
     request.url += (request.url.search(/\?/) === -1 ? '?' : '&') + `${paramsArray.join('&')}`
   }
 
+  // 处理 url
   if (request.url.startsWith('/')) {
     request.url = URL.BASE + request.url
   }
 }
 
-const formatHeaders = (request: Request, openId: string): void => {
+const formatHeaders = (request: Request): void => {
   if (typeof request.headers == 'undefined') {
     request.headers = {}
   }
 
-  request.headers.authorization = 'Bearer ' + openId
+  request.headers.authorization = 'Bearer ' + wx.getStorageSync(STORAGE.ACCESS_TOKEN) || ''
 }
 
-const request = <T>(request: Request, mustOpenId?: boolean): Promise<T> => {
-  const openId = userUtils.getOpenId()
-
-  if (openId == '' && (mustOpenId ?? true)) {
-    return Promise.reject(new LoginError())
-  }
-
+const request = <T>(request: Request): Promise<T> => {
   formatUrl(request)
-  formatHeaders(request, openId)
+  formatHeaders(request)
 
   if (request.isUploadFile) {
     return wxUpload(request)
@@ -125,17 +120,12 @@ const wxUpload = <T>(request: Request) => {
   })
 }
 
-const post = <T>(
-  url: string,
-  data?: RequestData,
-  isUploadFile?: boolean,
-  mustOpenId?: boolean
-): Promise<T> => {
-  return request<T>({ url, data, isUploadFile, method: 'POST' } as Request, mustOpenId)
+const post = <T>(url: string, data?: RequestData, isUploadFile?: boolean): Promise<T> => {
+  return request<T>({ url, data, isUploadFile, method: 'POST' } as Request)
 }
 
-const get = <T>(url: string, query?: RequestQuery, mustOpenId?: boolean): Promise<T> => {
-  return request<T>({ url, query, method: 'GET' } as Request, mustOpenId)
+const get = <T>(url: string, query?: RequestQuery): Promise<T> => {
+  return request<T>({ url, query, method: 'GET' } as Request)
 }
 
 export default { request, post, get }

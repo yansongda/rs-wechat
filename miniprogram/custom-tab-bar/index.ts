@@ -1,4 +1,4 @@
-import { TabbarTap } from 'miniprogram/types/tdesign'
+import type { TabbarTap } from 'types/tdesign'
 
 Component({
   data: {

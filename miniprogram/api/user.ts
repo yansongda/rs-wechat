@@ -4,23 +4,7 @@ import { CODE } from '@constant/error'
 import logger from '@utils/logger'
 import error from '@utils/error'
 import { HttpError } from '@models/error'
-import type {
-  DetailResponse,
-  LoginRequest,
-  LoginResponse,
-  UpdateRequest,
-  UpdateResponse
-} from 'miniprogram/types/user'
-
-const login = async (code: string) => {
-  try {
-    return await http.post<LoginResponse>(URL.LOGIN, { code } as LoginRequest, false, false)
-  } catch (e: unknown) {
-    logger.error('登录接口请求失败', e)
-
-    throw new HttpError(CODE.HTTP_API_USER_LOGIN, error.getErrorMessage(e))
-  }
-}
+import type { DetailResponse, UpdateRequest, UpdateResponse } from 'types/user'
 
 const detail = async () => {
   try {
@@ -42,4 +26,4 @@ const update = async (updated: UpdateRequest) => {
   }
 }
 
-export default { login, detail, update }
+export default { detail, update }

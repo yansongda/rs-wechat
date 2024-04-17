@@ -1,13 +1,5 @@
 import { RequestData } from './http'
 
-export interface LoginRequest extends RequestData {
-  code: string
-}
-
-export interface LoginResponse {
-  open_id: string
-}
-
 export interface DetailResponse {
   open_id: string
   avatar: string
@@ -28,13 +20,7 @@ export interface UpdateResponse {
   slogan: string
 }
 
-export interface UpdateResult {
-  isGlobalDataUpdated: boolean
-  user?: User
-}
-
 export interface User {
-  openId: string
   avatar: string
   nickname: string
   slogan: string

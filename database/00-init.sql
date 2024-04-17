@@ -1,4 +1,3 @@
--- auto-generated definition
 create table yansongda.user
 (
     id         bigserial
@@ -18,7 +17,6 @@ alter table yansongda.user
 create unique index uk_user_open_id
     on yansongda.user (open_id);
 
--- auto-generated definition
 create table yansongda.totp
 (
     id         bigserial
@@ -39,7 +37,6 @@ alter table yansongda.totp
 create index idx_totp_user
     on yansongda.totp (user_id);
 
--- auto-generated definition
 create table yansongda.short_url
 (
     id         bigserial
@@ -55,4 +52,21 @@ create table yansongda.short_url
 );
 
 alter table yansongda.short_url
+    owner to miniprogram;
+
+create table yansongda.access_token
+(
+    id           bigserial
+        constraint pk_token_id
+            primary key,
+    user_id      bigint                                 not null,
+    access_token varchar(128)                           not null
+        constraint uk_token_token
+            unique,
+    data         jsonb                                  not null,
+    created_at   timestamp with time zone default now() not null,
+    updated_at   timestamp with time zone default now() not null
+);
+
+alter table yansongda.access_token
     owner to miniprogram;

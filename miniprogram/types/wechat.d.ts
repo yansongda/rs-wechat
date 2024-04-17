@@ -51,3 +51,12 @@ export interface WxGetFileSystemManagerReadFileSuccess {
 export interface WxGetUpdateManagerOnCheckForUpdateResult {
   hasUpdate: boolean
 }
+
+export interface WxLoginSuccessCallbackResult {
+  code: string
+  errMsg: string
+}
+
+export interface WxGetStorageSuccess<T> {
+  data: T
+}

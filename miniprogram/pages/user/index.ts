@@ -1,22 +1,20 @@
+import { DEFAULT } from '@constant/user'
 import utils from '@utils/user'
-import type { GlobalData } from 'miniprogram/types/app'
-
-const app = getApp<GlobalData>()
+import type { User } from 'types/user'
 
 Page({
   data: {
-    avatar: app.globalData.user.avatar,
-    nickname: app.globalData.user.nickname,
-    slogan: app.globalData.user.slogan
+    avatar: DEFAULT.avatar,
+    nickname: DEFAULT.nickname,
+    slogan: DEFAULT.slogan
   },
-  async onLoad() {
-    await utils.sync()
-  },
-  onShow() {
+  async onShow() {
+    const user: User = await utils.detail()
+
     this.setData({
-      avatar: app.globalData.user.avatar,
-      nickname: app.globalData.user.nickname,
-      slogan: app.globalData.user.slogan
+      avatar: user.avatar,
+      nickname: user.nickname,
+      slogan: user.slogan
     })
   },
   onHide() {},

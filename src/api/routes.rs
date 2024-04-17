@@ -7,7 +7,7 @@ use crate::api::v1;
 
 pub fn api_v1() -> Router {
     let unauthorized = Router::new()
-        .route("/users/login", post(v1::users::login))
+        .route("/access-token/login", post(v1::access_token::login))
         .route("/short-url/detail", post(v1::short_url::detail))
         .route("/short-url/redirect/:short", get(v1::short_url::redirect));
 
