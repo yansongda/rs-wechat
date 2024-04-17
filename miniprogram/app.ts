@@ -3,13 +3,13 @@ import accessToken from '@api/accessToken'
 import { EE, WeixinError } from '@models/error'
 import { CODE, MESSAGE } from '@constant/error'
 import logger from '@utils/logger'
-import type { GlobalData } from '@types/app'
+import type { GlobalData } from 'types/app'
 import type {
   AppOnUnhandledRejection,
   WxGetUpdateManagerOnCheckForUpdateResult,
   WxLoginSuccessCallbackResult
-} from '@types/wechat'
-import type { LoginResponse } from '@types/accessToken'
+} from 'types/wechat'
+import type { LoginResponse } from 'types/accessToken'
 
 App<GlobalData>({
   async onLaunch() {

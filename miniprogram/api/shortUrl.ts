@@ -4,7 +4,7 @@ import { CODE } from '@constant/error'
 import { HttpError } from '@models/error'
 import logger from '@utils/logger'
 import error from '@utils/error'
-import type { CreateRequest, CreateResponse } from '@types/shortUrl'
+import type { CreateRequest, CreateResponse } from 'types/shortUrl'
 
 const create = async (url: string) => {
   try {

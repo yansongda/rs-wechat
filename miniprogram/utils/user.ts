@@ -1,8 +1,8 @@
 import api from '@api/user'
 import { STORAGE } from '@constant/app'
 import { DEFAULT } from '@constant/user'
-import type { User } from '@types/user'
-import { WxGetStorageSuccess } from '@types/wechat'
+import type { User } from 'types/user'
+import { WxGetStorageSuccess } from 'types/wechat'
 
 const detail = async (): Promise<User> => {
   try {
@@ -12,7 +12,7 @@ const detail = async (): Promise<User> => {
   } catch (e) {
     /* empty */
   }
-  
+
   return sync()
 }
 

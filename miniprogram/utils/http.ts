@@ -2,8 +2,8 @@ import { STORAGE, URL } from '@constant/app'
 import { CODE, WECHAT_MESSAGE } from '@constant/error'
 import { HttpError } from '@models/error'
 import logger from '@utils/logger'
-import type { Request, RequestData, RequestQuery, Response } from '@types/http'
-import type { WxRequestFail, WxRequestSuccess } from '@types/wechat'
+import type { Request, RequestData, RequestQuery, Response } from 'types/http'
+import type { WxRequestFail, WxRequestSuccess } from 'types/wechat'
 
 const formatUrl = (request: Request): void => {
   // 处理 url 的 query

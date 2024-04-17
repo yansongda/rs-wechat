@@ -1,6 +1,6 @@
 import { DEFAULT } from '@constant/user'
 import utils from '@utils/user'
-import type { User } from '@types/user'
+import type { User } from 'types/user'
 
 Page({
   data: {

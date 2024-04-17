@@ -11,7 +11,7 @@ import type {
   Item,
   Response,
   UpdateRequest
-} from '@types/totp'
+} from 'types/totp'
 
 const all = async () => {
   try {

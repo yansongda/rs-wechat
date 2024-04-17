@@ -8,9 +8,9 @@ import type {
   FormSubmit,
   WxGetFileSystemManagerReadFileSuccess,
   WxGetStorageSuccess
-} from '@types/wechat'
+} from 'types/wechat'
 import { STORAGE } from '@constant/app'
-import type { UpdateRequest, User } from '@types/user'
+import type { UpdateRequest, User } from 'types/user'
 import { DEFAULT } from '@constant/user'
 
 interface FormData {

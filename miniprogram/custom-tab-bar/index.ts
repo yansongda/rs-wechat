@@ -1,4 +1,4 @@
-import type { TabbarTap } from '@types/tdesign'
+import type { TabbarTap } from 'types/tdesign'
 
 Component({
   data: {

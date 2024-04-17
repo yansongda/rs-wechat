@@ -4,7 +4,7 @@ import { CODE } from '@constant/error'
 import logger from '@utils/logger'
 import error from '@utils/error'
 import { HttpError } from '@models/error'
-import type { DetailResponse, UpdateRequest, UpdateResponse } from '@types/user'
+import type { DetailResponse, UpdateRequest, UpdateResponse } from 'types/user'
 
 const detail = async () => {
   try {

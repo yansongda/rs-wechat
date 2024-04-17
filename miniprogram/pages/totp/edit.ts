@@ -2,8 +2,8 @@ import Message from 'tdesign-miniprogram/message/index'
 import Toast from 'tdesign-miniprogram/toast/index'
 import api from '@api/totp'
 import { HttpError } from '@models/error'
-import type { UpdateRequest } from '@types/totp'
-import type { FormSubmit } from '@types/wechat'
+import type { UpdateRequest } from 'types/totp'
+import type { FormSubmit } from 'types/wechat'
 
 interface Query {
   id?: string

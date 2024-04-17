@@ -1,5 +1,5 @@
 import { CODE, MESSAGE } from '@constant/error'
-import type { RequestData, RequestHeaders, RequestQuery } from '@types/http'
+import type { RequestData, RequestHeaders, RequestQuery } from 'types/http'
 
 export class EE {
   code: number

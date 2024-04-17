@@ -4,7 +4,7 @@ import { CODE } from '@constant/error'
 import logger from '@utils/logger'
 import error from '@utils/error'
 import { HttpError } from '@models/error'
-import type { LoginRequest, LoginResponse } from '@types/accessToken'
+import type { LoginRequest, LoginResponse } from 'types/accessToken'
 
 const login = async (code: string) => {
   try {
