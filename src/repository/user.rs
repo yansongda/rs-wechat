@@ -6,7 +6,7 @@ use crate::model::result::{Error, Result};
 use crate::model::user::{UpdateUser, User};
 use crate::repository::Pool;
 
-pub async fn fetch(open_id: &str) -> Result<User> {
+pub async fn fetch_by_open_id(open_id: &str) -> Result<User> {
     let sql = "select * from yansongda.user where open_id = $1 limit 1";
     let started_at = Instant::now();
 

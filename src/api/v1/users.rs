@@ -9,7 +9,7 @@ use crate::request::Validator;
 use crate::service;
 
 pub async fn detail(Extension(access_token): Extension<AccessToken>) -> Resp<DetailResponse> {
-    let user = service::user::detail(access_token.data.open_id.as_str()).await?;
+    let user = service::user::detail_by_open_id(access_token.data.open_id.as_str()).await?;
 
     Ok(Response::success(user.into()))
 }

@@ -38,7 +38,7 @@ pub async fn login(code: &str) -> Result<AccessToken> {
 }
 
 async fn get_login_user_id(open_id: &str) -> Result<i64> {
-    let result = repository::user::fetch(open_id).await;
+    let result = repository::user::fetch_by_open_id(open_id).await;
 
     if let Ok(user) = result {
         return Ok(user.id);

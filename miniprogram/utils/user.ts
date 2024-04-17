@@ -2,6 +2,19 @@ import api from '@api/user'
 import { STORAGE } from '@constant/app'
 import { DEFAULT } from '@constant/user'
 import type { User } from '@types/user'
+import { WxGetStorageSuccess } from '@types/wechat'
+
+const detail = async (): Promise<User> => {
+  try {
+    const storage: WxGetStorageSuccess<User> = await wx.getStorage({ key: STORAGE.USER })
+
+    return storage.data
+  } catch (e) {
+    /* empty */
+  }
+  
+  return sync()
+}
 
 const sync = async (): Promise<User> => {
   const detail = await api.detail()
@@ -17,4 +30,4 @@ const sync = async (): Promise<User> => {
   return user
 }
 
-export default { sync }
+export default { detail, sync }
