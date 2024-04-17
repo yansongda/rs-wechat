@@ -1,30 +1,22 @@
 import { STORAGE } from '@constant/app'
-import userApi from '@api/user'
-import userUtils from '@utils/user'
+import accessToken from '@api/accessToken'
 import { EE, WeixinError } from '@models/error'
 import { CODE, MESSAGE } from '@constant/error'
-import { DEFAULT } from '@constant/user'
 import logger from '@utils/logger'
-import type { GlobalData } from './types/app'
-import type { LoginResponse, UpdateResult, User } from './types/user'
+import type { GlobalData } from '@types/app'
 import type {
   AppOnUnhandledRejection,
-  WxGetUpdateManagerOnCheckForUpdateResult
-} from './types/wechat'
+  WxGetUpdateManagerOnCheckForUpdateResult,
+  WxLoginSuccessCallbackResult
+} from '@types/wechat'
+import type { LoginResponse } from '@types/accessToken'
 
 App<GlobalData>({
-  globalData: {
-    user: {
-      avatar: DEFAULT.avatar,
-      nickname: DEFAULT.nickname,
-      slogan: DEFAULT.slogan,
-    }
-  },
   async onLaunch() {
     try {
-      const storage = await wx.getStorage({ key: STORAGE.USER })
+      await wx.checkSession()
 
-      this.globalData.user = storage.data
+      await wx.getStorage({ key: STORAGE.ACCESS_TOKEN })
 
       return
     } catch (e) {
@@ -32,20 +24,12 @@ App<GlobalData>({
     }
 
     wx.login({
-      success: async (res) => {
-        const loginResponse: LoginResponse = await userApi.login(res.code)
+      success: async (res: WxLoginSuccessCallbackResult) => {
+        const loginResponse: LoginResponse = await accessToken.login(res.code)
 
-        // 初始化时 app 并没有加载完成，而下面的 userUtils.sync 中会调用 user.detail 去获取用户详细信息
-        // 而调用获取用户详细信息需要有用户 openId，但此时 App 又没有加载完，所以
-        // 此时不能从全局数据里拿数据，所以这个时候就只能从 stroage 里拿数据，这里 storage 就是这个用的
         await wx
-          .setStorage({ key: STORAGE.OPEN_ID, data: loginResponse.open_id })
+          .setStorage({ key: STORAGE.ACCESS_TOKEN, data: loginResponse.access_token })
           .catch(() => Promise.reject(new WeixinError(CODE.WEIXIN_STORAGE_SET)))
-
-        const updateResult: UpdateResult = await userUtils.sync()
-        if (!updateResult.isGlobalDataUpdated) {
-          this.globalData.user = updateResult.user as User
-        }
       },
       fail: async () => Promise.reject(new WeixinError(CODE.WEIXIN_LOGIN))
     })
@@ -82,7 +66,7 @@ App<GlobalData>({
   },
   async onUnhandledRejection(e: AppOnUnhandledRejection) {
     if (e.reason instanceof EE) {
-      await wx.showToast({ title: e.reason.message || MESSAGE[e.reason.code], icon: 'error' })
+      await wx.showToast({ title: MESSAGE[e.reason.code], icon: 'error' })
 
       return
     }

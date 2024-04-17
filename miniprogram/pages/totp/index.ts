@@ -3,8 +3,8 @@ import Toast from 'tdesign-miniprogram/toast/index'
 import api from '@api/totp'
 import { CODE } from '@constant/error'
 import { HttpError, WeixinError } from '@models/error'
-import type { Item } from 'miniprogram/types/totp'
-import { SwipeTap } from 'miniprogram/types/tdesign'
+import type { Item } from '@types/totp'
+import type { SwipeTap } from '@types/tdesign'
 
 interface SwipeButton {
   text: string

@@ -20,11 +20,6 @@ export interface UpdateResponse {
   slogan: string
 }
 
-export interface UpdateResult {
-  isGlobalDataUpdated: boolean
-  user?: User
-}
-
 export interface User {
   avatar: string
   nickname: string

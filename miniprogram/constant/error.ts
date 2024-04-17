@@ -35,7 +35,7 @@ const MESSAGE = {
   [CODE.LOGIN]: '登录失败',
   [CODE.HTTP]: '网络请求失败',
   [CODE.HTTP_PARAMS]: '内部参数错误',
-  [CODE.HTTP_API_ACCESS_TOKEN_LOGIN]: '业务登录失败',
+  [CODE.HTTP_API_ACCESS_TOKEN_LOGIN]: '登录失败请重开',
   [CODE.HTTP_API_USER_DETAIL]: '查询详情失败',
   [CODE.HTTP_API_USER_UPDATE]: '更新失败',
   [CODE.HTTP_API_TOTP_ALL]: '查询列表失败',

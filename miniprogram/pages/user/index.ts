@@ -1,22 +1,25 @@
+import { DEFAULT } from '@constant/user'
+import { STORAGE } from '@constant/app'
 import utils from '@utils/user'
-import type { GlobalData } from 'miniprogram/types/app'
-
-const app = getApp<GlobalData>()
+import type { User } from '@types/user'
+import type { WxGetStorageSuccess } from '@types/wechat'
 
 Page({
   data: {
-    avatar: app.globalData.user.avatar,
-    nickname: app.globalData.user.nickname,
-    slogan: app.globalData.user.slogan
+    avatar: DEFAULT.avatar,
+    nickname: DEFAULT.nickname,
+    slogan: DEFAULT.slogan
   },
   async onLoad() {
     await utils.sync()
   },
-  onShow() {
+  async onShow() {
+    const storage: WxGetStorageSuccess<User> = await wx.getStorage({ key: STORAGE.USER })
+
     this.setData({
-      avatar: app.globalData.user.avatar,
-      nickname: app.globalData.user.nickname,
-      slogan: app.globalData.user.slogan
+      avatar: storage.data.avatar,
+      nickname: storage.data.nickname,
+      slogan: storage.data.slogan
     })
   },
   onHide() {},

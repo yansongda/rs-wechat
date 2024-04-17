@@ -3,13 +3,15 @@ import Toast from 'tdesign-miniprogram/toast/index'
 import api from '@api/user'
 import user from '@utils/user'
 import error from '@utils/error'
-import type { GlobalData } from 'miniprogram/types/app'
-import type { UpdateRequest } from 'miniprogram/types/user'
 import type {
   ChooseAvatarButtonTap,
   FormSubmit,
-  WxGetFileSystemManagerReadFileSuccess
-} from 'miniprogram/types/wechat'
+  WxGetFileSystemManagerReadFileSuccess,
+  WxGetStorageSuccess
+} from '@types/wechat'
+import { STORAGE } from '@constant/app'
+import type { UpdateRequest, User } from '@types/user'
+import { DEFAULT } from '@constant/user'
 
 interface FormData {
   avatar: string
@@ -17,19 +19,19 @@ interface FormData {
   slogan: string
 }
 
-const app = getApp<GlobalData>()
-
 Page({
   data: {
-    avatar: app.globalData.user.avatar,
-    nickname: app.globalData.user.nickname,
-    slogan: app.globalData.user.slogan
+    avatar: DEFAULT.avatar,
+    nickname: DEFAULT.nickname,
+    slogan: DEFAULT.slogan
   },
-  onShow() {
+  async onShow() {
+    const storage: WxGetStorageSuccess<User> = await wx.getStorage({ key: STORAGE.USER })
+
     this.setData({
-      avatar: app.globalData.user.avatar,
-      nickname: app.globalData.user.nickname,
-      slogan: app.globalData.user.slogan
+      avatar: storage.data.avatar,
+      nickname: storage.data.nickname,
+      slogan: storage.data.slogan
     })
   },
   async onChooseAvatar(e: ChooseAvatarButtonTap<unknown, unknown>) {

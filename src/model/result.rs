@@ -35,12 +35,14 @@ pub struct Response<D: Serialize> {
 impl Error {
     pub fn get_code_message(&self) -> (u16, &'static str) {
         match self {
-            Error::AuthorizationMissing(message) => {
-                (1000, message.unwrap_or_else(|| "缺少认证信息，认证失败"))
-            }
-            Error::AuthorizationNotFound(message) => {
-                (1001, message.unwrap_or_else(|| "认证信息不正确，认证失败"))
-            }
+            Error::AuthorizationMissing(message) => (
+                1000,
+                message.unwrap_or_else(|| "缺少认证信息，请重新打开小程序"),
+            ),
+            Error::AuthorizationNotFound(message) => (
+                1001,
+                message.unwrap_or_else(|| "认证信息不正确，请重新打开小程序"),
+            ),
             Error::Params(message) => (
                 2000,
                 message.unwrap_or_else(|| "参数错误，请确认您的参数是否符合规范"),

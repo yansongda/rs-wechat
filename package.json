@@ -1,6 +1,6 @@
 {
   "name": "yansongda",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "description": "miniprogram for yansongda",
   "type": "module",
   "scripts": {
@@ -19,7 +19,7 @@
     "miniprogram-api-typings": "^3.12.2",
     "prettier": "^3.2.5",
     "typescript": "^5.4.5",
-    "typescript-eslint": "^7.6.0"
+    "typescript-eslint": "^7.7.0"
   },
   "dependencies": {
     "tdesign-miniprogram": "^1.2.9"

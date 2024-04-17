@@ -4,14 +4,11 @@ import { CODE } from '@constant/error'
 import logger from '@utils/logger'
 import error from '@utils/error'
 import { HttpError } from '@models/error'
-import type {
-  LoginRequest,
-  LoginResponse,
-} from 'miniprogram/types/accessToken'
+import type { LoginRequest, LoginResponse } from '@types/accessToken'
 
 const login = async (code: string) => {
   try {
-    return await http.post<LoginResponse>(URL.LOGIN, { code } as LoginRequest, false, false)
+    return await http.post<LoginResponse>(URL.LOGIN, { code } as LoginRequest)
   } catch (e: unknown) {
     logger.error('登录接口请求失败', e)
 
