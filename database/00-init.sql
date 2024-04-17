@@ -54,7 +54,7 @@ create table yansongda.short_url
 alter table yansongda.short_url
     owner to miniprogram;
 
-create table access_token
+create table yansongda.access_token
 (
     id           bigserial
         constraint pk_token_id
@@ -68,5 +68,5 @@ create table access_token
     updated_at   timestamp with time zone default now() not null
 );
 
-alter table access_token
+alter table yansongda.access_token
     owner to miniprogram;
