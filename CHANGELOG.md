@@ -1,3 +1,9 @@
+## v1.4.1
+
+### optimized
+
+- optimize(frontend): 优化登录提示(#63)
+
 ## v1.4.0
 
 ### changed
