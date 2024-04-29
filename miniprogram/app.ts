@@ -23,7 +23,7 @@ App<GlobalData>({
       /* empty */
     }
 
-    await wx.showToast({ title: '登录中...', icon: "loading", mask: true })
+    await wx.showToast({ title: '登录中...', icon: 'loading', mask: true })
 
     wx.login({
       success: async (res: WxLoginSuccessCallbackResult) => {
@@ -32,7 +32,7 @@ App<GlobalData>({
         await wx
           .setStorage({ key: STORAGE.ACCESS_TOKEN, data: loginResponse.access_token })
           .catch(() => Promise.reject(new WeixinError(CODE.WEIXIN_STORAGE_SET)))
-        
+
         await wx.hideToast()
       },
       fail: async () => Promise.reject(new WeixinError(CODE.WEIXIN_LOGIN))
