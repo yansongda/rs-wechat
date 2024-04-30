@@ -1,3 +1,9 @@
+## v1.4.2
+
+### fixed
+
+- fix(frontend): 修复登录时提示未知错误的问题(#64)
+
 ## v1.4.1
 
 ### optimized
