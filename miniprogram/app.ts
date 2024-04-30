@@ -23,7 +23,7 @@ App<GlobalData>({
       /* empty */
     }
 
-    await wx.showToast({ title: '登录中...', icon: 'loading', mask: true })
+    await wx.showToast({ title: '登录中...', icon: 'loading', duration: 6000, mask: true })
 
     wx.login({
       success: async (res: WxLoginSuccessCallbackResult) => {
