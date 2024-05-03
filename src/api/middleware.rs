@@ -12,7 +12,6 @@ pub async fn authorization(mut request: Request, next: Next) -> Response {
         return Error::AuthorizationMissing(None).into_response();
     }
 
-
     let auth = authorization.unwrap().to_str();
 
     if auth.is_err() {
