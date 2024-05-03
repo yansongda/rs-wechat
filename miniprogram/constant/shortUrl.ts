@@ -1,5 +1,5 @@
 const URL = {
-  CREATE: '/api/v1/short-url/create'
-}
+	CREATE: "/api/v1/short-url/create",
+};
 
-export { URL }
+export { URL };

@@ -1,9 +1,9 @@
-import { RequestData } from './http'
+import type { RequestData } from "./http";
 
 export interface LoginRequest extends RequestData {
-  code: string
+	code: string;
 }
 
 export interface LoginResponse {
-  access_token: string
+	access_token: string;
 }

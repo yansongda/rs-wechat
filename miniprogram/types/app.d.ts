@@ -1,1 +1,1 @@
-export interface GlobalData {}
+export type GlobalData = {};
