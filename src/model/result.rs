@@ -8,6 +8,7 @@ pub type Result<D> = std::result::Result<D, Error>;
 pub enum Error {
     AuthorizationMissing(Option<&'static str>),
     AuthorizationNotFound(Option<&'static str>),
+    AuthorizationInvalid(Option<&'static str>),
     Params(Option<&'static str>),
     UserNotFound(Option<&'static str>),
     TotpNotFound(Option<&'static str>),
@@ -42,6 +43,10 @@ impl Error {
             Error::AuthorizationNotFound(message) => (
                 1001,
                 message.unwrap_or_else(|| "认证信息不正确，请重新打开小程序"),
+            ),
+            Error::AuthorizationInvalid(message) => (
+                1002,
+                message.unwrap_or_else(|| "认证信息格式不正确，请重新打开小程序"),
             ),
             Error::Params(message) => (
                 2000,
