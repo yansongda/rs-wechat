@@ -1,16 +1,18 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-const l = wx.getRealtimeLogManager ? wx.getRealtimeLogManager() : null
+const l = wx.getRealtimeLogManager ? wx.getRealtimeLogManager() : null;
 
 const logger = {
-  info: (...args: any[]) => {
-    l?.info(args)
-  },
-  warning: (...args: any[]) => {
-    l?.warn(args)
-  },
-  error: (...args: any[]) => {
-    l?.error(args)
-  }
-}
+	// biome-ignore lint: 日志
+	info: (...args: any[]) => {
+		l?.info(args);
+	},
+	// biome-ignore lint: 日志
+	warning: (...args: any[]) => {
+		l?.warn(args);
+	},
+	// biome-ignore lint: 日志
+	error: (...args: any[]) => {
+		l?.error(args);
+	},
+};
 
-export default logger
+export default logger;

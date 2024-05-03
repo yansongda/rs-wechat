@@ -1,5 +1,5 @@
 const URL = {
-  LOGIN: '/api/v1/access-token/login'
-}
+	LOGIN: "/api/v1/access-token/login",
+};
 
-export { URL }
+export { URL };

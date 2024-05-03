@@ -1,10 +1,10 @@
-import { RequestData } from './http'
+import type { RequestData } from "./http";
 
 export interface CreateRequest extends RequestData {
-  url: string
+	url: string;
 }
 
 export interface CreateResponse {
-  url: string
-  short: string
+	url: string;
+	short: string;
 }

@@ -1,3 +1,9 @@
+## v1.4.3
+
+### chore
+
+- chore(frontend): 迁移到 biome(#65)
+
 ## v1.4.2
 
 ### fixed
