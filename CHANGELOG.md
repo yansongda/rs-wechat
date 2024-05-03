@@ -1,5 +1,10 @@
 ## v1.4.3
 
+### fixed
+
+- fix(frontend): 修复登录时认证信息错误的问题(#66)
+- fix(backend): 优化认证信息错误解析失败的问题(#66)
+
 ### chore
 
 - chore(frontend): 迁移到 biome(#65)

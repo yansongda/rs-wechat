@@ -34,7 +34,7 @@ const formatHeaders = (request: Request): void => {
 	}
 
 	request.headers.authorization =
-		`Bearer·${wx.getStorageSync(STORAGE.ACCESS_TOKEN)}` || "";
+		`Bearer ${wx.getStorageSync(STORAGE.ACCESS_TOKEN)}` || "";
 };
 
 const request = <T>(request: Request): Promise<T> => {

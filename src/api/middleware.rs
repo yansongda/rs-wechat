@@ -12,14 +12,14 @@ pub async fn authorization(mut request: Request, next: Next) -> Response {
         return Error::AuthorizationMissing(None).into_response();
     }
 
-    let auth = authorization
-        .unwrap()
-        .to_str()
-        .unwrap()
-        .replace("Bearer ", "");
+    let auth = authorization.unwrap().to_str();
+
+    if auth.is_err() {
+        return Error::AuthorizationInvalid(None).into_response();
+    }
 
     let access_token: Result<AccessToken> =
-        crate::repository::access_token::fetch(auth.as_str()).await;
+        crate::repository::access_token::fetch(auth.unwrap().replace("Bearer ", "").as_str()).await;
 
     if access_token.is_err() {
         return Error::AuthorizationNotFound(None).into_response();
