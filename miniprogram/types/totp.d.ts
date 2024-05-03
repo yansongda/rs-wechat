@@ -27,4 +27,7 @@ export interface DeleteRequest extends RequestData {
 	id: number;
 }
 
-export type Response = {};
+export interface Response {
+	code: number;
+	message: string;
+}

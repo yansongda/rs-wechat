@@ -87,7 +87,7 @@ Page({
 				});
 
 				Message.error({
-					content: "更新失败：" + e.message,
+					content: `更新失败：${e.message}`,
 					duration: 5000,
 					context: this,
 					offset: [20, 32],

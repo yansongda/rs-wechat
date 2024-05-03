@@ -13,7 +13,7 @@ export interface WxRequestFail {
 
 export interface AppOnUnhandledRejection {
 	/** 被拒绝的 Promise 对象 */
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	// biome-ignore lint: 微信的提示，不改变
 	promise: Promise<any>;
 	/** 拒绝原因，一般是一个 Error 对象 */
 	reason: Error | string;

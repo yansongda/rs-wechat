@@ -44,7 +44,7 @@ Page({
 				});
 
 				Message.error({
-					content: "生成失败：" + e.message,
+					content: `生成失败：${e.message}`,
 					duration: 5000,
 					offset: [20, 32],
 					context: this,
@@ -52,7 +52,7 @@ Page({
 			});
 	},
 	async copy() {
-		if (this.data.short == "") {
+		if (this.data.short === "") {
 			return;
 		}
 

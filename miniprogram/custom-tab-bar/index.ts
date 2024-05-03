@@ -20,7 +20,7 @@ Component({
 		onChange(e: TabbarTap<unknown, unknown>) {
 			const path = e.detail.value;
 
-			wx.switchTab({ url: "/" + path });
+			wx.switchTab({ url: `/${path}` });
 		},
 	},
 });

@@ -68,7 +68,7 @@ Page({
 				});
 
 				Message.error({
-					content: "加载失败：" + e.message,
+					content: `加载失败：${e.message}`,
 					duration: 5000,
 					offset: [20, 32],
 					context: this,
@@ -95,7 +95,7 @@ Page({
 	async edit(id: number) {
 		this.clearRefreshInterval();
 
-		await wx.navigateTo({ url: "/pages/totp/edit?id=" + id });
+		await wx.navigateTo({ url: `/pages/totp/edit?id=${id}` });
 	},
 	refreshCode(id: number, index: number) {
 		api
@@ -105,7 +105,7 @@ Page({
 			)
 			.catch((e: HttpError) =>
 				Message.error({
-					content: "更新验证码失败：" + e.message,
+					content: `更新验证码失败：${e.message}`,
 					duration: 5000,
 					offset: [20, 32],
 					context: this,
@@ -131,7 +131,7 @@ Page({
 			.deleteTotp(id)
 			.catch((e: HttpError) =>
 				Message.error({
-					content: "删除失败：" + e.message,
+					content: `删除失败：${e.message}`,
 					duration: 5000,
 					offset: [20, 32],
 					context: this,
@@ -155,7 +155,7 @@ Page({
 
 				this.setData({ [`items[${index}].remainSeconds`]: remainSeconds });
 
-				if (remainSeconds == period) {
+				if (remainSeconds === period) {
 					this.refreshCode(item.id, index);
 				}
 			}

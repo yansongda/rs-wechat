@@ -7,18 +7,19 @@ import type { WxRequestFail, WxRequestSuccess } from "types/wechat";
 
 const formatUrl = (request: Request): void => {
 	// 处理 url 的 query
-	if (typeof request.query != "undefined") {
+	if (typeof request.query !== "undefined") {
 		const query = request.query;
 
 		const paramsArray: string[] = [];
 
+		// biome-ignore lint: no-check
 		Object.keys(request.query).forEach(
 			(key) => query[key] && paramsArray.push(`${key}=${query[key]}`),
 		);
 
-		request.url +=
-			(request.url.search(/\?/) === -1 ? "?" : "&") +
-			`${paramsArray.join("&")}`;
+		request.url += `${
+			request.url.search(/\?/) === -1 ? "?" : "&"
+		}${paramsArray.join("&")}`;
 	}
 
 	// 处理 url
@@ -28,12 +29,12 @@ const formatUrl = (request: Request): void => {
 };
 
 const formatHeaders = (request: Request): void => {
-	if (typeof request.headers == "undefined") {
+	if (typeof request.headers === "undefined") {
 		request.headers = {};
 	}
 
 	request.headers.authorization =
-		"Bearer " + wx.getStorageSync(STORAGE.ACCESS_TOKEN) || "";
+		`Bearer·${wx.getStorageSync(STORAGE.ACCESS_TOKEN)}` || "";
 };
 
 const request = <T>(request: Request): Promise<T> => {
@@ -79,7 +80,7 @@ const wxRequest = <T>(request: Request) => {
 					new HttpError(
 						err.errno,
 						WECHAT_MESSAGE[err.errno as keyof typeof WECHAT_MESSAGE] ||
-							"接口请求失败：" + err.errMsg,
+							`接口请求失败：${err.errMsg}`,
 					),
 				);
 			},
@@ -99,8 +100,8 @@ const wxUpload = <T>(request: Request) => {
 			reject(new HttpError(CODE.HTTP_PARAMS));
 		}
 
-		delete formData.filePath;
-		delete formData.name;
+		formData.filePath = undefined;
+		formData.name = undefined;
 
 		wx.uploadFile({
 			url: request.url,
@@ -114,7 +115,7 @@ const wxUpload = <T>(request: Request) => {
 
 				const response = JSON.parse(res.data) as Response<T>;
 
-				if (response.code == 0) {
+				if (response.code === 0) {
 					resolve(response.data);
 				}
 
@@ -123,7 +124,7 @@ const wxUpload = <T>(request: Request) => {
 			fail: (err) => {
 				logger.warning("接口请求失败", err);
 
-				reject(new HttpError(undefined, "接口请求失败：" + err.errMsg));
+				reject(new HttpError(undefined, `接口请求失败：${err.errMsg}`));
 			},
 		});
 	});

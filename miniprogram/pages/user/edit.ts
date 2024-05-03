@@ -48,7 +48,7 @@ Page({
 			filePath: res.tempFilePath,
 			encoding: "base64",
 			success: async (res: WxGetFileSystemManagerReadFileSuccess) => {
-				this.setData({ avatar: "data:image/jpeg;base64," + res.data });
+				this.setData({ avatar: `data:image/jpeg;base64,${res.data}` });
 
 				await wx.hideLoading();
 			},
@@ -87,7 +87,7 @@ Page({
 			});
 
 			Message.error({
-				content: "更新失败：" + error.getErrorMessage(e),
+				content: `更新失败：${error.getErrorMessage(e)}`,
 				duration: 5000,
 				context: this,
 				offset: [20, 32],

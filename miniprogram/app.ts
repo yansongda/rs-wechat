@@ -4,14 +4,13 @@ import { CODE, MESSAGE } from "@constant/error";
 import { EE, WeixinError } from "@models/error";
 import logger from "@utils/logger";
 import type { LoginResponse } from "types/accessToken";
-import type { GlobalData } from "types/app";
 import type {
 	AppOnUnhandledRejection,
 	WxGetUpdateManagerOnCheckForUpdateResult,
 	WxLoginSuccessCallbackResult,
 } from "types/wechat";
 
-App<GlobalData>({
+App({
 	async onLaunch() {
 		try {
 			await wx.checkSession();
