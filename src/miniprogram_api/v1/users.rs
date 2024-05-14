@@ -1,7 +1,7 @@
 use axum::Extension;
 
-use crate::api::extract::Json;
-use crate::api::response::Resp;
+use crate::miniprogram_api::extract::Json;
+use crate::miniprogram_api::response::Resp;
 use crate::model::access_token::AccessToken;
 use crate::model::result::Response;
 use crate::request::user::{DetailResponse, UpdateRequest};

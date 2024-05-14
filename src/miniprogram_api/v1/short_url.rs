@@ -1,8 +1,8 @@
 use axum::extract::Path;
 use axum::response::Redirect;
 
-use crate::api::extract::Json;
-use crate::api::response::Resp;
+use crate::miniprogram_api::extract::Json;
+use crate::miniprogram_api::response::Resp;
 use crate::model::result::{Response, Result};
 use crate::request::short_url::{CreateRequest, CreateResponse, DetailRequest, DetailResponse};
 use crate::request::Validator;

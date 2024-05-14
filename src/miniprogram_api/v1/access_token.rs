@@ -1,5 +1,5 @@
-use crate::api::extract::Json;
-use crate::api::response::Resp;
+use crate::miniprogram_api::extract::Json;
+use crate::miniprogram_api::response::Resp;
 use crate::model::result::Response;
 use crate::request::access_token::{LoginRequest, LoginResponse};
 use crate::request::Validator;

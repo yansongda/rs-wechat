@@ -1,4 +1,4 @@
-pub mod api;
+pub mod miniprogram_api;
 mod config;
 mod model;
 mod repository;

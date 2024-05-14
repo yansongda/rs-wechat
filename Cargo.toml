@@ -1,6 +1,6 @@
 [package]
-name = "miniprogram"
-version = "1.4.3"
+name = "wechat"
+version = "1.5.0"
 edition = "2021"
 publish = false
 
@@ -8,7 +8,7 @@ publish = false
 
 [[bin]]
 name = "miniprogram-api"
-path = "src/bin/api.rs"
+path = "src/bin/miniprogram-api.rs"
 
 [dependencies]
 config = { version = "~0.14.0", default-features = false, features = ["toml", "json", "json5"] }

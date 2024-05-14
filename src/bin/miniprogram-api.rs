@@ -1,4 +1,4 @@
-use miniprogram::api::App;
+use wechat::miniprogram_api::App;
 use tracing::info;
 
 #[tokio::main]
