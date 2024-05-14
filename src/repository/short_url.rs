@@ -6,7 +6,7 @@ use crate::model::short_url::{CreateShortUrl, ShortUrl};
 use crate::repository::Pool;
 
 pub async fn fetch(short: &str) -> Result<ShortUrl> {
-    let sql = "select * from yansongda.short_url where short = $1 limit 1";
+    let sql = "select * from miniprogram.short_url where short = $1 limit 1";
     let started_at = Instant::now();
 
     let result: Option<ShortUrl> = sqlx::query_as(sql)
@@ -31,7 +31,7 @@ pub async fn fetch(short: &str) -> Result<ShortUrl> {
 }
 
 pub async fn insert(url: CreateShortUrl) -> Result<ShortUrl> {
-    let sql = "insert into yansongda.short_url (short, url) values ($1, $2) returning *";
+    let sql = "insert into miniprogram.short_url (short, url) values ($1, $2) returning *";
     let started_at = Instant::now();
 
     let result = sqlx::query_as(sql)
@@ -53,12 +53,10 @@ pub async fn insert(url: CreateShortUrl) -> Result<ShortUrl> {
 }
 
 pub async fn update_count(id: i64) {
-    let sql = "update yansongda.short_url set visit = visit + 1, updated_at = now() where id = $1";
+    let sql = "update miniprogram.short_url set visit = visit + 1, updated_at = now() where id = $1";
     let started_at = Instant::now();
 
-    let _ = sqlx::query(
-        "update yansongda.short_url set visit = visit + 1, updated_at = now() where id = $1",
-    )
+    let _ = sqlx::query(sql)
     .bind(id)
     .execute(Pool::postgres("default"))
     .await

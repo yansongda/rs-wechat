@@ -8,10 +8,10 @@ use crate::model::totp::{CreateTotp, Totp, TotpConfig, UpdateTotp};
 use crate::repository::Pool;
 
 pub async fn all(user_id: i64) -> Result<Vec<Totp>> {
-    let sql = "select * from yansongda.totp where user_id = $1";
+    let sql = "select * from miniprogram.totp where user_id = $1";
     let started_at = Instant::now();
 
-    let result = sqlx::query_as("select * from yansongda.totp where user_id = $1")
+    let result = sqlx::query_as(sql)
         .bind(user_id)
         .fetch_all(Pool::postgres("default"))
         .await
@@ -29,7 +29,7 @@ pub async fn all(user_id: i64) -> Result<Vec<Totp>> {
 }
 
 pub async fn fetch(id: i64) -> Result<Totp> {
-    let sql = "select * from yansongda.totp where id = $1 limit 1";
+    let sql = "select * from miniprogram.totp where id = $1 limit 1";
     let started_at = Instant::now();
 
     let result: Option<Totp> = sqlx::query_as(sql)
@@ -54,7 +54,7 @@ pub async fn fetch(id: i64) -> Result<Totp> {
 }
 
 pub async fn insert(totp: CreateTotp) -> Result<Totp> {
-    let sql = "insert into yansongda.totp (user_id, username, issuer, secret, config) values ($1, $2, $3, $4, $5) returning *";
+    let sql = "insert into miniprogram.totp (user_id, username, issuer, secret, config) values ($1, $2, $3, $4, $5) returning *";
     let started_at = Instant::now();
 
     let result = sqlx::query_as(sql)
@@ -81,7 +81,7 @@ pub async fn insert(totp: CreateTotp) -> Result<Totp> {
 }
 
 pub async fn update(updated: UpdateTotp) -> Result<()> {
-    let mut builder = QueryBuilder::<Postgres>::new("update yansongda.totp set updated_at = now()");
+    let mut builder = QueryBuilder::<Postgres>::new("update miniprogram.totp set updated_at = now()");
 
     if let Some(ref issuer) = updated.issuer {
         builder.push(", issuer = ").push_bind(issuer);
@@ -113,7 +113,7 @@ pub async fn update(updated: UpdateTotp) -> Result<()> {
 }
 
 pub async fn delete(id: i64) -> Result<()> {
-    let sql = "delete from yansongda.totp where id = $1";
+    let sql = "delete from miniprogram.totp where id = $1";
     let started_at = Instant::now();
 
     sqlx::query(sql)
