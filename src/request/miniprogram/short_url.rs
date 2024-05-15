@@ -2,8 +2,8 @@ use serde::{Deserialize, Serialize};
 use url::Url;
 
 use crate::config::Config;
+use crate::model::miniprogram::short_url::ShortUrl;
 use crate::model::result::Error;
-use crate::model::short_url::ShortUrl;
 use crate::request::Validator;
 
 #[derive(Debug, Clone, Deserialize)]

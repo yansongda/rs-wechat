@@ -2,8 +2,8 @@ use sqlx::{Execute, Postgres, QueryBuilder};
 use std::time::Instant;
 use tracing::{error, info};
 
+use crate::model::miniprogram::user::{UpdateUser, User};
 use crate::model::result::{Error, Result};
-use crate::model::user::{UpdateUser, User};
 use crate::repository::Pool;
 
 pub async fn fetch_by_open_id(open_id: &str) -> Result<User> {
@@ -53,7 +53,8 @@ pub async fn insert(open_id: &str) -> Result<User> {
 }
 
 pub async fn update(id: i64, update_user: UpdateUser) -> Result<User> {
-    let mut builder = QueryBuilder::<Postgres>::new("update miniprogram.user set updated_at = now()");
+    let mut builder =
+        QueryBuilder::<Postgres>::new("update miniprogram.user set updated_at = now()");
 
     if let Some(ref nickname) = update_user.nickname {
         builder.push(", nickname = ").push_bind(nickname);

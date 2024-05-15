@@ -1,5 +1,5 @@
-pub mod miniprogram_api;
 mod config;
+pub mod miniprogram_api;
 mod model;
 mod repository;
 mod request;

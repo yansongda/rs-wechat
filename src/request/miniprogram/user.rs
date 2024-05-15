@@ -1,5 +1,5 @@
+use crate::model::miniprogram::user::{UpdateUser, User};
 use crate::model::result::Error;
-use crate::model::user::{UpdateUser, User};
 use crate::request::Validator;
 use serde::{Deserialize, Serialize};
 

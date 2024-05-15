@@ -1,19 +1,19 @@
 use totp_rs::{Algorithm, Secret, TOTP};
 use tracing::error;
 
+use crate::model::miniprogram::totp::{CreateTotp, Totp, UpdateTotp};
 use crate::model::result::{Error, Result};
-use crate::model::totp::{CreateTotp, Totp, UpdateTotp};
-use crate::repository;
-use crate::request::totp::DetailResponse;
+use crate::repository::miniprogram;
+use crate::request::miniprogram::totp::DetailResponse;
 
 pub async fn all(user_id: i64) -> Result<Vec<DetailResponse>> {
-    let totp = repository::totp::all(user_id).await?;
+    let totp = miniprogram::totp::all(user_id).await?;
 
     Ok(totp.into_iter().map(|t| t.into()).collect())
 }
 
 pub async fn detail(user_id: i64, id: i64) -> Result<DetailResponse> {
-    let totp = repository::totp::fetch(id).await?;
+    let totp = miniprogram::totp::fetch(id).await?;
 
     if user_id != totp.user_id {
         return Err(Error::TotpNotFound(None));
@@ -29,7 +29,7 @@ pub async fn create(user_id: i64, uri: String) -> Result<()> {
         Error::TotpParse(None)
     })?;
 
-    repository::totp::insert(CreateTotp {
+    miniprogram::totp::insert(CreateTotp {
         user_id,
         username: totp.account_name,
         issuer: totp.issuer,
@@ -42,25 +42,25 @@ pub async fn create(user_id: i64, uri: String) -> Result<()> {
 }
 
 pub async fn update(user_id: i64, params: UpdateTotp) -> Result<()> {
-    let totp = repository::totp::fetch(params.id).await?;
+    let totp = miniprogram::totp::fetch(params.id).await?;
 
     if user_id != totp.user_id {
         return Err(Error::TotpNotFound(None));
     }
 
-    repository::totp::update(params).await?;
+    miniprogram::totp::update(params).await?;
 
     Ok(())
 }
 
 pub async fn delete(user_id: i64, id: i64) -> Result<()> {
-    let totp = repository::totp::fetch(id).await?;
+    let totp = miniprogram::totp::fetch(id).await?;
 
     if user_id != totp.user_id {
         return Err(Error::TotpNotFound(None));
     }
 
-    repository::totp::delete(id).await?;
+    miniprogram::totp::delete(id).await?;
 
     Ok(())
 }

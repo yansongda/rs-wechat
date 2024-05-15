@@ -1,7 +1,7 @@
+use crate::model::miniprogram::totp::{Totp, UpdateTotp};
 use crate::model::result::Error;
-use crate::model::totp::{Totp, UpdateTotp};
 use crate::request::Validator;
-use crate::service::totp;
+use crate::service::miniprogram::totp;
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, Deserialize)]

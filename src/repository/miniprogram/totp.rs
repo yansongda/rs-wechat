@@ -3,8 +3,8 @@ use sqlx::{Execute, Postgres, QueryBuilder};
 use std::time::Instant;
 use tracing::{error, info};
 
+use crate::model::miniprogram::totp::{CreateTotp, Totp, TotpConfig, UpdateTotp};
 use crate::model::result::{Error, Result};
-use crate::model::totp::{CreateTotp, Totp, TotpConfig, UpdateTotp};
 use crate::repository::Pool;
 
 pub async fn all(user_id: i64) -> Result<Vec<Totp>> {
@@ -81,7 +81,8 @@ pub async fn insert(totp: CreateTotp) -> Result<Totp> {
 }
 
 pub async fn update(updated: UpdateTotp) -> Result<()> {
-    let mut builder = QueryBuilder::<Postgres>::new("update miniprogram.totp set updated_at = now()");
+    let mut builder =
+        QueryBuilder::<Postgres>::new("update miniprogram.totp set updated_at = now()");
 
     if let Some(ref issuer) = updated.issuer {
         builder.push(", issuer = ").push_bind(issuer);

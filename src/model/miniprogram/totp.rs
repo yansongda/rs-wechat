@@ -3,7 +3,7 @@ use serde::{Deserialize, Serialize};
 use sqlx::types::Json;
 use sqlx::FromRow;
 
-use crate::request::totp::UpdateRequest;
+use crate::request::miniprogram::totp::UpdateRequest;
 
 #[derive(Debug, Clone, Serialize, Deserialize, FromRow)]
 pub struct Totp {

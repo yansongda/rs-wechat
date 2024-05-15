@@ -4,7 +4,7 @@ use std::time::Instant;
 use sqlx::types::Json;
 use tracing::{error, info};
 
-use crate::model::access_token::{AccessToken, AccessTokenData};
+use crate::model::miniprogram::access_token::{AccessToken, AccessTokenData};
 use crate::model::result::{Error, Result};
 use crate::repository::Pool;
 

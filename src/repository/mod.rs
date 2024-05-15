@@ -8,10 +8,7 @@ use sqlx::PgPool;
 
 use crate::config::{Config, Database};
 
-pub mod access_token;
-pub mod short_url;
-pub mod totp;
-pub mod user;
+pub mod miniprogram;
 
 pub struct Pool;
 
