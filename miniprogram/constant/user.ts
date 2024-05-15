@@ -5,8 +5,8 @@ const DEFAULT = {
 };
 
 const URL = {
-	DETAIL: "/api/v1/users/detail",
-	UPDATE: "/api/v1/users/update",
+	DETAIL: "/miniprogram/api/v1/users/detail",
+	UPDATE: "/miniprogram/api/v1/users/update",
 };
 
 export { DEFAULT, URL };
