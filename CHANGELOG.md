@@ -1,8 +1,14 @@
+## v1.5.1
+
+### chore
+
+- chore(frontend): 重命名改为 `wechat`(#69)
+
 ## v1.5.0
 
 ### chore
 
-- chore(backend): 数据库改为 `wechat`(#67, #68)
+- chore(backend): 重命名改为 `wechat`(#67, #68)
 
 ## v1.4.3
 

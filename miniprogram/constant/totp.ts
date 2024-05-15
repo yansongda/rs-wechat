@@ -1,9 +1,9 @@
 const URL = {
-	ALL: "/api/v1/totp/all",
-	DETAIL: "/api/v1/totp/detail",
-	CREATE: "/api/v1/totp/create",
-	UPDATE: "/api/v1/totp/update",
-	DELETE: "/api/v1/totp/delete",
+	ALL: "/miniprogram/api/v1/totp/all",
+	DETAIL: "/miniprogram/api/v1/totp/detail",
+	CREATE: "/miniprogram/api/v1/totp/create",
+	UPDATE: "/miniprogram/api/v1/totp/update",
+	DELETE: "/miniprogram/api/v1/totp/delete",
 };
 
 export { URL };
