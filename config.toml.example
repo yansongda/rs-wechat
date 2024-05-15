@@ -1,6 +1,6 @@
 name="wechat"
 
-[bin.api]
+[bin.miniprogram_api]
 listen="0.0.0.0"
 port=8080
 debug=true
