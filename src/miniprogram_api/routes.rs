@@ -2,8 +2,8 @@ use axum::routing::{get, post};
 use axum::{middleware, Router};
 use tower::ServiceBuilder;
 
-use crate::api::middleware::authorization;
-use crate::api::v1;
+use crate::miniprogram_api::middleware::authorization;
+use crate::miniprogram_api::v1;
 
 pub fn api_v1() -> Router {
     let unauthorized = Router::new()

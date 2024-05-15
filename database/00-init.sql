@@ -1,4 +1,4 @@
-create table yansongda.user
+create table miniprogram.user
 (
     id         bigserial
         constraint pk_user_id
@@ -11,13 +11,10 @@ create table yansongda.user
     updated_at timestamp with time zone default now() not null
 );
 
-alter table yansongda.user
-    owner to miniprogram;
-
 create unique index uk_user_open_id
-    on yansongda.user (open_id);
+    on miniprogram.user (open_id);
 
-create table yansongda.totp
+create table miniprogram.totp
 (
     id         bigserial
         constraint pk_totp_id
@@ -31,13 +28,10 @@ create table yansongda.totp
     updated_at timestamp with time zone default now() not null
 );
 
-alter table yansongda.totp
-    owner to miniprogram;
-
 create index idx_totp_user
-    on yansongda.totp (user_id);
+    on miniprogram.totp (user_id);
 
-create table yansongda.short_url
+create table miniprogram.short_url
 (
     id         bigserial
         constraint pk_short_url_id
@@ -51,10 +45,7 @@ create table yansongda.short_url
     updated_at timestamp with time zone default now() not null
 );
 
-alter table yansongda.short_url
-    owner to miniprogram;
-
-create table yansongda.access_token
+create table miniprogram.access_token
 (
     id           bigserial
         constraint pk_token_id
@@ -67,6 +58,3 @@ create table yansongda.access_token
     created_at   timestamp with time zone default now() not null,
     updated_at   timestamp with time zone default now() not null
 );
-
-alter table yansongda.access_token
-    owner to miniprogram;

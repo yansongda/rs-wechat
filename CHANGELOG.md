@@ -1,3 +1,9 @@
+## v1.5.0
+
+### chore
+
+- chore(backend): 数据库改为 `wechat`(#67)
+
 ## v1.4.3
 
 ### fixed

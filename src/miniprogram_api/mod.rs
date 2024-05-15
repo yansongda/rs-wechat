@@ -64,7 +64,7 @@ impl App {
         tracing_subscriber::registry()
             .with(
                 filter::Targets::new().with_default(
-                    LevelFilter::from_str(if Config::get_bin("api").debug {
+                    LevelFilter::from_str(if Config::get_bin("miniprogram_api").debug {
                         "debug"
                     } else {
                         "info"
@@ -83,8 +83,8 @@ impl App {
     }
 
     fn listen() -> SocketAddr {
-        let listen = Config::get_bin("api").listen.as_str();
-        let port = Config::get_bin("api").port;
+        let listen = Config::get_bin("miniprogram_api").listen.as_str();
+        let port = Config::get_bin("miniprogram_api").port;
 
         SocketAddr::from((IpAddr::from_str(listen).unwrap(), port))
     }

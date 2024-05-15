@@ -1,5 +1,5 @@
-use miniprogram::api::App;
 use tracing::info;
+use wechat::miniprogram_api::App;
 
 #[tokio::main]
 async fn main() {

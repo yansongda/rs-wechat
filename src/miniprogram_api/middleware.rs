@@ -1,4 +1,6 @@
-use crate::model::access_token::AccessToken;
+use crate::model;
+use crate::repository;
+
 use axum::extract::Request;
 use axum::middleware::Next;
 use axum::response::{IntoResponse, Response};
@@ -18,8 +20,9 @@ pub async fn authorization(mut request: Request, next: Next) -> Response {
         return Error::AuthorizationInvalid(None).into_response();
     }
 
-    let access_token: Result<AccessToken> =
-        crate::repository::access_token::fetch(auth.unwrap().replace("Bearer ", "").as_str()).await;
+    let access_token: Result<model::miniprogram::access_token::AccessToken> =
+        repository::miniprogram::access_token::fetch(auth.unwrap().replace("Bearer ", "").as_str())
+            .await;
 
     if access_token.is_err() {
         return Error::AuthorizationNotFound(None).into_response();

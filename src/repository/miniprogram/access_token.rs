@@ -4,12 +4,12 @@ use std::time::Instant;
 use sqlx::types::Json;
 use tracing::{error, info};
 
-use crate::model::access_token::{AccessToken, AccessTokenData};
+use crate::model::miniprogram::access_token::{AccessToken, AccessTokenData};
 use crate::model::result::{Error, Result};
 use crate::repository::Pool;
 
 pub async fn fetch(access_token: &str) -> Result<AccessToken> {
-    let sql = "select * from yansongda.access_token where access_token = $1 limit 1";
+    let sql = "select * from miniprogram.access_token where access_token = $1 limit 1";
     let started_at = Instant::now();
 
     let result: Option<AccessToken> = sqlx::query_as(sql)
@@ -34,7 +34,7 @@ pub async fn fetch(access_token: &str) -> Result<AccessToken> {
 }
 
 pub async fn fetch_by_user_id(user_id: i64) -> Result<AccessToken> {
-    let sql = "select * from yansongda.access_token where user_id = $1 limit 1";
+    let sql = "select * from miniprogram.access_token where user_id = $1 limit 1";
     let started_at = Instant::now();
 
     let result: Option<AccessToken> = sqlx::query_as(sql)
@@ -59,7 +59,7 @@ pub async fn fetch_by_user_id(user_id: i64) -> Result<AccessToken> {
 }
 
 pub async fn insert(user_id: i64, data: AccessTokenData) -> Result<AccessToken> {
-    let sql = "insert into yansongda.access_token (user_id, access_token, data) values ($1, $2, $3) returning *";
+    let sql = "insert into miniprogram.access_token (user_id, access_token, data) values ($1, $2, $3) returning *";
     let access_token = base62::encode(murmur3::hash128(
         format!("{}:{}", &data.open_id, &data.session_key).as_bytes(),
     ));
@@ -85,7 +85,7 @@ pub async fn insert(user_id: i64, data: AccessTokenData) -> Result<AccessToken> 
 }
 
 pub async fn update(id: i64, data: AccessTokenData) -> Result<AccessToken> {
-    let sql = "update yansongda.access_token set access_token = $1, data = $2, updated_at = now() where id = $3 returning *";
+    let sql = "update miniprogram.access_token set access_token = $1, data = $2, updated_at = now() where id = $3 returning *";
     let access_token = base62::encode(murmur3::hash128(
         format!("{}:{}", &data.open_id, &data.session_key).as_bytes(),
     ));

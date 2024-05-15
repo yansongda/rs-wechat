@@ -1,4 +1,4 @@
-use crate::request::user::UpdateRequest;
+use crate::request::miniprogram::user::UpdateRequest;
 use chrono::{DateTime, Local};
 use serde::{Deserialize, Serialize};
 use sqlx::FromRow;

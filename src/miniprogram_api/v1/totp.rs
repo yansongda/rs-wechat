@@ -1,10 +1,10 @@
 use axum::Extension;
 
-use crate::api::extract::Json;
-use crate::api::response::Resp;
-use crate::model::access_token::AccessToken;
+use crate::miniprogram_api::extract::Json;
+use crate::miniprogram_api::response::Resp;
+use crate::model::miniprogram::access_token::AccessToken;
 use crate::model::result::Response;
-use crate::request::totp::{
+use crate::request::miniprogram::totp::{
     CreateRequest, DeleteRequest, DetailRequest, DetailResponse, UpdateRequest,
 };
 use crate::request::Validator;
@@ -12,7 +12,7 @@ use crate::service;
 
 pub async fn all(Extension(access_token): Extension<AccessToken>) -> Resp<Vec<DetailResponse>> {
     Ok(Response::success(
-        service::totp::all(access_token.user_id).await?,
+        service::miniprogram::totp::all(access_token.user_id).await?,
     ))
 }
 
@@ -23,7 +23,7 @@ pub async fn detail(
     let id = request.validate()?;
 
     Ok(Response::success(
-        service::totp::detail(access_token.user_id, id).await?,
+        service::miniprogram::totp::detail(access_token.user_id, id).await?,
     ))
 }
 
@@ -33,7 +33,7 @@ pub async fn create(
 ) -> Resp<()> {
     let uri = request.validate()?;
 
-    service::totp::create(access_token.user_id, uri).await?;
+    service::miniprogram::totp::create(access_token.user_id, uri).await?;
 
     Ok(Response::success(()))
 }
@@ -44,7 +44,7 @@ pub async fn update(
 ) -> Resp<()> {
     let params = request.validate()?;
 
-    service::totp::update(access_token.user_id, params).await?;
+    service::miniprogram::totp::update(access_token.user_id, params).await?;
 
     Ok(Response::success(()))
 }
@@ -55,7 +55,7 @@ pub async fn delete(
 ) -> Resp<()> {
     let id = request.validate()?;
 
-    service::totp::delete(access_token.user_id, id).await?;
+    service::miniprogram::totp::delete(access_token.user_id, id).await?;
 
     Ok(Response::success(()))
 }

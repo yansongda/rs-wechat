@@ -1,4 +1,4 @@
-name="miniprogram"
+name="wechat"
 
 [bin.api]
 listen="0.0.0.0"
@@ -6,7 +6,7 @@ port=8080
 debug=true
 
 [databases.default]
-url="postgres://localhost:5432/miniprogram"
+url="postgres://localhost:5432/wechat"
 min_connections=2
 max_connections=20
 acquire_timeout=1
