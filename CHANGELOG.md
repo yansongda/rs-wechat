@@ -1,3 +1,9 @@
+## v1.5.2
+
+### optimized
+
+- optimize(backend): 优化存储在数据库的认证信息(#70)
+
 ## v1.5.1
 
 ### chore

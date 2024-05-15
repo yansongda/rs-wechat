@@ -6,7 +6,6 @@ use crate::service::wechat;
 pub async fn login(code: &str) -> Result<AccessToken> {
     let wechat_response = wechat::login(code).await?;
     let open_id = wechat_response.openid.unwrap();
-    let session_key = wechat_response.session_key.unwrap();
     let user_id = get_login_user_id(open_id.as_str()).await?;
 
     let exist = miniprogram::access_token::fetch_by_user_id(user_id).await;
@@ -14,10 +13,7 @@ pub async fn login(code: &str) -> Result<AccessToken> {
     if exist.is_ok() {
         return miniprogram::access_token::update(
             exist.unwrap().id,
-            AccessTokenData {
-                open_id,
-                session_key,
-            },
+            AccessTokenData::from(wechat_response.clone()),
         )
         .await;
     }
@@ -26,10 +22,7 @@ pub async fn login(code: &str) -> Result<AccessToken> {
         Error::AccessTokenNotFound(_) => {
             miniprogram::access_token::insert(
                 user_id,
-                AccessTokenData {
-                    open_id,
-                    session_key,
-                },
+                AccessTokenData::from(wechat_response.clone()),
             )
             .await
         }
