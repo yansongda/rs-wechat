@@ -2,7 +2,7 @@
 
 ### chore
 
-- chore(backend): 数据库改为 `wechat`(#67)
+- chore(backend): 数据库改为 `wechat`(#67, #68)
 
 ## v1.4.3
 
