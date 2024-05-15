@@ -20,11 +20,11 @@ pub async fn request(request: Request) -> Result<HttpResponse> {
             .unwrap()
     });
 
-    info!("发送 http 请求 {:?}", request);
+    info!("请求第三方服务接口 {:?}", request);
 
     let started_at = std::time::Instant::now();
     let response = client.execute(request).await.map_err(|e| {
-        warn!("发送 http 请求失败 {:?}", e);
+        warn!("请求第三方服务接口失败 {:?}", e);
 
         Error::Http(None)
     })?;
@@ -43,7 +43,7 @@ pub async fn request(request: Request) -> Result<HttpResponse> {
         duration: started_at.elapsed().as_secs_f32(),
     };
 
-    info!("发送 http 请求结果 {:?}", result);
+    info!("请求第三方服务接口结果 {:?}", result);
 
     Ok(result)
 }
