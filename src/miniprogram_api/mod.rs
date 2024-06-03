@@ -32,19 +32,15 @@ mod routes;
 mod v1;
 
 pub struct App {
-    _logger: WorkerGuard,
     listen: SocketAddr,
     router: Router,
 }
 
 impl App {
     pub async fn init() -> Self {
-        Config::init();
-
         Pool::init().await;
 
         App {
-            _logger: App::logger(),
             listen: App::listen(),
             router: App::router(),
         }
@@ -56,30 +52,6 @@ impl App {
 
     pub fn get_router(&self) -> &Router {
         &self.router
-    }
-
-    fn logger() -> WorkerGuard {
-        let (non_blocking, guard) = NonBlockingBuilder::default().finish(std::io::stdout());
-
-        tracing_subscriber::registry()
-            .with(
-                filter::Targets::new().with_default(
-                    LevelFilter::from_str(if Config::get_bin("miniprogram_api").debug {
-                        "debug"
-                    } else {
-                        "info"
-                    })
-                    .unwrap(),
-                ),
-            )
-            .with(
-                tracing_subscriber::fmt::layer()
-                    .event_format(TracingFormatter)
-                    .with_writer(non_blocking),
-            )
-            .init();
-
-        guard
     }
 
     fn listen() -> SocketAddr {
@@ -162,50 +134,5 @@ where
 {
     fn on_failure(&mut self, failure_classification: FailureClass, latency: Duration, _: &Span) {
         error!(?failure_classification, ?latency, "<-- 请求处理失败",)
-    }
-}
-
-#[derive(Debug, Clone)]
-struct TracingFormatter;
-
-impl<S, N> FormatEvent<S, N> for TracingFormatter
-where
-    S: Subscriber + for<'a> LookupSpan<'a>,
-    N: for<'a> FormatFields<'a> + 'static,
-{
-    fn format_event(
-        &self,
-        ctx: &FmtContext<'_, S, N>,
-        mut writer: format::Writer<'_>,
-        event: &Event<'_>,
-    ) -> std::fmt::Result {
-        write!(
-            &mut writer,
-            "{}|{}|",
-            chrono::Local::now().format("%Y-%m-%d %H:%M:%S%.6f"),
-            event.metadata().level()
-        )?;
-
-        for span in ctx.event_scope().into_iter().flat_map(Scope::from_root) {
-            if let Some(fields) = span.extensions().get::<FormattedFields<N>>() {
-                if !fields.is_empty() {
-                    let c = &fields.fields;
-
-                    write!(
-                        writer,
-                        "{}|",
-                        if c.starts_with("request_id") {
-                            &c[12..c.len() - 1]
-                        } else {
-                            c
-                        }
-                    )?;
-                }
-            }
-        }
-
-        ctx.field_format().format_fields(writer.by_ref(), event)?;
-
-        writeln!(writer)
     }
 }
