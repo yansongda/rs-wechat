@@ -1,3 +1,9 @@
+## TBD - v1.5.3
+
+### chore
+
+- chore(backend): 将 logger 独立，优化代码结构(#71)
+
 ## v1.5.2
 
 ### optimized

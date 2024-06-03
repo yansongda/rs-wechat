@@ -12,14 +12,7 @@ use tower_http::request_id::{
     MakeRequestUuid, PropagateRequestIdLayer, RequestId, SetRequestIdLayer,
 };
 use tower_http::trace::{MakeSpan, OnFailure, OnRequest, OnResponse, TraceLayer};
-use tracing::metadata::LevelFilter;
-use tracing::{error, info, info_span, Event, Span, Subscriber};
-use tracing_appender::non_blocking::{NonBlockingBuilder, WorkerGuard};
-use tracing_subscriber::filter;
-use tracing_subscriber::fmt::{format, FmtContext, FormatEvent, FormatFields, FormattedFields};
-use tracing_subscriber::layer::SubscriberExt;
-use tracing_subscriber::registry::{LookupSpan, Scope};
-use tracing_subscriber::util::SubscriberInitExt;
+use tracing::{error, info, info_span, Span};
 
 use crate::config::Config;
 use crate::model::result::Response;
